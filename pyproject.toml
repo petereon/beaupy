@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "pytui"
+version = "0.1.0"
+description = "A library of elements for interactive TUIs in Python"
+authors = ["Peter Vyboch <pvyboch1@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+readchar = "^3.1.0"
+rich = "^12.5.1"
+
+[tool.poetry.dev-dependencies]
+ward = "^0.66.1-beta.0"
+black = "^22.6.0"
+flake8 = "^5.0.4"
+mypy = "^0.971"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
