@@ -284,3 +284,5 @@ def prompt_yes_or_no(
             else:
                 is_selected = False
     return is_selected and is_yes
+
+# TODO: Add filter function that will allow for list of options and text based filter

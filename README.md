@@ -1,3 +1,5 @@
+TODO: Update documentation
+
 # CUTIE
 
 *Command line User Tools for Input Easification*
