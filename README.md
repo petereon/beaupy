@@ -1,8 +1,6 @@
-TODO: Update documentation
-
 # PyTUI
 
-> A library of interactive elements for CLI applications you have been looking for
+> A library of interactive CLI elements you have been looking for
 
 **PyTUI** implements a number of common interactive elements:
 
