@@ -85,3 +85,6 @@ def _():
     assert console.print.call_args_list[3] == mock.call('  test1\n  test2\n  test3\n[green]x [/green]test4')
     assert console.print.call_count == 4
     assert res == 3
+    
+# TODO: test also selected_index parameter for select
+# TODO: Include tests for other functions
