@@ -16,6 +16,9 @@ black = "^22.6.0"
 flake8 = "^5.0.4"
 mypy = "^0.971"
 
+[tool.ward]
+path = ["test"]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

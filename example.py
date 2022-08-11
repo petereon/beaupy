@@ -8,7 +8,6 @@ import pytui.pytui as pytui
 def main():
     """Main."""
     if pytui.prompt_yes_or_no("Are you brave enough to continue?"):
-        # List of names to select from, including some captions
         names = [
             "Arthur, King of the Britons",
             "Sir Lancelot the Brave",
@@ -16,10 +15,8 @@ def main():
             "Sir Bedevere the Wise",
             "Sir Galahad the Pure",
         ]
-        # Names which are captions and thus not selectable
-        captions = [0, 2, 7]
-        # Get the name
-        name = names[pytui.select(names, caption_indices=captions, selected_index=8)]
+
+        name = names[pytui.select(names, selected_index=4)]
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
         age = pytui.get_number("What is your age?", min_value=0, allow_float=False)
@@ -34,7 +31,7 @@ def main():
         ]
         print("Choose your nemeses")
         # Choose multiple options from a list
-        nemeses_indices = pytui.select_multiple(nemeses_options, caption_indices=[6])
+        nemeses_indices = pytui.select_multiple(nemeses_options)
         nemeses = [
             nemesis
             for nemesis_index, nemesis in enumerate(nemeses_options)

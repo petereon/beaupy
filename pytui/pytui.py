@@ -6,13 +6,13 @@ Commandline User Tools for Input Easification
 __license__ = "MIT"
 
 import getpass
-from typing import List, Optional
+from typing import List, Optional, Union
 import sys
 
-from rich import print
+from rich.console import Console
 import readchar
 
-
+console = Console()
 class DefaultKeys:
     """List of default keybindings.
 
@@ -61,22 +61,22 @@ def get_number(
         try:
             return_value = float(input_value)
         except ValueError:
-            print("Not a valid number.\r", end="")
+            console.print("Not a valid number.\r", end="")
         if not allow_float and return_value is not None:
             if return_value != int(return_value):
-                print("Has to be an integer.\r", end="")
+                console.print("Has to be an integer.\r", end="")
                 return_value = None
         if min_value is not None and return_value is not None:
             if return_value < min_value:
-                print(f"Has to be at least {min_value}.\r", end="")
+                console.print(f"Has to be at least {min_value}.\r", end="")
                 return_value = None
         if max_value is not None and return_value is not None:
             if return_value > max_value:
-                print(f"Has to be at most {max_value}.\r", end="")
+                console.print(f"Has to be at most {max_value}.\r", end="")
                 return_value = None
         if return_value is not None:
             break
-    print("", end="")
+    console.print("", end="")
     if allow_float:
         return return_value
     return int(return_value)
@@ -96,19 +96,20 @@ def secure_input(prompt: str) -> str:
 
 def select(
     options: List[str],
-    caption_indices: Optional[List[int]] = None,
-    deselected_prefix: str = "  ",
-    selected_prefix: str = "[pink1]> [/pink1]",
+    cursor: str = "> ",
+    cursor_color = 'pink1',
     selected_index: int = 0,
-) -> int:
-
-    if caption_indices is None:
-        caption_indices = []
+    strict: bool = False,
+) -> Union[int, None]:
+    if not options:
+        if strict:
+            raise ValueError('`options` cannot be empty')
+        return None
     while True:
         format_option = lambda i, option: "{}{}".format(
-            selected_prefix if i == selected_index else deselected_prefix, option
+            f'[{cursor_color}]{cursor}[/{cursor_color}]' if i == selected_index else ' ' * len(cursor), option
         )
-        print("\n".join([format_option(i, option) for i, option in enumerate(options)]))
+        console.print("\n".join([format_option(i, option) for i, option in enumerate(options)]))
 
         for _ in range(len(options)):
             reset_line_up()
@@ -156,7 +157,7 @@ def select_multiple(
     max_index = len(options) - (1 if True else 0)
     error_message = ""
     while True:
-        print(
+        console.print(
             "\n".join(
                 [
                     format_option(
@@ -205,8 +206,8 @@ def select_multiple(
         elif keypress in DefaultKeys.interrupt:
             raise KeyboardInterrupt
         if error_message != "":
-            print(error_message)
-    print("", end="", flush=True)
+            console.print(error_message)
+    console.print("", end="")
     return ticked_indices
 
 
@@ -245,7 +246,7 @@ def prompt_yes_or_no(
         yes = is_yes and is_selected
         no = not is_yes and is_selected
         question_line = f"{question}{yn_prompt}{current_message}"
-        print(
+        console.print(
             f"{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}"
         )
         for _ in range(3):
