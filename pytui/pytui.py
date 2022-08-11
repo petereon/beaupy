@@ -37,7 +37,7 @@ def reset_line_up():
     sys.stdout.write("\x1b[2K\033[F\x1b[2K")
 
 
-def get_number(
+def prompt_number(
     prompt: str,
     min_value: Optional[float] = None,
     max_value: Optional[float] = None,
@@ -82,7 +82,7 @@ def get_number(
     return int(return_value)
 
 
-def secure_input(prompt: str) -> str:
+def prompt_secure(prompt: str) -> str:
     """Get secure input without showing it in the command line.
 
     Args:
@@ -101,6 +101,7 @@ def select(
     selected_index: int = 0,
     strict: bool = False,
 ) -> Union[int, None]:
+    # TODO: Add API doc so I can generate docs
     if not options:
         if strict:
             raise ValueError('`options` cannot be empty')
@@ -151,7 +152,7 @@ def select_multiple(
     minimal_count: int = 0,
     maximal_count: Optional[int] = None,
 ) -> List[int]:
-
+    # TODO: Add API doc so I can generate docs
     if ticked_indices is None:
         ticked_indices = []
     max_index = len(options) - (1 if True else 0)
@@ -211,7 +212,7 @@ def select_multiple(
     return ticked_indices
 
 
-def prompt_yes_or_no(
+def confirm(
     question: str,
     yes_text: str = "Yes",
     no_text: str = "No",
