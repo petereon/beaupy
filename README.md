@@ -9,8 +9,8 @@
 | `select`      | Prompt to pick a choice from a list |
 | `select_multiple` (checkboxes) | Prompt to select one or multiple choices from a list |
 | `confirm` | Prompt with a question and yes/no options |
-| `secure_input` | Prompt that takes input without displaying |
-| `get_number` | Prompt that takes a numeric input and validates |
+| `prompt_secure` | Prompt that takes input without displaying |
+| `prompt_number` | Prompt that takes a numeric input and validates |
 
 ## Usage
 
