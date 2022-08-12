@@ -4,18 +4,15 @@
 
 **PyTUI** implements a number of common interactive elements:
 
-| Function      | Functionality             |
-|:--------------|:--------------------------|
-| `select`      | Prompt to pick a choice from a list |
+| Function                       | Functionality                                        |
+|:-------------------------------|:-----------------------------------------------------|
+| `select`                       | Prompt to pick a choice from a list                  |
 | `select_multiple` (checkboxes) | Prompt to select one or multiple choices from a list |
-| `confirm` | Prompt with a question and yes/no options |
-| `prompt_secure` | Prompt that takes input without displaying |
-| `prompt_number` | Prompt that takes a numeric input and validates |
+| `confirm`                      | Prompt with a question and yes/no options            |
+| `prompt_secure`                |           Prompt that takes input without displaying |
+| `prompt_number`                | Prompt that takes a numeric input and validates      |
 
 ## Usage
-
-These are the main functions of cutie.
-[example.py](https://github.com/Kamik423/cutie/blob/master/example.py) contains an extended version of this also showing off the `select_multiple` option.
 
 ```python
 import pytui
@@ -72,7 +69,7 @@ From source:
 ```sh
 git clone https://github.com/petereon/pytui.git
 poetry build
-pipx install ./dist/pytui-{{some-version}}-py3-none-any.whl
+pip install ./dist/pytui-{{some-version}}-py3-none-any.whl
 ```
 
 ## Documentation
@@ -84,8 +81,6 @@ If you want to contribute, please feel free to suggest features or implement the
 
 Also **please report any issues and bugs you might find!**
 
-If you have a project that uses cutie please let me know and I'll link it here!
-
 ## License
 
-The project is licensed under the [MIT-License](https://github.com/Kamik423/cutie/blob/master/license.md).
+The project is licensed under the [MIT-License](LICENSE).
