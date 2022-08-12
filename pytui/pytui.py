@@ -101,7 +101,21 @@ def select(
     selected_index: int = 0,
     strict: bool = False,
 ) -> Union[int, None]:
-    # TODO: Add API doc so I can generate docs
+    """A prompt that allows selecting one option from a list of options
+
+    Args:
+        options (List[str]): A list of options to select from
+        cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to "> ".
+        cursor_color (str, optional): Color of the cursor. Defaults to 'pink1'.
+        selected_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
+        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
+
+    Raises:
+        ValueError: Thrown if no `options` are povided and strict is `True`
+
+    Returns:
+        Union[int, None]: Index of a selected option or `None`
+    """    
     if not options:
         if strict:
             raise ValueError('`options` cannot be empty')
@@ -152,7 +166,24 @@ def select_multiple(
     minimal_count: int = 0,
     maximal_count: Optional[int] = None,
 ) -> List[int]:
-    # TODO: Add API doc so I can generate docs
+    """A prompt that allows selecting multiple options from a list of options
+
+    Args:
+        options (List[str]): A list of options to select from
+        tick_character (str, optional): Character that will be used as a tick in a checkbox. Defaults to "x".
+        tick_color (str, optional): Color of the tick character. Defaults to "cyan1".
+        selected_color (str, optional): Color of the option when the cursor is currently on it. Defaults to "pink1".
+        ticked_indices (Optional[List[int]], optional): Indices of options that are pre-ticked when the prompt appears. Defaults to None.
+        cursor_index (int, optional): Index of the option cursor starts at. Defaults to 0.
+        minimal_count (int, optional): Minimal count of options that need to be selected. Defaults to 0.
+        maximal_count (Optional[int], optional): Maximal count of options that need to be selected. Defaults to None.
+
+    Raises:
+        KeyboardInterrupt: Raised when Ctrl+C is encountered
+
+    Returns:
+        List[int]: A list of selected indices
+    """    
     if ticked_indices is None:
         ticked_indices = []
     max_index = len(options) - (1 if True else 0)
@@ -219,26 +250,29 @@ def confirm(
     has_to_match_case: bool = False,
     enter_empty_confirms: bool = True,
     default_is_yes: bool = False,
-    deselected_prefix: str = "  ",
-    selected_prefix: str = "[green]> [/green]",
+    cursor: str = "> ",
+    cursor_color: str = 'magenta1',
     char_prompt: bool = True,
 ) -> Optional[bool]:
-    """Prompt the user to input yes or no.
+    """A prompt that asks a question and offers two responses
 
     Args:
-        question (str): The prompt asking the user to input.
-        yes_text (str, optional): The text corresponding to 'yes'.
-        no_text (str, optional): The text corresponding to 'no'.
-        has_to_match_case (bool, optional): Does the case have to match.
-        enter_empty_confirms (bool, optional): Does enter on empty string work.
-        default_is_yes (bool, optional): Is yes selected by default (no).
-        deselected_prefix (str, optional): Prefix if something is deselected.
-        selected_prefix (str, optional): Prefix if something is selected (> )
-        char_prompt (bool, optional): Add a [Y/N] to the prompt.
+        question (str): Question to be asked
+        yes_text (str, optional): Text of the positive response. Defaults to "Yes".
+        no_text (str, optional): Text of the negative response. Defaults to "No".
+        has_to_match_case (bool, optional): Check if typed response matches case. Defaults to False.
+        enter_empty_confirms (bool, optional): No response is confirmation. Defaults to True.
+        default_is_yes (bool, optional): Default is Yes. Defaults to False.
+        cursor (str, optional): What character(s) to use as a cursor. Defaults to "> ".
+        cursor_color (str, optional): Color of the cursor. Defaults to 'magenta1'.
+        char_prompt (bool, optional): Print [Y/n] after the question. Defaults to True.
+
+    Raises:
+        KeyboardInterrupt: Raised when Ctrl+C is encountered
 
     Returns:
-        Optional[bool]: The bool what has been selected.
-    """
+        Optional[bool]
+    """    
     is_yes = default_is_yes
     is_selected = enter_empty_confirms
     current_message = ""
@@ -247,6 +281,8 @@ def confirm(
         yes = is_yes and is_selected
         no = not is_yes and is_selected
         question_line = f"{question}{yn_prompt}{current_message}"
+        selected_prefix = f"[{cursor_color}]{cursor}[/{cursor_color}]"
+        deselected_prefix = " " * len(cursor)
         console.print(
             f"{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}"
         )
