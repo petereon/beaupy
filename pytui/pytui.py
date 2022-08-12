@@ -10,7 +10,6 @@ import sys
 from typing import List, Optional, Union
 
 import readchar
-from readchar import readkey
 from rich.console import Console
 
 console = Console()
@@ -101,7 +100,7 @@ def select(
     options: List[str],
     cursor: str = '> ',
     cursor_color='pink1',
-    selected_index: int = 0,
+    cursor_index: int = 0,
     strict: bool = False,
 ) -> Union[int, None]:
     '''A prompt that allows selecting one option from a list of options
@@ -110,7 +109,7 @@ def select(
         options (List[str]): A list of options to select from
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
         cursor_color (str, optional): Color of the cursor. Defaults to 'pink1'.
-        selected_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
+        cursor_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
 
     Raises:
@@ -126,7 +125,7 @@ def select(
     while True:
         format_option = lambda i, option: '{}{}'.format(
             f'[{cursor_color}]{cursor}[/{cursor_color}]'
-            if i == selected_index else ' ' * len(cursor),
+            if i == cursor_index else ' ' * len(cursor),
             option,
         )
         console.print('\n'.join(
@@ -134,21 +133,21 @@ def select(
 
         for _ in range(len(options)):
             reset_line_up()
-        keypress = readkey()
+        keypress = readchar.readkey()
         if keypress in DefaultKeys.up:
-            new_index = selected_index
+            new_index = cursor_index
             while new_index > 0:
                 new_index -= 1
-                selected_index = new_index
+                cursor_index = new_index
                 break
         elif keypress in DefaultKeys.down:
-            new_index = selected_index
+            new_index = cursor_index
             while new_index < len(options) - 1:
                 new_index += 1
-                selected_index = new_index
+                cursor_index = new_index
                 break
         elif keypress in DefaultKeys.confirm:
-            return selected_index
+            return cursor_index
         elif keypress in DefaultKeys.interrupt:
             return None
 
@@ -167,11 +166,12 @@ def select_multiple(
     options: List[str],
     tick_character: str = 'x',
     tick_color: str = 'cyan1',
-    selected_color: str = 'pink1',
+    cursor_color: str = 'pink1',
     ticked_indices: Optional[List[int]] = None,
     cursor_index: int = 0,
     minimal_count: int = 0,
     maximal_count: Optional[int] = None,
+    strict: bool = False, 
 ) -> List[int]:
     '''A prompt that allows selecting multiple options from a list of options
 
@@ -179,11 +179,12 @@ def select_multiple(
         options (List[str]): A list of options to select from
         tick_character (str, optional): Character that will be used as a tick in a checkbox. Defaults to 'x'.
         tick_color (str, optional): Color of the tick character. Defaults to 'cyan1'.
-        selected_color (str, optional): Color of the option when the cursor is currently on it. Defaults to 'pink1'.
+        cursor_color (str, optional): Color of the option when the cursor is currently on it. Defaults to 'pink1'.
         ticked_indices (Optional[List[int]], optional): Indices of options that are pre-ticked when the prompt appears. Defaults to None.
         cursor_index (int, optional): Index of the option cursor starts at. Defaults to 0.
         minimal_count (int, optional): Minimal count of options that need to be selected. Defaults to 0.
         maximal_count (Optional[int], optional): Maximal count of options that need to be selected. Defaults to None.
+        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
 
     Raises:
         KeyboardInterrupt: Raised when Ctrl+C is encountered
@@ -191,6 +192,10 @@ def select_multiple(
     Returns:
         List[int]: A list of selected indices
     '''
+    if not options:
+        if strict:
+            raise ValueError('`options` cannot be empty')
+        return []
     if ticked_indices is None:
         ticked_indices = []
     max_index = len(options) - (1 if True else 0)
@@ -203,12 +208,12 @@ def select_multiple(
                 tick_character=tick_character,
                 tick_color=tick_color,
                 selected=i == cursor_index,
-                selected_color=selected_color,
+                selected_color=cursor_color,
             ) for i, option in enumerate(options)
         ]))
         for i in range(len(options)):
             reset_line_up()
-        keypress = readkey()
+        keypress = readchar.readkey()
         if keypress in DefaultKeys.up:
             new_index = cursor_index
             while new_index > 0:
@@ -242,7 +247,7 @@ def select_multiple(
             raise KeyboardInterrupt
         if error_message != '':
             console.print(error_message)
-    console.print('', end='')
+            error_message = ''
     return ticked_indices
 
 
@@ -291,7 +296,7 @@ def confirm(
         )
         for _ in range(3):
             reset_line_up()
-        keypress = readkey()
+        keypress = readchar.readkey()
         if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
             is_yes = not is_yes
             is_selected = True
