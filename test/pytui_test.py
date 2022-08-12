@@ -205,4 +205,7 @@ def _():
     assert console.print.call_args_list[5] == mock.call('\\[[cyan1]😋[/cyan1]] test1\n\\[[cyan1]😋[/cyan1]] [pink1]test2[/pink1]')
     assert console.print.call_count == 6
     assert res == [0,1]
-# TODO: Include tests for other functions
+
+
+# TODO: Include tests for `confirm`
+# TODO: Drive implementation of `prompt` by the tests

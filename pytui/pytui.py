@@ -38,7 +38,8 @@ class DefaultKeys:
 def reset_line_up():
     sys.stdout.write('\x1b[2K\033[F\x1b[2K')
 
-
+# TODO: rewrite `prompt_number` and `prompt_secure` into just `prompt` and offering a parameter that takes type to validate against
+# and another parameter for secure/plaintext input
 def prompt_number(
     prompt: str,
     min_value: Optional[float] = None,
