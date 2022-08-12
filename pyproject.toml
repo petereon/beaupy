@@ -29,7 +29,7 @@ rich = "^12.5.1"
 
 [[tool.pydoc-markdown.loaders]]
 type = "python"
-search_path = [ "../src" ]
+search_path = [ "./pytui" ]
 
 [tool.pydoc-markdown.renderer]
 type = "markdown"
