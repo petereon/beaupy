@@ -65,6 +65,8 @@ def main():
 
 ## Installation
 
+> :warning: No PyPI release is available yet
+
 From source:
 ```sh
 git clone https://github.com/petereon/pytui.git
@@ -72,15 +74,21 @@ poetry build
 pip install ./dist/pytui-{{some-version}}-py3-none-any.whl
 ```
 
+## Roadmap
+
+1. Achieve >90% test coverage
+2. PyPI Release
+3. Extend `select` with filterability
+4. ...
+
 ## Docmentation
 
-**PyTUI** is a library of interactive TUI elements for CLI applications. It is based on another library built for the same purpose [`cutie`](https://github.com/kamik423/cutie).
+**PyTUI** is a library of interactive TUI elements for CLI applications. It is based on another library built for the same purpose, [`cutie`](https://github.com/kamik423/cutie).
 
 In comparison, **PyTUI** is
 
 - more [rich](https://rich.readthedocs.io/en/stable/) friendly
 - more opinionated
-- Poetry built
 - less unicode heavy (relies on [rich](https://rich.readthedocs.io/en/stable/) for this)
 
 ### API Doc
