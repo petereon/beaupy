@@ -1,20 +1,29 @@
 # PyTUI
 
-> A library of interactive CLI elements you have been looking for
+> :star: A library of interactive CLI elements you have been looking for
+> :keyboard:
 
 **PyTUI** implements a number of common interactive elements:
 
-| Function                       | Functionality                                        |
-|:-------------------------------|:-----------------------------------------------------|
-| `select`                       | Prompt to pick a choice from a list                  |
-| `select_multiple` (checkboxes) | Prompt to select one or multiple choices from a list |
-| `confirm`                      | Prompt with a question and yes/no options            |
-| `prompt_secure`                |           Prompt that takes input without displaying |
-| `prompt_number`                | Prompt that takes a numeric input and validates      |
+  -----------------------------------------------------------------------
+  Function                   Functionality
+  -------------------------- --------------------------------------------
+  `select`                   Prompt to pick a choice from a list
+
+  `select_multiple`          Prompt to select one or multiple choices
+  (checkboxes)               from a list
+
+  `confirm`                  Prompt with a question and yes/no options
+
+  `prompt_secure`            Prompt that takes input without displaying
+
+  `prompt_number`            Prompt that takes a numeric input and
+                             validates
+  -----------------------------------------------------------------------
 
 ## Usage
 
-```python
+``` python
 import pytui
 
 
@@ -60,13 +69,13 @@ def main():
                 print(f'His nemeses are {" and ".join(nemeses)}.')
         else:
             print("He has no nemesis.")
-
 ```
 
 ## Installation
 
 From source:
-```sh
+
+``` sh
 git clone https://github.com/petereon/pytui.git
 poetry build
 pip install ./dist/pytui-{{some-version}}-py3-none-any.whl
@@ -77,7 +86,8 @@ TODO: Add API doc
 
 ## Contributing
 
-If you want to contribute, please feel free to suggest features or implement them yourself.
+If you want to contribute, please feel free to suggest features or
+implement them yourself.
 
 Also **please report any issues and bugs you might find!**
 

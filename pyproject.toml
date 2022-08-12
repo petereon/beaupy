@@ -5,16 +5,76 @@ description = "A library of elements for interactive TUIs in Python"
 authors = ["Peter Vyboch <pvyboch1@gmail.com>"]
 license = "MIT"
 
+[tool.poe.tasks]
+add = { shell = "poetry add" }
+install = { shell = "poetry install" }
+build = { shell = "poetry build" }
+clean = { shell = "rm -R ./dist .pytest_cache .mypy_cache &> /dev/null" }
+
+isort = { shell = "poetry run isort ./src" }
+black = { shell = "poetry run black ./src/" }
+mypy = { shell = "poetry run mypy ./src/" }
+flake8 = {shell = "poetry run pflake8 ./src/"}
+lint = { shell = """echo '\nRunning isort:' && poetry run isort ./src && 
+                    echo '\nRunning black:' && poetry run black ./src/ && 
+                    echo '\nRunning mypy:' && poetry run mypy ./src/ && 
+                    echo '\nRunning flake8:' && poetry run pflake8 ./src/ && 
+                    echo '\nRunning pymarkdownlint:' && poetry run pymarkdownlint && 
+                    echo '\nRunning perflint...' && poetry run perflint ./src/"""}
+
 [tool.poetry.dependencies]
 python = "^3.7"
 readchar = "^3.1.0"
 rich = "^12.5.1"
 
+[[tool.pydoc-markdown.loaders]]
+type = "python"
+search_path = [ "../src" ]
+
+[tool.pydoc-markdown.renderer]
+type = "markdown"
+
+
 [tool.poetry.dev-dependencies]
-ward = "^0.66.1-beta.0"
-black = "^22.6.0"
-flake8 = "^5.0.4"
-mypy = "^0.971"
+# Code Scanning and Formatting
+black = { version = "*", allow-prereleases = true }
+mypy = "*"
+pyproject-flake8 = "*"
+
+## Bugs
+flake8-bugbear = "*"
+flake8-simplify = "*"
+flake8-pie = "*"
+flake8-bandit = "*"
+
+## Complexity
+flake8-cognitive-complexity = "*"
+flake8-expression-complexity = "*"
+radon = "*"
+xenon = "*"
+
+## Lints
+flake8-quotes = "*"
+flake8-print = "*"
+flake8-eradicate = "*"
+flake8-comments = "*"
+toml-sort = "*"
+isort = "*"
+
+## Performance
+perflint = "*"
+
+# Expect Pattern Testing
+expycted = "*"
+
+# Unit Testing
+ward = "*"
+mock = "*"
+watchdog = "*"
+
+# Task Runner
+poethepoet = "*"
+pydoc-markdown = "^4.6.3"
 
 [tool.ward]
 path = ["test"]
