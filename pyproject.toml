@@ -21,7 +21,7 @@ lint = { shell = 'echo "Running isort..." ; poetry run isort ./pytui ; echo "Run
 "test:watch" = { shell = "poetry run ward; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='ward'" }
 
 [tool.poetry.dependencies]
-python = '^3.7'
+python = '^3.7.8'
 readchar = '^3.1.0'
 rich = '^12.5.1'
 
@@ -32,6 +32,12 @@ search_path = [ './pytui' ]
 [tool.pydoc-markdown.renderer]
 type = 'markdown'
 
+[tool.ward] 
+path = ['test']
+hook_module = ["ward_coverage"]
+
+[tool.ward.plugins.coverage]
+omit = "*test*"
 
 [tool.poetry.dev-dependencies]
 # Code Scanning and Formatting
@@ -67,15 +73,15 @@ expycted = '*'
 
 # Unit Testing
 ward = '*'
+ward-coverage = {git = "https://github.com/petereon/ward-coverage.git"}
 mock = '*'
 watchdog = '*'
 
 # Task Runner
 poethepoet = '*'
-pydoc-markdown = "^4.6.3"
 
-[tool.ward]
-path = ['test']
+# Docs
+pydoc-markdown = "^4.6.3"
 
 [build-system]
 requires = ['poetry-core>=1.0.0']
