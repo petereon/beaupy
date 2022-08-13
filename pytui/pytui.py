@@ -46,7 +46,8 @@ T = TypeVar('T')
 def prompt(
     prompt: str,
     type: Type[T] = str,
-    validator: Callable = lambda input: True
+    validator: Callable = lambda input: True,
+    secure: bool = False
 ) -> Union[T, str]:
     pass
 
