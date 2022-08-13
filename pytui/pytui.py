@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
-'''
+"""
 Commandline User Tools for Input Easification
-'''
+"""
 
-__license__ = 'MIT'
+__license__ = "MIT"
 
 import getpass
 import sys
@@ -16,7 +16,7 @@ console = Console()
 
 
 class DefaultKeys:
-    '''List of default keybindings.
+    """List of default keybindings.
 
     Attributes:
         interrupt(List[str]): Keys that cause a keyboard interrupt.
@@ -25,31 +25,34 @@ class DefaultKeys:
         delete(List[str]): Keys that trigger character deletion.
         down(List[str]): Keys that select the element below.
         up(List[str]): Keys that select the element above.
-    '''
+    """
 
     interrupt: List[str] = [readchar.key.CTRL_C, readchar.key.CTRL_D]
     select: List[str] = [readchar.key.SPACE]
     confirm: List[str] = [readchar.key.ENTER]
     delete: List[str] = [readchar.key.BACKSPACE]
-    down: List[str] = [readchar.key.DOWN, 'j']
-    up: List[str] = [readchar.key.UP, 'k']
+    down: List[str] = [readchar.key.DOWN, "j"]
+    up: List[str] = [readchar.key.UP, "k"]
 
 
 def reset_line_up():
-    sys.stdout.write('\x1b[2K\033[F\x1b[2K')
+    sys.stdout.write("\x1b[2K\033[F\x1b[2K")
+
 
 # TODO: rewrite `prompt_number` and `prompt_secure` into just `prompt` and offering a parameter that takes type to validate against
 # and another parameter for secure/plaintext input
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 def prompt(
     prompt: str,
     type: Type[T] = str,
     validator: Callable = lambda input: True,
-    secure: bool = False
+    secure: bool = False,
 ) -> Union[T, str]:
     pass
+
 
 def prompt_number(
     prompt: str,
@@ -57,7 +60,7 @@ def prompt_number(
     max_value: Optional[float] = None,
     allow_float: bool = True,
 ) -> float:
-    '''Get a number from user input.
+    """Get a number from user input.
     If an invalid number is entered the user will be prompted again.
 
     Args:
@@ -68,54 +71,54 @@ def prompt_number(
 
     Returns:
         float: The number input by the user.
-    '''
+    """
     return_value: Optional[float] = None
     while return_value is None:
-        input_value = input(prompt + ' ')
+        input_value = input(prompt + " ")
         try:
             return_value = float(input_value)
         except ValueError:
-            console.print('Not a valid number.\r', end='')
+            console.print("Not a valid number.\r", end="")
         if not allow_float and return_value is not None:
             if return_value != int(return_value):
-                console.print('Has to be an integer.\r', end='')
+                console.print("Has to be an integer.\r", end="")
                 return_value = None
         if min_value is not None and return_value is not None:
             if return_value < min_value:
-                console.print(f'Has to be at least {min_value}.\r', end='')
+                console.print(f"Has to be at least {min_value}.\r", end="")
                 return_value = None
         if max_value is not None and return_value is not None:
             if return_value > max_value:
-                console.print(f'Has to be at most {max_value}.\r', end='')
+                console.print(f"Has to be at most {max_value}.\r", end="")
                 return_value = None
         if return_value is not None:
             break
-    console.print('', end='')
+    console.print("", end="")
     if allow_float:
         return return_value
     return int(return_value)
 
 
 def prompt_secure(prompt: str) -> str:
-    '''Get secure input without showing it in the command line.
+    """Get secure input without showing it in the command line.
 
     Args:
         prompt (str): The prompt asking the user to input.
 
     Returns:
         str: The secure input.
-    '''
-    return getpass.getpass(prompt + ' ')
+    """
+    return getpass.getpass(prompt + " ")
 
 
 def select(
     options: List[str],
-    cursor: str = '> ',
-    cursor_color='pink1',
+    cursor: str = "> ",
+    cursor_color="pink1",
     cursor_index: int = 0,
     strict: bool = False,
 ) -> Union[int, None]:
-    '''A prompt that allows selecting one option from a list of options
+    """A prompt that allows selecting one option from a list of options
 
     Args:
         options (List[str]): A list of options to select from
@@ -129,19 +132,21 @@ def select(
 
     Returns:
         Union[int, None]: Index of a selected option or `None`
-    '''
+    """
     if not options:
         if strict:
-            raise ValueError('`options` cannot be empty')
+            raise ValueError("`options` cannot be empty")
         return None
     while True:
-        format_option = lambda i, option: '{}{}'.format(
-            f'[{cursor_color}]{cursor}[/{cursor_color}]'
-            if i == cursor_index else ' ' * len(cursor),
+        format_option = lambda i, option: "{}{}".format(
+            f"[{cursor_color}]{cursor}[/{cursor_color}]"
+            if i == cursor_index
+            else " " * len(cursor),
             option,
         )
-        console.print('\n'.join(
-            [format_option(i, option) for i, option in enumerate(options)]))
+        console.print(
+            "\n".join([format_option(i, option) for i, option in enumerate(options)])
+        )
 
         for _ in range(len(options)):
             reset_line_up()
@@ -164,28 +169,27 @@ def select(
             return None
 
 
-def format_option(option, ticked, tick_character, tick_color, selected,
-                  selected_color):
-    prefix = f'\[ ]'
+def format_option(option, ticked, tick_character, tick_color, selected, selected_color):
+    prefix = f"\[ ]"
     if ticked:
-        prefix = f'\[[{tick_color}]{tick_character}[/{tick_color}]]'
+        prefix = f"\[[{tick_color}]{tick_character}[/{tick_color}]]"
     if selected:
-        option = f'[{selected_color}]{option}[/{selected_color}]'
-    return f'{prefix} {option}'
+        option = f"[{selected_color}]{option}[/{selected_color}]"
+    return f"{prefix} {option}"
 
 
 def select_multiple(
     options: List[str],
-    tick_character: str = 'x',
-    tick_color: str = 'cyan1',
-    cursor_color: str = 'pink1',
+    tick_character: str = "x",
+    tick_color: str = "cyan1",
+    cursor_color: str = "pink1",
     ticked_indices: Optional[List[int]] = None,
     cursor_index: int = 0,
     minimal_count: int = 0,
     maximal_count: Optional[int] = None,
-    strict: bool = False, 
+    strict: bool = False,
 ) -> List[int]:
-    '''A prompt that allows selecting multiple options from a list of options
+    """A prompt that allows selecting multiple options from a list of options
 
     Args:
         options (List[str]): A list of options to select from
@@ -203,26 +207,31 @@ def select_multiple(
 
     Returns:
         List[int]: A list of selected indices
-    '''
+    """
     if not options:
         if strict:
-            raise ValueError('`options` cannot be empty')
+            raise ValueError("`options` cannot be empty")
         return []
     if ticked_indices is None:
         ticked_indices = []
     max_index = len(options) - (1 if True else 0)
-    error_message = ''
+    error_message = ""
     while True:
-        console.print('\n'.join([
-            format_option(
-                option=option,
-                ticked=i in ticked_indices,
-                tick_character=tick_character,
-                tick_color=tick_color,
-                selected=i == cursor_index,
-                selected_color=cursor_color,
-            ) for i, option in enumerate(options)
-        ]))
+        console.print(
+            "\n".join(
+                [
+                    format_option(
+                        option=option,
+                        ticked=i in ticked_indices,
+                        tick_character=tick_character,
+                        tick_color=tick_color,
+                        selected=i == cursor_index,
+                        selected_color=cursor_color,
+                    )
+                    for i, option in enumerate(options)
+                ]
+            )
+        )
         for i in range(len(options)):
             reset_line_up()
         keypress = readchar.readkey()
@@ -249,32 +258,31 @@ def select_multiple(
                 ticked_indices.append(cursor_index)
         elif keypress in DefaultKeys.confirm:
             if minimal_count > len(ticked_indices):
-                error_message = f'Must select at least {minimal_count} options'
-            elif maximal_count is not None and maximal_count < len(
-                    ticked_indices):
-                error_message = f'Must select at most {maximal_count} options'
+                error_message = f"Must select at least {minimal_count} options"
+            elif maximal_count is not None and maximal_count < len(ticked_indices):
+                error_message = f"Must select at most {maximal_count} options"
             else:
                 break
         elif keypress in DefaultKeys.interrupt:
             raise KeyboardInterrupt
-        if error_message != '':
+        if error_message != "":
             console.print(error_message)
-            error_message = ''
+            error_message = ""
     return ticked_indices
 
 
 def confirm(
     question: str,
-    yes_text: str = 'Yes',
-    no_text: str = 'No',
+    yes_text: str = "Yes",
+    no_text: str = "No",
     has_to_match_case: bool = False,
     enter_empty_confirms: bool = True,
     default_is_yes: bool = False,
-    cursor: str = '> ',
-    cursor_color: str = 'magenta1',
+    cursor: str = "> ",
+    cursor_color: str = "magenta1",
     char_prompt: bool = True,
 ) -> Optional[bool]:
-    '''A prompt that asks a question and offers two responses
+    """A prompt that asks a question and offers two responses
 
     Args:
         question (str): Question to be asked
@@ -292,19 +300,19 @@ def confirm(
 
     Returns:
         Optional[bool]
-    '''
+    """
     is_yes = default_is_yes
     is_selected = enter_empty_confirms
-    current_message = ''
-    yn_prompt = f' ({yes_text[0]}/{no_text[0]}) ' if char_prompt else ': '
-    selected_prefix = f'[{cursor_color}]{cursor}[/{cursor_color}]'
-    deselected_prefix = ' ' * len(cursor)
+    current_message = ""
+    yn_prompt = f" ({yes_text[0]}/{no_text[0]}) " if char_prompt else ": "
+    selected_prefix = f"[{cursor_color}]{cursor}[/{cursor_color}]"
+    deselected_prefix = " " * len(cursor)
     while True:
         yes = is_yes and is_selected
         no = not is_yes and is_selected
-        question_line = f'{question}{yn_prompt}{current_message}'
+        question_line = f"{question}{yn_prompt}{current_message}"
         console.print(
-            f'{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}'
+            f"{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}"
         )
         for _ in range(3):
             reset_line_up()
@@ -321,7 +329,7 @@ def confirm(
         elif keypress in DefaultKeys.confirm:
             if is_selected:
                 break
-        elif keypress in '\t':
+        elif keypress in "\t":
             if is_selected:
                 current_message = yes_text if is_yes else no_text
         else:

@@ -15,7 +15,7 @@ isort = { shell = 'poetry run isort ./pytui' }
 black = { shell = 'poetry run black ./pytui/' }
 mypy = { shell = 'poetry run mypy ./pytui/' }
 flake8 = {shell = 'poetry run pflake8 ./pytui/'}
-lint = { shell = 'echo "Running isort..." ; poetry run isort ./pytui ; echo "Running yapf..." ; poetry run yapf -i --recursive ./pytui/ ; echo "Running flake8..." ; poetry run pflake8 ./pytui/ ; echo "Running perflint..." ; poetry run perflint ./pytui/'}
+lint = { shell = 'echo "Running isort..." ; poetry run isort ./pytui ; echo "Running yapf..." ; poetry run black ; echo "Running flake8..." ; poetry run pflake8 ./pytui/ ; echo "Running perflint..." ; poetry run perflint ./pytui/'}
 
 [tool.poetry.dependencies]
 python = '^3.7'
@@ -34,6 +34,7 @@ type = 'markdown'
 # Code Scanning and Formatting
 mypy = '*'
 pyproject-flake8 = '*'
+black = "^22.6.0"
 
 ## Bugs
 flake8-bugbear = '*'
@@ -68,7 +69,6 @@ watchdog = '*'
 
 # Task Runner
 poethepoet = '*'
-yapf = '^0.32.0'
 pydoc-markdown = "^4.6.3"
 
 [tool.ward]
