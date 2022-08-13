@@ -7,9 +7,9 @@ __license__ = "MIT"
 
 import getpass
 import sys
-from typing import Callable, List, Optional, Type, TypeVar, Union
+from typing import Any, Callable, List, Optional, Type, TypeVar, Union
 
-import readchar
+import readchar # type: ignore
 from rich.console import Console
 
 console = Console()
@@ -47,8 +47,8 @@ T = TypeVar("T")
 
 def prompt(
     prompt: str,
-    type: Type[T] = str,
-    validator: Callable = lambda input: True,
+    type: Union[Type[T], Type[str]] = str,
+    validator: Callable[[Any], bool] = lambda input: True,
     secure: bool = False,
 ) -> Union[T, str]:
     pass
