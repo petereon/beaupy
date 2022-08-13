@@ -7,7 +7,7 @@ __license__ = 'MIT'
 
 import getpass
 import sys
-from typing import List, Optional, Union
+from typing import Callable, List, Optional, Type, TypeVar, Union
 
 import readchar
 from rich.console import Console
@@ -40,6 +40,16 @@ def reset_line_up():
 
 # TODO: rewrite `prompt_number` and `prompt_secure` into just `prompt` and offering a parameter that takes type to validate against
 # and another parameter for secure/plaintext input
+
+T = TypeVar('T')
+
+def prompt(
+    prompt: str,
+    type: Type[T] = str,
+    validator: Callable = lambda input: True
+) -> Union[T, str]:
+    pass
+
 def prompt_number(
     prompt: str,
     min_value: Optional[float] = None,
