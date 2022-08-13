@@ -17,6 +17,9 @@ mypy = { shell = 'poetry run mypy ./pytui/' }
 flake8 = {shell = 'poetry run pflake8 ./pytui/'}
 lint = { shell = 'echo "Running isort..." ; poetry run isort ./pytui ; echo "Running yapf..." ; poetry run black ; echo "Running flake8..." ; poetry run pflake8 ./pytui/ ; echo "Running perflint..." ; poetry run perflint ./pytui/'}
 
+"test" = { shell = "poetry run ward" }
+"test:watch" = { shell = "poetry run ward; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='ward'" }
+
 [tool.poetry.dependencies]
 python = '^3.7'
 readchar = '^3.1.0'
