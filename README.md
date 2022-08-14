@@ -28,11 +28,11 @@ def main():
             "Sir Bedevere the Wise",
             "Sir Galahad the Pure",
         ]
-        # Get the index of selected option
-        name = names[pytui.select(names, selected_index=4)]
+
+        name = names[pytui.select(names, cursor_index=3)]
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
-        age = pytui.prompt_number("What is your age?", min_value=0, allow_float=False)
+        age = pytui.prompt("What is your age?", type=int, validator=lambda val: val > 0)
         nemeses_options = [
             "The French",
             "The Police",
@@ -51,7 +51,7 @@ def main():
             if nemesis_index in nemeses_indices
         ]
         # Get input without showing it being typed
-        quest = pytui.prompt_secure("What is your quest?")
+        quest = pytui.prompt("What is your quest?", secure=True)
         print(f"{name}'s quest (who is {age}) is {quest}.")
         if nemeses:
             if len(nemeses) == 1:
@@ -92,50 +92,37 @@ In comparison, **PyTUI** is
 - less unicode heavy (relies on [rich](https://rich.readthedocs.io/en/stable/) for this)
 
 ### API Doc
-<a id="pytui.prompt_number"></a>
+<a id="pytui.prompt"></a>
 
-#### prompt\_number
+#### prompt
 
 ```python
-def prompt_number(prompt: str,
-                  min_value: Optional[float] = None,
-                  max_value: Optional[float] = None,
-                  allow_float: bool = True) -> float
+def prompt(prompt: str,
+           type: Union[Type[T], Type[str]] = str,
+           validator: Callable[[Any], bool] = lambda input: True,
+           secure: bool = False) -> Union[T, str]
 ```
 
-Get a number from user input.
-If an invalid number is entered the user will be prompted again.
+Function that prompts the user for written input
 
 **Arguments**:
 
-- `prompt` _str_ - The prompt asking the user to input.
-- `min_value` _float, optional_ - The [inclusive] minimum value.
-- `max_value` _float, optional_ - The [inclusive] maximum value.
-- `allow_float` _bool, optional_ - Allow floats or force integers.
+- `prompt` _str_ - The prompt that will be displayed
+- `type` _Union[Type[T], Type[str]], optional_ - Type to convert the answer to. Defaults to str.
+- `validator` _Callable[[Any], bool], optional_ - Optional function to validate the input. Defaults to lambdainput:True.
+- `secure` _bool, optional_ - If True, input will be hidden. Defaults to False.
+  
+
+**Raises**:
+
+- `ValidationError` - Raised if validation with provided validator fails
+- `ConversionError` - Raised if the value cannot be converted to provided type
+- `KeyboardInterrupt` - Raised when keyboard interrupt is encountered
   
 
 **Returns**:
 
-- `float` - The number input by the user.
-
-<a id="pytui.prompt_secure"></a>
-
-#### prompt\_secure
-
-```python
-def prompt_secure(prompt: str) -> str
-```
-
-Get secure input without showing it in the command line.
-
-**Arguments**:
-
-- `prompt` _str_ - The prompt asking the user to input.
-  
-
-**Returns**:
-
-- `str` - The secure input.
+  Union[T, str]: Returns a value formatted as provided type or string if no type is provided
 
 <a id="pytui.select"></a>
 
@@ -143,8 +130,8 @@ Get secure input without showing it in the command line.
 
 ```python
 def select(options: List[str],
-           cursor: str = '> ',
-           cursor_color='pink1',
+           cursor: str = "> ",
+           cursor_color="pink1",
            cursor_index: int = 0,
            strict: bool = False) -> Union[int, None]
 ```
@@ -175,9 +162,9 @@ A prompt that allows selecting one option from a list of options
 
 ```python
 def select_multiple(options: List[str],
-                    tick_character: str = 'x',
-                    tick_color: str = 'cyan1',
-                    cursor_color: str = 'pink1',
+                    tick_character: str = "x",
+                    tick_color: str = "cyan1",
+                    cursor_color: str = "pink1",
                     ticked_indices: Optional[List[int]] = None,
                     cursor_index: int = 0,
                     minimal_count: int = 0,
@@ -215,13 +202,13 @@ A prompt that allows selecting multiple options from a list of options
 
 ```python
 def confirm(question: str,
-            yes_text: str = 'Yes',
-            no_text: str = 'No',
+            yes_text: str = "Yes",
+            no_text: str = "No",
             has_to_match_case: bool = False,
             enter_empty_confirms: bool = True,
             default_is_yes: bool = False,
-            cursor: str = '> ',
-            cursor_color: str = 'magenta1',
+            cursor: str = "> ",
+            cursor_color: str = "magenta1",
             char_prompt: bool = True) -> Optional[bool]
 ```
 
@@ -248,6 +235,7 @@ A prompt that asks a question and offers two responses
 **Returns**:
 
   Optional[bool]
+
 
 ## Contributing
 

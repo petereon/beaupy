@@ -64,6 +64,22 @@ def prompt(
     validator: Callable[[Any], bool] = lambda input: True,
     secure: bool = False,
 ) -> Union[T, str]:
+    """Function that prompts the user for written input
+
+    Args:
+        prompt (str): The prompt that will be displayed
+        type (Union[Type[T], Type[str]], optional): Type to convert the answer to. Defaults to str.
+        validator (Callable[[Any], bool], optional): Optional function to validate the input. Defaults to lambdainput:True.
+        secure (bool, optional): If True, input will be hidden. Defaults to False.
+
+    Raises:
+        ValidationError: Raised if validation with provided validator fails
+        ConversionError: Raised if the value cannot be converted to provided type
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered
+
+    Returns:
+        Union[T, str]: Returns a value formatted as provided type or string if no type is provided
+    """    
     return_value: str = ''
     render(secure, '', prompt)
     while True:
