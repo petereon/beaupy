@@ -1,6 +1,6 @@
 from unittest import mock
 from ward import test, raises
-from pytui import select_multiple, console
+from pytui import select_multiple, console, Config
 import readchar
 
 
@@ -172,3 +172,35 @@ def _():
     assert console.print.call_count == 6
     assert res == [0, 1]
 
+
+@test(
+    "`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt False"
+)
+def _():
+    steps = iter(
+        [readchar.key.CTRL_C]
+    )
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+    assert console.print.call_args_list[0] == mock.call(
+        "\\[ ] [pink1]test1[/pink1]\n\\[ ] test2"
+    )
+    assert console.print.call_count == 1
+    assert res == []
+    
+    
+@test(
+    "`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt True"
+)
+def _():
+    steps = iter(
+        [readchar.key.CTRL_C]
+    )
+    Config.raise_on_interrupt = True
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    with raises(KeyboardInterrupt):
+        select_multiple(options=["test1", "test2"], tick_character="😋")
+    

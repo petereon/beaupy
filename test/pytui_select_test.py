@@ -164,7 +164,7 @@ def _():
 
 
 @test(
-    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color"
+    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt False"
 )
 def _():
     steps = iter([readchar.key.CTRL_C])
@@ -186,7 +186,7 @@ def _():
 
   
 @test(
-    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color"
+    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt True"
 )
 def _():
     steps = iter([readchar.key.CTRL_C])
