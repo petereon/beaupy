@@ -15,6 +15,12 @@ from rich.console import Console
 console = Console()
 
 
+
+class Config:
+    raise_on_interrupt: bool = False
+    strict: bool = True
+    
+
 class DefaultKeys:
     """List of default keybindings.
 
@@ -166,6 +172,8 @@ def select(
         elif keypress in DefaultKeys.confirm:
             return cursor_index
         elif keypress in DefaultKeys.interrupt:
+            if Config.raise_on_interrupt:
+                raise KeyboardInterrupt
             return None
 
 
@@ -264,7 +272,9 @@ def select_multiple(
             else:
                 break
         elif keypress in DefaultKeys.interrupt:
-            raise KeyboardInterrupt
+            if Config.raise_on_interrupt:
+                raise KeyboardInterrupt
+            return []
         if error_message != "":
             console.print(error_message)
             error_message = ""
@@ -325,7 +335,9 @@ def confirm(
             if current_message:
                 current_message = current_message[:-1]
         elif keypress in DefaultKeys.interrupt:
-            raise KeyboardInterrupt
+            if Config.raise_on_interrupt:
+                raise KeyboardInterrupt
+            return None
         elif keypress in DefaultKeys.confirm:
             if is_selected:
                 break

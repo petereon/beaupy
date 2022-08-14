@@ -1,6 +1,6 @@
 from unittest import mock
 from ward import test, raises
-from pytui import select, console
+from pytui import select, console, Config
 import readchar
 
 
@@ -116,10 +116,58 @@ def _():
 
 
 @test(
-    "`select` with 4 options starting from second going up and selecting first with `x` as a cursor and `green` as a cursor color"
+    "`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color"
 )
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter(
+        [readchar.key.UP, readchar.key.ENTER]
+    )
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_color="green"
+    )
+
+    assert console.print.call_args_list[0] == mock.call(
+        "[green]x [/green]test1\n  test2\n  test3\n  test4"
+    )
+    assert console.print.call_args_list[1] == mock.call(
+        "[green]x [/green]test1\n  test2\n  test3\n  test4"
+    )
+    assert console.print.call_count == 2
+    assert res == 0
+    
+
+@test(
+    "`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color"
+)
+def _():
+    steps = iter(
+        [readchar.key.UP, readchar.key.ENTER]
+    )
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_color="green", cursor_index=1
+    )
+
+    assert console.print.call_args_list[0] == mock.call(
+        "  test1\n[green]x [/green]test2\n  test3\n  test4"
+    )
+    assert console.print.call_args_list[1] == mock.call(
+        "[green]x [/green]test1\n  test2\n  test3\n  test4"
+    )
+    assert console.print.call_count == 2
+    assert res == 0
+
+
+@test(
+    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color"
+)
+def _():
+    steps = iter([readchar.key.CTRL_C])
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
@@ -133,8 +181,21 @@ def _():
     assert console.print.call_args_list[0] == mock.call(
         "  test1\n[green]x [/green]test2\n  test3\n  test4"
     )
-    assert console.print.call_args_list[1] == mock.call(
-        "[green]x [/green]test1\n  test2\n  test3\n  test4"
-    )
-    assert console.print.call_count == 2
-    assert res == 0
+    assert console.print.call_count == 1
+    assert res == None
+
+  
+@test(
+    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color"
+)
+def _():
+    steps = iter([readchar.key.CTRL_C])
+    Config.raise_on_interrupt = True
+    readchar.readkey = lambda: next(steps)
+    with raises(KeyboardInterrupt):
+        res = select(
+            options=["test1", "test2", "test3", "test4"],
+            cursor="x ",
+            cursor_color="green",
+            cursor_index=1,
+        )
