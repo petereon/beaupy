@@ -9,7 +9,7 @@ import getpass
 import sys
 from typing import Any, Callable, List, Optional, Type, TypeVar, Union
 
-import readchar # type: ignore
+import readchar  # type: ignore
 from rich.console import Console
 
 console = Console()
@@ -31,8 +31,8 @@ class DefaultKeys:
     select: List[str] = [readchar.key.SPACE]
     confirm: List[str] = [readchar.key.ENTER]
     delete: List[str] = [readchar.key.BACKSPACE]
-    down: List[str] = [readchar.key.DOWN, "j"]
-    up: List[str] = [readchar.key.UP, "k"]
+    down: List[str] = [readchar.key.DOWN]
+    up: List[str] = [readchar.key.UP]
 
 
 def reset_line_up():
