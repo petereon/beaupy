@@ -96,7 +96,7 @@ def _():
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = select(
-        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_color="green"
+        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_style="green"
     )
 
     assert console.print.call_args_list[0] == mock.call(
@@ -126,7 +126,7 @@ def _():
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = select(
-        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_color="green"
+        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_style="green"
     )
 
     assert console.print.call_args_list[0] == mock.call(
@@ -150,7 +150,7 @@ def _():
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = select(
-        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_color="green", cursor_index=1
+        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_style="green", cursor_index=1
     )
 
     assert console.print.call_args_list[0] == mock.call(
@@ -174,7 +174,7 @@ def _():
     res = select(
         options=["test1", "test2", "test3", "test4"],
         cursor="x ",
-        cursor_color="green",
+        cursor_style="green",
         cursor_index=1,
     )
 
@@ -196,6 +196,6 @@ def _():
         res = select(
             options=["test1", "test2", "test3", "test4"],
             cursor="x ",
-            cursor_color="green",
+            cursor_style="green",
             cursor_index=1,
         )

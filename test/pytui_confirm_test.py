@@ -130,7 +130,7 @@ def _():
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = confirm(question="Try test", default_is_yes=True, cursor_color="bold orange1")
+    res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
     assert console.print.call_args_list[0] == mock.call(
         "Try test (Y/N) \n[bold orange1]> [/bold orange1]Yes\n  No"
     )
@@ -149,7 +149,7 @@ def _():
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = confirm(question="Try test", default_is_yes=True, cursor_color="bold orange1")
+    res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
     assert console.print.call_args_list[0] == mock.call(
         "Try test (Y/N) \n[bold orange1]> [/bold orange1]Yes\n  No"
     )
@@ -168,7 +168,7 @@ def _():
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = confirm(question="Try test", default_is_yes=True, cursor_color="bold orange1")
+    res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
     assert console.print.call_args_list[0] == mock.call(
         "Try test (Y/N) \n[bold orange1]> [/bold orange1]Yes\n  No"
     )
@@ -204,7 +204,7 @@ def _():
     res = confirm(
         question="Try test",
         default_is_yes=True,
-        cursor_color="bold orange1",
+        cursor_style="bold orange1",
         has_to_match_case=True,
     )
     assert console.print.call_args_list[0] == mock.call("Try test (Y/N) \n[bold orange1]> [/bold orange1]Yes\n  No")
@@ -227,7 +227,7 @@ def _():
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = confirm(question="Try test", char_prompt=False, cursor_color="bold orange1")
+    res = confirm(question="Try test", char_prompt=False, cursor_style="bold orange1")
     assert console.print.call_args_list[0] == mock.call(
         "Try test: \n  Yes\n[bold orange1]> [/bold orange1]No"
     )
@@ -246,7 +246,7 @@ def _():
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = confirm(question="Try test", cursor_color="bold orange1", default_is_yes=True, enter_empty_confirms=True)
+    res = confirm(question="Try test", cursor_style="bold orange1", default_is_yes=True, enter_empty_confirms=True)
     assert console.print.call_args_list[0] == mock.call(
         "Try test (Y/N) \n[bold orange1]> [/bold orange1]Yes\n  No"
     )

@@ -58,7 +58,7 @@ def _():
     res = select_multiple(
         options=["test1", "test2"],
         tick_character="✓",
-        tick_color="yellow1",
+        tick_style="yellow1",
         cursor_index=1,
     )
     assert console.print.call_args_list[0] == mock.call(
@@ -85,7 +85,7 @@ def _():
     res = select_multiple(
         options=["test1", "test2"],
         tick_character="✓",
-        tick_color="yellow1",
+        tick_style="yellow1",
         cursor_index=1,
         ticked_indices=[0],
     )

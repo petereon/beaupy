@@ -18,13 +18,15 @@ console = Console()
 class ValidationError(Exception):
     pass
 
+
 class ConversionError(Exception):
     pass
+
 
 class Config:
     raise_on_interrupt: bool = False
     strict: bool = True
-    
+
 
 class DefaultKeys:
     """List of default keybindings.
@@ -53,10 +55,12 @@ def reset_lines(num_lines):
 
 T = TypeVar("T")
 
+
 def render(secure, return_value, prompt):
-    render_value = len(return_value)*'*' if secure else return_value
-    console.print(f'{prompt}\n> {render_value}')
+    render_value = len(return_value) * "*" if secure else return_value
+    console.print(f"{prompt}\n> {render_value}")
     reset_lines(2)
+
 
 def prompt(
     prompt: str,
@@ -79,9 +83,9 @@ def prompt(
 
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
-    """    
-    return_value: str = ''
-    render(secure, '', prompt)
+    """
+    return_value: str = ""
+    render(secure, "", prompt)
     while True:
         char = readchar.readkey()
         if char in DefaultKeys.confirm:
@@ -95,9 +99,13 @@ def prompt(
                 if validator(return_value):
                     return return_value
                 else:
-                    raise ValidationError(f"`{'secure input' if secure else return_value}` cannot be validated")
+                    raise ValidationError(
+                        f"`{'secure input' if secure else return_value}` cannot be validated"
+                    )
             except ValueError:
-                raise ConversionError(f"`{'secure input' if secure else return_value}` cannot be converted to type `{type}`")
+                raise ConversionError(
+                    f"`{'secure input' if secure else return_value}` cannot be converted to type `{type}`"
+                )
         elif char in DefaultKeys.delete:
             return_value = return_value[:-1]
             render(secure, return_value, prompt)
@@ -111,7 +119,7 @@ def prompt(
 def select(
     options: List[str],
     cursor: str = "> ",
-    cursor_color="pink1",
+    cursor_style="pink1",
     cursor_index: int = 0,
     strict: bool = False,
 ) -> Union[int, None]:
@@ -120,7 +128,7 @@ def select(
     Args:
         options (List[str]): A list of options to select from
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
-        cursor_color (str, optional): Color of the cursor. Defaults to 'pink1'.
+        cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         cursor_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
 
@@ -136,7 +144,7 @@ def select(
         return None
     while True:
         format_option = lambda i, option: "{}{}".format(
-            f"[{cursor_color}]{cursor}[/{cursor_color}]"
+            f"[{cursor_style}]{cursor}[/{cursor_style}]"
             if i == cursor_index
             else " " * len(cursor),
             option,
@@ -167,10 +175,10 @@ def select(
             return None
 
 
-def format_option(option, ticked, tick_character, tick_color, selected, selected_color):
+def format_option(option, ticked, tick_character, tick_style, selected, selected_color):
     prefix = f"\[ ]"
     if ticked:
-        prefix = f"\[[{tick_color}]{tick_character}[/{tick_color}]]"
+        prefix = f"\[[{tick_style}]{tick_character}[/{tick_style}]]"
     if selected:
         option = f"[{selected_color}]{option}[/{selected_color}]"
     return f"{prefix} {option}"
@@ -179,8 +187,8 @@ def format_option(option, ticked, tick_character, tick_color, selected, selected
 def select_multiple(
     options: List[str],
     tick_character: str = "x",
-    tick_color: str = "cyan1",
-    cursor_color: str = "pink1",
+    tick_style: str = "cyan1",
+    cursor_style: str = "pink1",
     ticked_indices: Optional[List[int]] = None,
     cursor_index: int = 0,
     minimal_count: int = 0,
@@ -192,8 +200,8 @@ def select_multiple(
     Args:
         options (List[str]): A list of options to select from
         tick_character (str, optional): Character that will be used as a tick in a checkbox. Defaults to 'x'.
-        tick_color (str, optional): Color of the tick character. Defaults to 'cyan1'.
-        cursor_color (str, optional): Color of the option when the cursor is currently on it. Defaults to 'pink1'.
+        tick_style (str, optional): Rich friendly style for the tick character. Defaults to 'cyan1'.
+        cursor_style (str, optional): Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.
         ticked_indices (Optional[List[int]], optional): Indices of options that are pre-ticked when the prompt appears. Defaults to None.
         cursor_index (int, optional): Index of the option cursor starts at. Defaults to 0.
         minimal_count (int, optional): Minimal count of options that need to be selected. Defaults to 0.
@@ -222,9 +230,9 @@ def select_multiple(
                         option=option,
                         ticked=i in ticked_indices,
                         tick_character=tick_character,
-                        tick_color=tick_color,
+                        tick_style=tick_style,
                         selected=i == cursor_index,
-                        selected_color=cursor_color,
+                        selected_color=cursor_style,
                     )
                     for i, option in enumerate(options)
                 ]
@@ -278,7 +286,7 @@ def confirm(
     enter_empty_confirms: bool = True,
     default_is_yes: bool = False,
     cursor: str = "> ",
-    cursor_color: str = "magenta1",
+    cursor_style: str = "magenta1",
     char_prompt: bool = True,
 ) -> Optional[bool]:
     """A prompt that asks a question and offers two responses
@@ -291,7 +299,7 @@ def confirm(
         enter_empty_confirms (bool, optional): No response is confirmation. Defaults to True.
         default_is_yes (bool, optional): Default is Yes. Defaults to False.
         cursor (str, optional): What character(s) to use as a cursor. Defaults to '> '.
-        cursor_color (str, optional): Color of the cursor. Defaults to 'magenta1'.
+        cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'magenta1'.
         char_prompt (bool, optional): Print [Y/n] after the question. Defaults to True.
 
     Raises:
@@ -304,7 +312,7 @@ def confirm(
     is_selected = enter_empty_confirms
     current_message = ""
     yn_prompt = f" ({yes_text[0]}/{no_text[0]}) " if char_prompt else ": "
-    selected_prefix = f"[{cursor_color}]{cursor}[/{cursor_color}]"
+    selected_prefix = f"[{cursor_style}]{cursor}[/{cursor_style}]"
     deselected_prefix = " " * len(cursor)
     while True:
         yes = is_yes and is_selected
