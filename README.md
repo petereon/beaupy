@@ -13,8 +13,9 @@
 
 ## Usage
 
-![example](./example.gif)
+<img src="https://github.com/petereon/pytui/blob/master/example.gif">
 
+TUI elements shown in the above gif are the result of the follwing code:
 
 ```python
 import pytui
