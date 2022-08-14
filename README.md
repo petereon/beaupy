@@ -4,13 +4,12 @@
 
 **PyTUI** implements a number of common interactive elements:
 
-| Function                       | Functionality                                        |
-|:-------------------------------|:-----------------------------------------------------|
-| `select`                       | Prompt to pick a choice from a list                  |
-| `select_multiple` (checkboxes) | Prompt to select one or multiple choices from a list |
-| `confirm`                      | Prompt with a question and yes/no options            |
-| `prompt_secure`                |           Prompt that takes input without displaying |
-| `prompt_number`                | Prompt that takes a numeric input and validates      |
+| Function                       | Functionality                                                                 |
+|:-------------------------------|:------------------------------------------------------------------------------|
+| `select`                       | Prompt to pick a choice from a list                                           |
+| `select_multiple` (checkboxes) | Prompt to select one or multiple choices from a list                          |
+| `confirm`                      | Prompt with a question and yes/no options                                     |
+| `prompt`                       | Prompt that takes input with optional validation, type conversion and masking |
 
 ## Usage
 
