@@ -14,6 +14,9 @@
 
 ## Usage
 
+![example](./example.gif)
+
+
 ```python
 import pytui
 
