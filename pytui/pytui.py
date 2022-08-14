@@ -5,7 +5,7 @@ Commandline User Tools for Input Easification
 
 __license__ = "MIT"
 
-import getpass
+import ast
 import sys
 from typing import Any, Callable, List, Optional, Type, TypeVar, Union
 
@@ -15,6 +15,11 @@ from rich.console import Console
 console = Console()
 
 
+class ValidationError(Exception):
+    pass
+
+class ConversionError(Exception):
+    pass
 
 class Config:
     raise_on_interrupt: bool = False
@@ -41,15 +46,17 @@ class DefaultKeys:
     up: List[str] = [readchar.key.UP]
 
 
-def reset_line_up():
-    sys.stdout.write("\x1b[2K\033[F\x1b[2K")
+def reset_lines(num_lines):
+    for _ in range(num_lines):
+        sys.stdout.write("\x1b[2K\033[F\x1b[2K")
 
-
-# TODO: rewrite `prompt_number` and `prompt_secure` into just `prompt` and offering a parameter that takes type to validate against
-# and another parameter for secure/plaintext input
 
 T = TypeVar("T")
 
+def render(secure, return_value, prompt):
+    render_value = len(return_value)*'*' if secure else return_value
+    console.print(f'{prompt}\n> {render_value}')
+    reset_lines(2)
 
 def prompt(
     prompt: str,
@@ -57,64 +64,32 @@ def prompt(
     validator: Callable[[Any], bool] = lambda input: True,
     secure: bool = False,
 ) -> Union[T, str]:
-    pass
-
-
-def prompt_number(
-    prompt: str,
-    min_value: Optional[float] = None,
-    max_value: Optional[float] = None,
-    allow_float: bool = True,
-) -> float:
-    """Get a number from user input.
-    If an invalid number is entered the user will be prompted again.
-
-    Args:
-        prompt (str): The prompt asking the user to input.
-        min_value (float, optional): The [inclusive] minimum value.
-        max_value (float, optional): The [inclusive] maximum value.
-        allow_float (bool, optional): Allow floats or force integers.
-
-    Returns:
-        float: The number input by the user.
-    """
-    return_value: Optional[float] = None
-    while return_value is None:
-        input_value = input(prompt + " ")
-        try:
-            return_value = float(input_value)
-        except ValueError:
-            console.print("Not a valid number.\r", end="")
-        if not allow_float and return_value is not None:
-            if return_value != int(return_value):
-                console.print("Has to be an integer.\r", end="")
-                return_value = None
-        if min_value is not None and return_value is not None:
-            if return_value < min_value:
-                console.print(f"Has to be at least {min_value}.\r", end="")
-                return_value = None
-        if max_value is not None and return_value is not None:
-            if return_value > max_value:
-                console.print(f"Has to be at most {max_value}.\r", end="")
-                return_value = None
-        if return_value is not None:
-            break
-    console.print("", end="")
-    if allow_float:
-        return return_value
-    return int(return_value)
-
-
-def prompt_secure(prompt: str) -> str:
-    """Get secure input without showing it in the command line.
-
-    Args:
-        prompt (str): The prompt asking the user to input.
-
-    Returns:
-        str: The secure input.
-    """
-    return getpass.getpass(prompt + " ")
+    return_value: str = ''
+    render(secure, '', prompt)
+    while True:
+        char = readchar.readkey()
+        if char in DefaultKeys.confirm:
+            try:
+                if type is bool:
+                    return_value = ast.literal_eval(return_value)
+                    if not isinstance(return_value, bool):
+                        raise ValueError()
+                else:
+                    return_value = type(return_value)
+                if validator(return_value):
+                    return return_value
+                else:
+                    raise ValidationError(f"`{'secure input' if secure else return_value}` cannot be validated")
+            except ValueError:
+                raise ConversionError(f"`{'secure input' if secure else return_value}` cannot be converted to type `{type}`")
+        elif char in DefaultKeys.delete:
+            return_value = return_value[:-1]
+            render(secure, return_value, prompt)
+        elif char in DefaultKeys.interrupt:
+            raise KeyboardInterrupt()
+        else:
+            return_value += char
+            render(secure, return_value, prompt)
 
 
 def select(
@@ -154,8 +129,7 @@ def select(
             "\n".join([format_option(i, option) for i, option in enumerate(options)])
         )
 
-        for _ in range(len(options)):
-            reset_line_up()
+        reset_lines(len(options))
         keypress = readchar.readkey()
         if keypress in DefaultKeys.up:
             new_index = cursor_index
@@ -240,8 +214,7 @@ def select_multiple(
                 ]
             )
         )
-        for i in range(len(options)):
-            reset_line_up()
+        reset_lines(len(options))
         keypress = readchar.readkey()
         if keypress in DefaultKeys.up:
             new_index = cursor_index
@@ -324,8 +297,7 @@ def confirm(
         console.print(
             f"{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}"
         )
-        for _ in range(3):
-            reset_line_up()
+        reset_lines(3)
         keypress = readchar.readkey()
         if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
             is_yes = not is_yes

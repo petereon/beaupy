@@ -16,10 +16,10 @@ def main():
             "Sir Galahad the Pure",
         ]
 
-        name = names[pytui.select(names, selected_index=4)]
+        name = names[pytui.select(names, cursor_index=3)]
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
-        age = pytui.prompt_number("What is your age?", min_value=0, allow_float=False)
+        age = pytui.prompt("What is your age?", type=int, validator=lambda val: val > 0)
         nemeses_options = [
             "The French",
             "The Police",
@@ -38,7 +38,7 @@ def main():
             if nemesis_index in nemeses_indices
         ]
         # Get input without showing it being typed
-        quest = pytui.prompt_secure("What is your quest?")
+        quest = pytui.prompt("What is your quest?", secure=True)
         print(f"{name}'s quest (who is {age}) is {quest}.")
         if nemeses:
             if len(nemeses) == 1:
