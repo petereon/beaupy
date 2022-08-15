@@ -4,6 +4,13 @@ version = '0.1.5'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
+readme = 'README.md'
+keywords = ["python"]
+classifiers = [
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3',
+]
+packages = [{ include = "beaupy" }]
 
 [tool.poe.tasks]
 add = { shell = 'poetry add' }
@@ -14,8 +21,8 @@ clean = { shell = 'rm -R ./dist .pytest_cache .mypy_cache &> /dev/null' }
 isort = { shell = 'poetry run isort ./beaupy' }
 black = { shell = 'poetry run black ./beaupy/' }
 mypy = { shell = 'poetry run mypy ./beaupy/' }
-flake8 = {shell = 'poetry run pflake8 ./beaupy/'}
-lint = { shell = 'echo "Running isort..." ; poetry run isort ./beaupy ; echo "Running yapf..." ; poetry run black ./beaupy ; echo "Running flake8..." ; poetry run pflake8 ./beaupy/ ; echo "Running perflint..." ; poetry run perflint ./beaupy/'}
+flake8 = { shell = 'poetry run pflake8 ./beaupy/' }
+lint = { shell = 'echo "Running isort..." ; poetry run isort ./beaupy ; echo "Running yapf..." ; poetry run black ./beaupy ; echo "Running flake8..." ; poetry run pflake8 ./beaupy/ ; echo "Running perflint..." ; poetry run perflint ./beaupy/' }
 
 "test" = { shell = "poetry run ward" }
 "test:watch" = { shell = "poetry run ward; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='ward'" }
@@ -27,12 +34,12 @@ rich = '^12.5.1'
 
 [[tool.pydoc-markdown.loaders]]
 type = 'python'
-search_path = [ './beaupy' ]
+search_path = ['./beaupy']
 
 [tool.pydoc-markdown.renderer]
 type = 'markdown'
 
-[tool.ward] 
+[tool.ward]
 path = ['test']
 hook_module = ["ward_coverage"]
 
@@ -73,7 +80,7 @@ expycted = '*'
 
 # Unit Testing
 ward = '*'
-ward-coverage = {git = "https://github.com/petereon/ward-coverage.git"}
+ward-coverage = { git = "https://github.com/petereon/ward-coverage.git" }
 mock = '*'
 watchdog = '*'
 
