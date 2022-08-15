@@ -68,8 +68,6 @@ def main():
 
 ## Installation
 
-> :warning: No PyPI release is available yet
-
 From source:
 ```sh
 git clone https://github.com/petereon/beaupy.git
