@@ -1,9 +1,10 @@
 [tool.poetry]
 name = 'beaupy'
-version = '0.1.5'
+version = '0.1.6'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
+repository = 'https://github.com/petereon/beaupy'
 readme = 'README.md'
 keywords = ["python"]
 classifiers = [
