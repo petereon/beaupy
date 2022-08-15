@@ -13,7 +13,7 @@
 
 ## Usage
 
-![example](https://github.com/petereon/pytui/blob/master/example.gif)
+![example](https://raw.githubusercontent.com/petereon/beaupy/master/example.gif)
 
 TUI elements shown in the above gif are the result of the follwing code:
 
