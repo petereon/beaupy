@@ -1,6 +1,6 @@
 from unittest import mock
 from ward import test, raises
-from pytui import select, console, Config
+from beaupy import select, console, Config
 import readchar
 
 

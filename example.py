@@ -2,12 +2,12 @@
 """Example script demonstrating usage of cutie.
 """
 
-import pytui
+import beaupy
 
 
 def main():
     """Main."""
-    if pytui.confirm("Are you brave enough to continue?"):
+    if beaupy.confirm("Are you brave enough to continue?"):
         names = [
             "Arthur, King of the Britons",
             "Sir Lancelot the Brave",
@@ -16,10 +16,10 @@ def main():
             "Sir Galahad the Pure",
         ]
 
-        name = names[pytui.select(names, cursor_index=3)]
+        name = names[beaupy.select(names, cursor_index=3)]
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
-        age = pytui.prompt("What is your age?", type=int, validator=lambda val: val > 0)
+        age = beaupy.prompt("What is your age?", type=int, validator=lambda val: val > 0)
         nemeses_options = [
             "The French",
             "The Police",
@@ -31,14 +31,14 @@ def main():
         ]
         print("Choose your nemeses")
         # Choose multiple options from a list
-        nemeses_indices = pytui.select_multiple(nemeses_options)
+        nemeses_indices = beaupy.select_multiple(nemeses_options)
         nemeses = [
             nemesis
             for nemesis_index, nemesis in enumerate(nemeses_options)
             if nemesis_index in nemeses_indices
         ]
         # Get input without showing it being typed
-        quest = pytui.prompt("What is your quest?", secure=True)
+        quest = beaupy.prompt("What is your quest?", secure=True)
         print(f"{name}'s quest (who is {age}) is {quest}.")
         if nemeses:
             if len(nemeses) == 1:

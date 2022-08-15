@@ -1,8 +1,8 @@
-# PyTUI
+# beaupy
 
 > :star: A library of interactive CLI elements you have been looking for :keyboard:
 
-**PyTUI** implements a number of common interactive elements:
+**beaupy** implements a number of common interactive elements:
 
 | Function                       | Functionality                                                                 |
 |:-------------------------------|:------------------------------------------------------------------------------|
@@ -17,12 +17,12 @@
 
 
 ```python
-import pytui
+import beaupy
 
 
 def main():
     """Main."""
-    if pytui.confirm("Are you brave enough to continue?"):
+    if beaupy.confirm("Are you brave enough to continue?"):
         names = [
             "Arthur, King of the Britons",
             "Sir Lancelot the Brave",
@@ -31,10 +31,10 @@ def main():
             "Sir Galahad the Pure",
         ]
 
-        name = names[pytui.select(names, cursor_index=3)]
+        name = names[beaupy.select(names, cursor_index=3)]
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
-        age = pytui.prompt("What is your age?", type=int, validator=lambda val: val > 0)
+        age = beaupy.prompt("What is your age?", type=int, validator=lambda val: val > 0)
         nemeses_options = [
             "The French",
             "The Police",
@@ -46,14 +46,14 @@ def main():
         ]
         print("Choose your nemeses")
         # Choose multiple options from a list
-        nemeses_indices = pytui.select_multiple(nemeses_options)
+        nemeses_indices = beaupy.select_multiple(nemeses_options)
         nemeses = [
             nemesis
             for nemesis_index, nemesis in enumerate(nemeses_options)
             if nemesis_index in nemeses_indices
         ]
         # Get input without showing it being typed
-        quest = pytui.prompt("What is your quest?", secure=True)
+        quest = beaupy.prompt("What is your quest?", secure=True)
         print(f"{name}'s quest (who is {age}) is {quest}.")
         if nemeses:
             if len(nemeses) == 1:
@@ -71,9 +71,9 @@ def main():
 
 From source:
 ```sh
-git clone https://github.com/petereon/pytui.git
+git clone https://github.com/petereon/beaupy.git
 poetry build
-pip install ./dist/pytui-{{some-version}}-py3-none-any.whl
+pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 ```
 
 ## Roadmap
@@ -85,16 +85,16 @@ pip install ./dist/pytui-{{some-version}}-py3-none-any.whl
 
 ## Docmentation
 
-**PyTUI** is a library of interactive TUI elements for CLI applications. It is based on another library built for the same purpose, [`cutie`](https://github.com/kamik423/cutie).
+**beaupy** is a library of interactive TUI elements for CLI applications. It is based on another library built for the same purpose, [`cutie`](https://github.com/kamik423/cutie).
 
-In comparison, **PyTUI** is
+In comparison, **beaupy** is
 
 - more [rich](https://rich.readthedocs.io/en/stable/) friendly
 - more opinionated
 - less unicode heavy (relies on [rich](https://rich.readthedocs.io/en/stable/) for this)
 
 ### API Doc
-<a id="pytui.prompt"></a>
+<a id="beaupy.prompt"></a>
 
 #### prompt
 
@@ -126,7 +126,7 @@ Function that prompts the user for written input
 
   Union[T, str]: Returns a value formatted as provided type or string if no type is provided
 
-<a id="pytui.select"></a>
+<a id="beaupy.select"></a>
 
 #### select
 
@@ -158,7 +158,7 @@ A prompt that allows selecting one option from a list of options
 
   Union[int, None]: Index of a selected option or `None`
 
-<a id="pytui.select_multiple"></a>
+<a id="beaupy.select_multiple"></a>
 
 #### select\_multiple
 
@@ -198,7 +198,7 @@ A prompt that allows selecting multiple options from a list of options
 
 - `List[int]` - A list of selected indices
 
-<a id="pytui.confirm"></a>
+<a id="beaupy.confirm"></a>
 
 #### confirm
 

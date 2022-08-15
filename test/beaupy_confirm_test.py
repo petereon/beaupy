@@ -2,7 +2,7 @@ from asyncore import read
 from email.policy import default
 from unittest import mock
 from ward import test, raises
-from pytui import confirm, console
+from beaupy import confirm, console
 import readchar
 
 

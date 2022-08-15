@@ -1,6 +1,6 @@
 [tool.poetry]
-name = 'pytui'
-version = '0.1.0'
+name = 'beaupy'
+version = '0.1.5'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
@@ -11,11 +11,11 @@ install = { shell = 'poetry install' }
 build = { shell = 'poetry build' }
 clean = { shell = 'rm -R ./dist .pytest_cache .mypy_cache &> /dev/null' }
 
-isort = { shell = 'poetry run isort ./pytui' }
-black = { shell = 'poetry run black ./pytui/' }
-mypy = { shell = 'poetry run mypy ./pytui/' }
-flake8 = {shell = 'poetry run pflake8 ./pytui/'}
-lint = { shell = 'echo "Running isort..." ; poetry run isort ./pytui ; echo "Running yapf..." ; poetry run black ./pytui ; echo "Running flake8..." ; poetry run pflake8 ./pytui/ ; echo "Running perflint..." ; poetry run perflint ./pytui/'}
+isort = { shell = 'poetry run isort ./beaupy' }
+black = { shell = 'poetry run black ./beaupy/' }
+mypy = { shell = 'poetry run mypy ./beaupy/' }
+flake8 = {shell = 'poetry run pflake8 ./beaupy/'}
+lint = { shell = 'echo "Running isort..." ; poetry run isort ./beaupy ; echo "Running yapf..." ; poetry run black ./beaupy ; echo "Running flake8..." ; poetry run pflake8 ./beaupy/ ; echo "Running perflint..." ; poetry run perflint ./beaupy/'}
 
 "test" = { shell = "poetry run ward" }
 "test:watch" = { shell = "poetry run ward; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='ward'" }
@@ -27,7 +27,7 @@ rich = '^12.5.1'
 
 [[tool.pydoc-markdown.loaders]]
 type = 'python'
-search_path = [ './pytui' ]
+search_path = [ './beaupy' ]
 
 [tool.pydoc-markdown.renderer]
 type = 'markdown'

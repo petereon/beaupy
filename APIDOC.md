@@ -2,13 +2,13 @@
 
 # \_\_init\_\_
 
-<a id="pytui"></a>
+<a id="beaupy"></a>
 
-# pytui
+# beaupy
 
 Commandline User Tools for Input Easification
 
-<a id="pytui.DefaultKeys"></a>
+<a id="beaupy.DefaultKeys"></a>
 
 ## DefaultKeys Objects
 
@@ -27,7 +27,7 @@ List of default keybindings.
 - `down(List[str])` - Keys that select the element below.
 - `up(List[str])` - Keys that select the element above.
 
-<a id="pytui.prompt"></a>
+<a id="beaupy.prompt"></a>
 
 #### prompt
 
@@ -59,7 +59,7 @@ Function that prompts the user for written input
 
   Union[T, str]: Returns a value formatted as provided type or string if no type is provided
 
-<a id="pytui.select"></a>
+<a id="beaupy.select"></a>
 
 #### select
 
@@ -91,7 +91,7 @@ A prompt that allows selecting one option from a list of options
 
   Union[int, None]: Index of a selected option or `None`
 
-<a id="pytui.select_multiple"></a>
+<a id="beaupy.select_multiple"></a>
 
 #### select\_multiple
 
@@ -131,7 +131,7 @@ A prompt that allows selecting multiple options from a list of options
 
 - `List[int]` - A list of selected indices
 
-<a id="pytui.confirm"></a>
+<a id="beaupy.confirm"></a>
 
 #### confirm
 
