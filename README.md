@@ -1,8 +1,8 @@
-# beaupy
+# BeauPy
 
 > :star: A library of interactive CLI elements you have been looking for :keyboard:
 
-**beaupy** implements a number of common interactive elements:
+**BeauPy** implements a number of common interactive elements:
 
 | Function                       | Functionality                                                                 |
 |:-------------------------------|:------------------------------------------------------------------------------|
@@ -68,6 +68,12 @@ def main():
 
 ## Installation
 
+From PyPI:
+
+```sh
+pip install beaupy
+```
+
 From source:
 
 ```sh
@@ -78,16 +84,16 @@ pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 
 ## Roadmap
 
-1. Achieve >90% test coverage
-2. PyPI Release
-3. Extend `select` with filterability
-4. ...
+- [x] PyPI Release
+- [ ] Achieve >90% test coverage
+- [ ] Extend `select` with filterability
+- [ ] ...
 
-## Docmentation
+## Documentation
 
-**beaupy** is a library of interactive TUI elements for CLI applications. It is based on another library built for the same purpose, [`cutie`](https://github.com/kamik423/cutie).
+**BeauPy** is a library of interactive TUI elements for CLI applications. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
 
-In comparison, **beaupy** is
+In comparison, **BeauPy** is
 
 - more [rich](https://rich.readthedocs.io/en/stable/) friendly
 - more opinionated
