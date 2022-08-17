@@ -186,8 +186,8 @@ def format_option(option, ticked, tick_character, tick_style, selected, selected
 
 def select_multiple(
     options: List[str],
-    tick_character: str = "x",
-    tick_style: str = "cyan1",
+    tick_character: str = "✓",
+    tick_style: str = "pink1",
     cursor_style: str = "pink1",
     ticked_indices: Optional[List[int]] = None,
     cursor_index: int = 0,
@@ -200,7 +200,7 @@ def select_multiple(
     Args:
         options (List[str]): A list of options to select from
         tick_character (str, optional): Character that will be used as a tick in a checkbox. Defaults to 'x'.
-        tick_style (str, optional): Rich friendly style for the tick character. Defaults to 'cyan1'.
+        tick_style (str, optional): Rich friendly style for the tick character. Defaults to 'pink1'.
         cursor_style (str, optional): Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.
         ticked_indices (Optional[List[int]], optional): Indices of options that are pre-ticked when the prompt appears. Defaults to None.
         cursor_index (int, optional): Index of the option cursor starts at. Defaults to 0.
@@ -286,7 +286,7 @@ def confirm(
     enter_empty_confirms: bool = True,
     default_is_yes: bool = False,
     cursor: str = "> ",
-    cursor_style: str = "magenta1",
+    cursor_style: str = "pink1",
     char_prompt: bool = True,
 ) -> Optional[bool]:
     """A prompt that asks a question and offers two responses
@@ -299,7 +299,7 @@ def confirm(
         enter_empty_confirms (bool, optional): No response is confirmation. Defaults to True.
         default_is_yes (bool, optional): Default is Yes. Defaults to False.
         cursor (str, optional): What character(s) to use as a cursor. Defaults to '> '.
-        cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'magenta1'.
+        cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         char_prompt (bool, optional): Print [Y/n] after the question. Defaults to True.
 
     Raises:

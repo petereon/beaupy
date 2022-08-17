@@ -10,7 +10,7 @@ def _():
     console.print = mock.MagicMock()
     res = confirm(question="Try test")
     assert console.print.call_args_list[0] == mock.call(
-        "Try test (Y/N) \n  Yes\n[magenta1]> [/magenta1]No"
+        "Try test (Y/N) \n  Yes\n[pink1]> [/pink1]No"
     )
     assert console.print.call_count == 1
     assert res == False
@@ -24,7 +24,7 @@ def _():
     console.print = mock.MagicMock()
     res = confirm(question="Try test", yes_text="No", no_text="Yes")
     assert console.print.call_args_list[0] == mock.call(
-        "Try test (N/Y) \n  No\n[magenta1]> [/magenta1]Yes"
+        "Try test (N/Y) \n  No\n[pink1]> [/pink1]Yes"
     )
     assert console.print.call_count == 1
     assert res == False
@@ -40,10 +40,10 @@ def _():
     console.print = mock.MagicMock()
     res = confirm(question="Try test", yes_text="No", no_text="Yes")
     assert console.print.call_args_list[0] == mock.call(
-        "Try test (N/Y) \n  No\n[magenta1]> [/magenta1]Yes"
+        "Try test (N/Y) \n  No\n[pink1]> [/pink1]Yes"
     )
     assert console.print.call_args_list[1] == mock.call(
-        "Try test (N/Y) No\n[magenta1]> [/magenta1]No\n  Yes"
+        "Try test (N/Y) No\n[pink1]> [/pink1]No\n  Yes"
     )
     assert console.print.call_count == 2
     assert res == True
@@ -57,7 +57,7 @@ def _():
     console.print = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True)
     assert console.print.call_args_list[0] == mock.call(
-        "Try test (Y/N) \n[magenta1]> [/magenta1]Yes\n  No"
+        "Try test (Y/N) \n[pink1]> [/pink1]Yes\n  No"
     )
     assert console.print.call_count == 1
     assert res == True
@@ -73,10 +73,10 @@ def _():
     console.print = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True)
     assert console.print.call_args_list[0] == mock.call(
-        "Try test (Y/N) \n[magenta1]> [/magenta1]Yes\n  No"
+        "Try test (Y/N) \n[pink1]> [/pink1]Yes\n  No"
     )
     assert console.print.call_args_list[1] == mock.call(
-        "Try test (Y/N) No\n  Yes\n[magenta1]> [/magenta1]No"
+        "Try test (Y/N) No\n  Yes\n[pink1]> [/pink1]No"
     )
     assert console.print.call_count == 2
     assert res == False
@@ -92,10 +92,10 @@ def _():
     console.print = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True)
     assert console.print.call_args_list[0] == mock.call(
-        "Try test (Y/N) \n[magenta1]> [/magenta1]Yes\n  No"
+        "Try test (Y/N) \n[pink1]> [/pink1]Yes\n  No"
     )
     assert console.print.call_args_list[1] == mock.call(
-        "Try test (Y/N) No\n  Yes\n[magenta1]> [/magenta1]No"
+        "Try test (Y/N) No\n  Yes\n[pink1]> [/pink1]No"
     )
     assert console.print.call_count == 2
     assert res == False
@@ -111,10 +111,10 @@ def _():
     console.print = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True, cursor="some long text ")
     assert console.print.call_args_list[0] == mock.call(
-        "Try test (Y/N) \n[magenta1]some long text [/magenta1]Yes\n               No"
+        "Try test (Y/N) \n[pink1]some long text [/pink1]Yes\n               No"
     )
     assert console.print.call_args_list[1] == mock.call(
-        "Try test (Y/N) No\n               Yes\n[magenta1]some long text [/magenta1]No"
+        "Try test (Y/N) No\n               Yes\n[pink1]some long text [/pink1]No"
     )
     assert console.print.call_count == 2
     assert res == False

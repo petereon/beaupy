@@ -175,7 +175,7 @@ A prompt that allows selecting one option from a list of options
 ```python
 def select_multiple(options: List[str],
                     tick_character: str = "x",
-                    tick_style: str = "cyan1",
+                    tick_style: str = "pink1",
                     cursor_style: str = "pink1",
                     ticked_indices: Optional[List[int]] = None,
                     cursor_index: int = 0,
@@ -190,7 +190,7 @@ A prompt that allows selecting multiple options from a list of options
 
 - `options` _List[str]_ - A list of options to select from
 - `tick_character` _str, optional_ - Character that will be used as a tick in a checkbox. Defaults to 'x'.
-- `tick_style` _str, optional_ - Rich friendly style for the tick character. Defaults to 'cyan1'.
+- `tick_style` _str, optional_ - Rich friendly style for the tick character. Defaults to 'pink1'.
 - `cursor_style` _str, optional_ - Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.
 - `ticked_indices` _Optional[List[int]], optional_ - Indices of options that are pre-ticked when the prompt appears. Defaults to None.
 - `cursor_index` _int, optional_ - Index of the option cursor starts at. Defaults to 0.
@@ -220,7 +220,7 @@ def confirm(question: str,
             enter_empty_confirms: bool = True,
             default_is_yes: bool = False,
             cursor: str = "> ",
-            cursor_style: str = "magenta1",
+            cursor_style: str = "pink1",
             char_prompt: bool = True) -> Optional[bool]
 ```
 
@@ -235,7 +235,7 @@ A prompt that asks a question and offers two responses
 - `enter_empty_confirms` _bool, optional_ - No response is confirmation. Defaults to True.
 - `default_is_yes` _bool, optional_ - Default is Yes. Defaults to False.
 - `cursor` _str, optional_ - What character(s) to use as a cursor. Defaults to '> '.
-- `cursor_style` _str, optional_ - Rich friendly style for the cursor. Defaults to 'magenta1'.
+- `cursor_style` _str, optional_ - Rich friendly style for the cursor. Defaults to 'pink1'.
 - `char_prompt` _bool, optional_ - Print [Y/n] after the question. Defaults to True.
   
 
