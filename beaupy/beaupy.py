@@ -64,7 +64,7 @@ def render(secure, return_value, prompt):
 
 def prompt(
     prompt: str,
-    type: Union[Type[T], Type[str]] = str,
+    target_type: Union[Type[T], Type[str]] = str,
     validator: Callable[[Any], bool] = lambda input: True,
     secure: bool = False,
 ) -> Union[T, str]:
@@ -90,12 +90,12 @@ def prompt(
         char = readchar.readkey()
         if char in DefaultKeys.confirm:
             try:
-                if type is bool:
+                if target_type is bool:
                     return_value = ast.literal_eval(return_value)
                     if not isinstance(return_value, bool):
                         raise ValueError()
                 else:
-                    return_value = type(return_value)
+                    return_value = target_type(return_value)
                 if validator(return_value):
                     return return_value
                 else:
@@ -104,7 +104,7 @@ def prompt(
                     )
             except ValueError:
                 raise ConversionError(
-                    f"`{'secure input' if secure else return_value}` cannot be converted to type `{type}`"
+                    f"`{'secure input' if secure else return_value}` cannot be converted to type `{target_type}`"
                 )
         elif char in DefaultKeys.delete:
             return_value = return_value[:-1]

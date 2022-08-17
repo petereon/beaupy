@@ -19,7 +19,7 @@ def main():
         name = names[beaupy.select(names, cursor_index=3)]
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
-        age = beaupy.prompt("What is your age?", type=int, validator=lambda val: val > 0)
+        age = beaupy.prompt("What is your age?", target_type=int, validator=lambda val: val > 0)
         nemeses_options = [
             "The French",
             "The Police",

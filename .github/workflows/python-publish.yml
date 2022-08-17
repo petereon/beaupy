@@ -39,7 +39,7 @@ jobs:
         poe build
     - name: Test with ward
       run: |
-        export PYTHONPATH=$(pwd)/src
+        export PYTHONPATH=$(pwd)
         poe test
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29

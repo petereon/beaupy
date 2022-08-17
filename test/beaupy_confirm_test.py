@@ -1,7 +1,5 @@
-from asyncore import read
-from email.policy import default
 from unittest import mock
-from ward import test, raises
+from ward import test
 from beaupy import confirm, console
 import readchar
 
