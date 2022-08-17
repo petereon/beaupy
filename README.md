@@ -1,7 +1,7 @@
 ![beaupy](https://user-images.githubusercontent.com/47027005/185082011-cb588f57-d38f-42d8-8312-3981ae1bc479.png)
 
 
-> A library of interactive CLI elements you have been looking for
+> A Python library of interactive CLI elements you have been looking for
 
 ---
 
