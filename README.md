@@ -1,6 +1,9 @@
-# BeauPy
+![beaupy](https://user-images.githubusercontent.com/47027005/185082011-cb588f57-d38f-42d8-8312-3981ae1bc479.png)
 
-> :star: A library of interactive CLI elements you have been looking for :keyboard:
+
+> A library of interactive CLI elements you have been looking for
+
+---
 
 **BeauPy** implements a number of common interactive elements:
 
