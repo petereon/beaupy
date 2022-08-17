@@ -38,7 +38,7 @@ def main():
         name = names[beaupy.select(names, cursor_index=3)]
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
-        age = beaupy.prompt("What is your age?", type=int, validator=lambda val: val > 0)
+        age = beaupy.prompt("What is your age?", target_type=int, validator=lambda val: val > 0)
         nemeses_options = [
             "The French",
             "The Police",
@@ -88,7 +88,7 @@ pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 ## Roadmap
 
 - [x] PyPI Release
-- [ ] Achieve >90% test coverage
+- [x] Achieve >90% test coverage
 - [ ] Extend `select` with filterability
 - [ ] ...
 
@@ -104,11 +104,13 @@ In comparison, **BeauPy** is
 
 ### API Doc
 
+<a id="beaupy.prompt"></a>
+
 #### prompt
 
 ```python
 def prompt(prompt: str,
-           type: Union[Type[T], Type[str]] = str,
+           target_type: Union[Type[T], Type[str]] = str,
            validator: Callable[[Any], bool] = lambda input: True,
            secure: bool = False) -> Union[T, str]
 ```
@@ -118,19 +120,23 @@ Function that prompts the user for written input
 **Arguments**:
 
 - `prompt` _str_ - The prompt that will be displayed
-- `type` _Union[Type[T], Type[str]], optional_ - Type to convert the answer to. Defaults to str.
+- `target_type` _Union[Type[T], Type[str]], optional_ - Type to convert the answer to. Defaults to str.
 - `validator` _Callable[[Any], bool], optional_ - Optional function to validate the input. Defaults to lambdainput:True.
 - `secure` _bool, optional_ - If True, input will be hidden. Defaults to False.
   
+
 **Raises**:
 
 - `ValidationError` - Raised if validation with provided validator fails
 - `ConversionError` - Raised if the value cannot be converted to provided type
 - `KeyboardInterrupt` - Raised when keyboard interrupt is encountered
   
+
 **Returns**:
 
   Union[T, str]: Returns a value formatted as provided type or string if no type is provided
+
+<a id="beaupy.select"></a>
 
 #### select
 
@@ -152,13 +158,17 @@ A prompt that allows selecting one option from a list of options
 - `cursor_index` _int, optional_ - Option can be preselected based on its list index. Defaults to 0.
 - `strict` _bool, optional_ - If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
   
+
 **Raises**:
 
 - `ValueError` - Thrown if no `options` are povided and strict is `True`
   
+
 **Returns**:
 
   Union[int, None]: Index of a selected option or `None`
+
+<a id="beaupy.select_multiple"></a>
 
 #### select\_multiple
 
@@ -188,13 +198,17 @@ A prompt that allows selecting multiple options from a list of options
 - `maximal_count` _Optional[int], optional_ - Maximal count of options that need to be selected. Defaults to None.
 - `strict` _bool, optional_ - If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
   
+
 **Raises**:
 
 - `KeyboardInterrupt` - Raised when Ctrl+C is encountered
   
+
 **Returns**:
 
 - `List[int]` - A list of selected indices
+
+<a id="beaupy.confirm"></a>
 
 #### confirm
 
@@ -224,10 +238,12 @@ A prompt that asks a question and offers two responses
 - `cursor_style` _str, optional_ - Rich friendly style for the cursor. Defaults to 'magenta1'.
 - `char_prompt` _bool, optional_ - Print [Y/n] after the question. Defaults to True.
   
+
 **Raises**:
 
 - `KeyboardInterrupt` - Raised when Ctrl+C is encountered
   
+
 **Returns**:
 
   Optional[bool]
@@ -240,4 +256,4 @@ Also **please report any issues and bugs you might find!**
 
 ## License
 
-The project is licensed under the [MIT-License](LICENSE).
+The project is licensed under the [MIT License](LICENSE).
