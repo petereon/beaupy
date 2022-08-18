@@ -117,6 +117,35 @@ If you want to contribute, please feel free to suggest features or implement the
 
 Also **please report any issues and bugs you might find!**
 
+To start development you can clone the repository:
+
+```sh
+git clone https://github.com/petereon/beaupy.git
+```
+
+Change the directory to the project directory:
+
+```sh
+cd ./beaupy/
+```
+
+This project uses [`poetry`](https://python-poetry.org/) as a dependency manager. You can install the dependencies using:
+
+```sh
+poetry install
+```
+
+For testing, this project relies on [`ward`](https://github.com/darrenburns/ward). It is included as a development dependency, so
+after installing the dependencies you can simply execute the following:
+
+```sh
+poetry run poe test
+```
+
+After you have made your changes, create a pull request towards a master branch of this repository
+
+Looking forward to your pull requests!
+
 ## License
 
 The project is licensed under the [MIT License](LICENSE).
