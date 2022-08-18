@@ -7,7 +7,7 @@ __license__ = "MIT"
 
 import ast
 import sys
-from typing import Any, Callable, List, Optional, Type, TypeVar, Union, cast
+from typing import Any, Callable, List, Optional, Type, Union
 
 import readchar  # type: ignore
 from rich.console import Console
@@ -99,8 +99,8 @@ def prompt(
                     if not isinstance(result, bool):
                         raise ValueError()
                 else:
-                    result: target_type = target_type(value) # type: ignore
-                
+                    result: target_type = target_type(value)  # type: ignore
+
                 if validator(result):
                     return result
                 else:
