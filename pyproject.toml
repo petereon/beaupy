@@ -48,6 +48,7 @@ hook_module = ["ward_coverage"]
 
 [tool.ward.plugins.coverage]
 omit = "*test*"
+report_type = ["term", "xml"]
 
 [tool.poetry.dev-dependencies]
 # Code Scanning and Formatting
