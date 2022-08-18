@@ -112,14 +112,14 @@ res_index = select(options = ["red", "on", "white"],
                    cursor = "x ", 
                    cursor_style= "red on white")
 ```
-to print a read `x` character on a white background, or
+to use a red `x` character on a white background, or
 
 ```python
-res_index = select(options = ["ok", "ko"], 
-                   cursor = "k ", 
-                   cursor_style="#af00ff)
+res_indices = select_multiple(options = ["ok", "ko"], 
+                              tick_character = "k", 
+                              tick_style="#af00ff)
 ```
-to print a purple `k` in front of the currently selected option.
+to use a purple `k` as in a tick in checked option
 
 You can also use whatever as a cursor:
 ```python
@@ -139,7 +139,9 @@ res_index = select(options = ["this", "other thing"],
                    cursor = "selected ")
 ```
 
-For API doc, please refer to [`APIDOC.md`](https://github.com/petereon/beaupy/blob/master/APIDOC.md)
+As you can see, world is your oyster. 
+
+To see more exciting stuff in less exciting format, please refer to [`APIDOC.md`](https://github.com/petereon/beaupy/blob/master/APIDOC.md)
 
 ## Roadmap
 
