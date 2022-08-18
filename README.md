@@ -7,6 +7,10 @@
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 
+## Attribution
+BeauPy stands on the shoulders of giants. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
+
+# Overview
 
 **BeauPy** implements a number of common interactive elements:
 
@@ -99,13 +103,14 @@ pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 
 ## Documentation
 
-**BeauPy** is a library of interactive TUI elements for CLI applications. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
+**BeauPy** is a library of interactive TUI elements for CLI applications.
 
-In comparison, **BeauPy** is
+**BeauPy** is
 
-- more [rich](https://rich.readthedocs.io/en/stable/) friendly
-- more opinionated
-- less unicode heavy (relies on [rich](https://rich.readthedocs.io/en/stable/) for this)
+- [rich](https://rich.readthedocs.io/en/stable/) friendly
+- stylable
+- opinionated
+- configurable
 
 For API doc, please refer to [`APIDOC.md`](https://github.com/petereon/beaupy/blob/master/APIDOC.md)
 
