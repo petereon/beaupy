@@ -37,4 +37,4 @@ jobs:
         poetry run poe mypy
     - name: Lint the code
       run: |
-        poetry run poe falke8
+        poetry run poe flake8
