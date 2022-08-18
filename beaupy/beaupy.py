@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 """
-Commandline User Tools for Input Easification
+A Python library of interactive CLI elements you have been looking for 
 """
 
 __license__ = "MIT"

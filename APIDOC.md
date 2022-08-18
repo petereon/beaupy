@@ -17,7 +17,7 @@
 
 # beaupy
 
-Commandline User Tools for Input Easification
+A Python library of interactive CLI elements you have been looking for
 
 <a id="beaupy.DefaultKeys"></a>
 
