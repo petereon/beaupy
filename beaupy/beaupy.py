@@ -110,7 +110,10 @@ def prompt(
             return_value = return_value[:-1]
             render(secure, return_value, prompt)
         elif char in DefaultKeys.interrupt:
-            raise KeyboardInterrupt()
+            if Config.raise_on_interrupt:
+                raise KeyboardInterrupt()
+            else:
+                return None
         else:
             return_value += char
             render(secure, return_value, prompt)
