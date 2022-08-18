@@ -34,11 +34,13 @@ readchar = '^3.1.0'
 rich = '^12.5.1'
 
 [[tool.pydoc-markdown.loaders]]
+
 type = 'python'
 search_path = ['./beaupy']
 
 [tool.pydoc-markdown.renderer]
 type = 'markdown'
+render_toc = true
 
 [tool.ward]
 path = ['test']

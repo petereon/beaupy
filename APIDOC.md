@@ -1,3 +1,14 @@
+# Table of Contents
+
+* [\_\_init\_\_](#__init__)
+* [beaupy](#beaupy)
+  * [DefaultKeys](#beaupy.DefaultKeys)
+  * [Config](#beaupy.Config)
+  * [prompt](#beaupy.prompt)
+  * [select](#beaupy.select)
+  * [select\_multiple](#beaupy.select_multiple)
+  * [confirm](#beaupy.confirm)
+
 <a id="__init__"></a>
 
 # \_\_init\_\_

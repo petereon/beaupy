@@ -23,14 +23,8 @@ class ConversionError(Exception):
     pass
 
 
-class Config:
-    raise_on_interrupt: bool = False
-    # TODO: handle global setting of strict
-    strict: bool = True
-
-
 class DefaultKeys:
-    """List of default keybindings.
+    """A map of default keybindings.
 
     Attributes:
         interrupt(List[str]): Keys that cause a keyboard interrupt.
@@ -49,15 +43,26 @@ class DefaultKeys:
     up: List[str] = [readchar.key.UP]
 
 
-def reset_lines(num_lines):
+class Config:
+    """A map of default configuration
+    
+    Attributes:
+        raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input, 
+        otherwise, they will return some sane alternative to their usual return (e.g.: None, [] ). Defaults to False.
+    """
+    raise_on_interrupt: bool = False
+    default_keys = DefaultKeys
+
+
+def __reset_lines(num_lines):
     for _ in range(num_lines):
         sys.stdout.write("\x1b[2K\033[F\x1b[2K")
 
 
-def render(secure, return_value, prompt):
+def __render(secure, return_value, prompt):
     render_value = len(return_value) * "*" if secure else return_value
     console.print(f"{prompt}\n> {render_value}")
-    reset_lines(2)
+    __reset_lines(2)
 
 
 T = TypeVar("T")
@@ -73,23 +78,23 @@ def prompt(
 
     Args:
         prompt (str): The prompt that will be displayed
-        type (Union[Type[T], Type[str]], optional): Type to convert the answer to. Defaults to str.
+        target_type (Union[Type[T], Type[str]], optional): Type to convert the answer to. Defaults to str.
         validator (Callable[[Any], bool], optional): Optional function to validate the input. Defaults to lambdainput:True.
         secure (bool, optional): If True, input will be hidden. Defaults to False.
 
     Raises:
         ValidationError: Raised if validation with provided validator fails
         ConversionError: Raised if the value cannot be converted to provided type
-        KeyboardInterrupt: Raised when keyboard interrupt is encountered
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
 
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
     return_value: str = ""
-    render(secure, "", prompt)
+    __render(secure, "", prompt)
     while True:
         char = readchar.readkey()
-        if char in DefaultKeys.confirm:
+        if char in Config.default_keys.confirm:
             try:
                 if target_type is bool:
                     return_value = ast.literal_eval(return_value)
@@ -107,17 +112,17 @@ def prompt(
                 raise ConversionError(
                     f"`{'secure input' if secure else return_value}` cannot be converted to type `{target_type}`"
                 )
-        elif char in DefaultKeys.delete:
+        elif char in Config.default_keys.delete:
             return_value = return_value[:-1]
-            render(secure, return_value, prompt)
-        elif char in DefaultKeys.interrupt:
+            __render(secure, return_value, prompt)
+        elif char in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt()
             else:
                 return None
         else:
             return_value += char
-            render(secure, return_value, prompt)
+            __render(secure, return_value, prompt)
 
 
 def select(
@@ -138,7 +143,8 @@ def select(
 
     Raises:
         ValueError: Thrown if no `options` are povided and strict is `True`
-
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
+    
     Returns:
         Union[int, None]: Index of a selected option or `None`
     """
@@ -157,34 +163,34 @@ def select(
             "\n".join([format_option(i, option) for i, option in enumerate(options)])
         )
 
-        reset_lines(len(options))
+        __reset_lines(len(options))
         keypress = readchar.readkey()
-        if keypress in DefaultKeys.up:
+        if keypress in Config.default_keys.up:
             new_index = cursor_index
             while new_index > 0:
                 new_index -= 1
                 cursor_index = new_index
                 break
-        elif keypress in DefaultKeys.down:
+        elif keypress in Config.default_keys.down:
             new_index = cursor_index
             while new_index < len(options) - 1:
                 new_index += 1
                 cursor_index = new_index
                 break
-        elif keypress in DefaultKeys.confirm:
+        elif keypress in Config.default_keys.confirm:
             return cursor_index
-        elif keypress in DefaultKeys.interrupt:
+        elif keypress in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
 
 
-def format_option(option, ticked, tick_character, tick_style, selected, selected_color):
+def __format_option(option, ticked, tick_character, tick_style, selected, cursor_style):
     prefix = f"\[ ]"
     if ticked:
         prefix = f"\[[{tick_style}]{tick_character}[/{tick_style}]]"
     if selected:
-        option = f"[{selected_color}]{option}[/{selected_color}]"
+        option = f"[{cursor_style}]{option}[/{cursor_style}]"
     return f"{prefix} {option}"
 
 
@@ -213,7 +219,7 @@ def select_multiple(
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
 
     Raises:
-        KeyboardInterrupt: Raised when Ctrl+C is encountered
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
 
     Returns:
         List[int]: A list of selected indices
@@ -230,33 +236,33 @@ def select_multiple(
         console.print(
             "\n".join(
                 [
-                    format_option(
+                    __format_option(
                         option=option,
                         ticked=i in ticked_indices,
                         tick_character=tick_character,
                         tick_style=tick_style,
                         selected=i == cursor_index,
-                        selected_color=cursor_style,
+                        cursor_style=cursor_style,
                     )
                     for i, option in enumerate(options)
                 ]
             )
         )
-        reset_lines(len(options))
+        __reset_lines(len(options))
         keypress = readchar.readkey()
-        if keypress in DefaultKeys.up:
+        if keypress in Config.default_keys.up:
             new_index = cursor_index
             while new_index > 0:
                 new_index -= 1
                 cursor_index = new_index
                 break
-        elif keypress in DefaultKeys.down:
+        elif keypress in Config.default_keys.down:
             new_index = cursor_index
             while new_index + 1 <= max_index:
                 new_index += 1
                 cursor_index = new_index
                 break
-        elif keypress in DefaultKeys.select:
+        elif keypress in Config.default_keys.select:
             if cursor_index in ticked_indices:
                 if len(ticked_indices) - 1 >= minimal_count:
                     ticked_indices.remove(cursor_index)
@@ -265,14 +271,14 @@ def select_multiple(
                     ticked_indices.append(cursor_index)
             else:
                 ticked_indices.append(cursor_index)
-        elif keypress in DefaultKeys.confirm:
+        elif keypress in Config.default_keys.confirm:
             if minimal_count > len(ticked_indices):
                 error_message = f"Must select at least {minimal_count} options"
             elif maximal_count is not None and maximal_count < len(ticked_indices):
                 error_message = f"Must select at most {maximal_count} options"
             else:
                 break
-        elif keypress in DefaultKeys.interrupt:
+        elif keypress in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return []
@@ -307,7 +313,7 @@ def confirm(
         char_prompt (bool, optional): Print [Y/n] after the question. Defaults to True.
 
     Raises:
-        KeyboardInterrupt: Raised when Ctrl+C is encountered
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
 
     Returns:
         Optional[bool]
@@ -325,20 +331,20 @@ def confirm(
         console.print(
             f"{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}"
         )
-        reset_lines(3)
+        __reset_lines(3)
         keypress = readchar.readkey()
-        if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
+        if keypress in Config.default_keys.down or keypress in Config.default_keys.up:
             is_yes = not is_yes
             is_selected = True
             current_message = yes_text if is_yes else no_text
-        elif keypress in DefaultKeys.delete:
+        elif keypress in Config.default_keys.delete:
             if current_message:
                 current_message = current_message[:-1]
-        elif keypress in DefaultKeys.interrupt:
+        elif keypress in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
-        elif keypress in DefaultKeys.confirm:
+        elif keypress in Config.default_keys.confirm:
             if is_selected:
                 break
         elif keypress in "\t":
