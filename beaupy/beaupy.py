@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 """
-A Python library of interactive CLI elements you have been looking for 
+A Python library of interactive CLI elements you have been looking for
 """
 
 __license__ = "MIT"
@@ -9,7 +9,7 @@ import ast
 import sys
 from typing import Any, Callable, List, Optional, Type, Union
 
-import readchar  # type: ignore
+import readchar
 from rich.console import Console
 
 console = Console()
@@ -55,12 +55,12 @@ class Config:
     default_keys = DefaultKeys
 
 
-def __reset_lines(num_lines):
+def __reset_lines(num_lines: int) -> None:
     for _ in range(num_lines):
         sys.stdout.write("\x1b[2K\033[F\x1b[2K")
 
 
-def __render(secure, return_value, prompt):
+def __render(secure: bool, return_value: str, prompt: str) -> None:
     render_value = len(return_value) * "*" if secure else return_value
     console.print(f"{prompt}\n> {render_value}")
     __reset_lines(2)
@@ -104,13 +104,9 @@ def prompt(
                 if validator(result):
                     return result
                 else:
-                    raise ValidationError(
-                        f"`{'secure input' if secure else value}` cannot be validated"
-                    )
+                    raise ValidationError(f"`{'secure input' if secure else value}` cannot be validated")
             except ValueError:
-                raise ConversionError(
-                    f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`"
-                )
+                raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
         elif char in Config.default_keys.delete:
             value = value[:-1]
             __render(secure, value, prompt)
@@ -124,10 +120,14 @@ def prompt(
             __render(secure, value, prompt)
 
 
+def __format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
+    return "{}{}".format(f"[{cursor_style}]{cursor}[/{cursor_style}]" if i == cursor_index else " " * len(cursor), option)
+
+
 def select(
     options: List[str],
     cursor: str = "> ",
-    cursor_style="pink1",
+    cursor_style: str = "pink1",
     cursor_index: int = 0,
     strict: bool = False,
 ) -> Union[int, None]:
@@ -138,7 +138,8 @@ def select(
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
         cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         cursor_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
-        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
+        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
+        if it's `True`, `ValueError` will be thrown. Defaults to False.
 
     Raises:
         ValueError: Thrown if no `options` are povided and strict is `True`
@@ -152,14 +153,8 @@ def select(
             raise ValueError("`options` cannot be empty")
         return None
     while True:
-        format_option = lambda i, option: "{}{}".format(
-            f"[{cursor_style}]{cursor}[/{cursor_style}]"
-            if i == cursor_index
-            else " " * len(cursor),
-            option,
-        )
         console.print(
-            "\n".join([format_option(i, option) for i, option in enumerate(options)])
+            "\n".join([__format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)])
         )
 
         __reset_lines(len(options))
@@ -182,10 +177,12 @@ def select(
             return None
 
 
-def __format_option(option, ticked, tick_character, tick_style, selected, cursor_style):
-    prefix = f"\[ ]"
+def __format_option_select_multiple(
+    option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
+) -> str:
+    prefix = "\[ ]"  # noqa: W605
     if ticked:
-        prefix = f"\[[{tick_style}]{tick_character}[/{tick_style}]]"
+        prefix = f"\[[{tick_style}]{tick_character}[/{tick_style}]]"  # noqa: W605
     if selected:
         option = f"[{cursor_style}]{option}[/{cursor_style}]"
     return f"{prefix} {option}"
@@ -233,7 +230,7 @@ def select_multiple(
         console.print(
             "\n".join(
                 [
-                    __format_option(
+                    __format_option_select_multiple(
                         option=option,
                         ticked=i in ticked_indices,
                         tick_character=tick_character,

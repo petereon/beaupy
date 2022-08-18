@@ -32,7 +32,9 @@ jobs:
       run: |
         python -m pip install poetry
         poetry install
+    - name: Typecheck the code
+      run: |
+        poetry run poe mypy
     - name: Lint the code
       run: |
-        # poetry run poe test-lint
-        poetry run poe mypy
+        poetry run poe falke8

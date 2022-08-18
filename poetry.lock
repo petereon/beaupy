@@ -335,21 +335,6 @@ flake8-polyfill = "*"
 pycodestyle = "*"
 
 [[package]]
-name = "flake8-bugbear"
-version = "22.7.1"
-description = "A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle."
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-attrs = ">=19.2.0"
-flake8 = ">=3.0.0"
-
-[package.extras]
-dev = ["pre-commit", "hypothesmith (>=0.2)", "hypothesis", "coverage"]
-
-[[package]]
 name = "flake8-cognitive-complexity"
 version = "0.1.0"
 description = "An extension for flake8 that validates cognitive functions complexity"
@@ -988,7 +973,7 @@ tomli = ">=1.0.0,<3.0.0"
 
 [[package]]
 name = "ward-coverage"
-version = "0.1.4"
+version = "0.1.5"
 description = "A coverage plugin for Ward testing framework"
 category = "dev"
 optional = false
@@ -1004,7 +989,7 @@ ward = "^0.66.0-beta.0"
 type = "git"
 url = "https://github.com/petereon/ward-coverage.git"
 reference = "master"
-resolved_reference = "635c345b6c1d83804c44d4baa50f2d56af0dba9a"
+resolved_reference = "8569dec34dc482778af2c64691283cb22bdd2330"
 
 [[package]]
 name = "watchdog"
@@ -1061,7 +1046,7 @@ docs = ["jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "jaraco.packaging (>=9)
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.7.8'
-content-hash = "47e32b782162c46b71cdc9aebd4a9786ef748092a8914c0099a33eaed5e316f7"
+content-hash = "e1e1133e203cba96c6f9464e0e96294d945a9efcc458bae4a709fce6510c2e3d"
 
 [metadata.files]
 astor = [
@@ -1230,10 +1215,6 @@ flake8 = [
 flake8-bandit = [
     {file = "flake8_bandit-3.0.0-py2.py3-none-any.whl", hash = "sha256:61b617f4f7cdaa0e2b1e6bf7b68afb2b619a227bb3e3ae00dd36c213bd17900a"},
     {file = "flake8_bandit-3.0.0.tar.gz", hash = "sha256:54d19427e6a8d50322a7b02e1841c0a7c22d856975f3459803320e0e18e2d6a1"},
-]
-flake8-bugbear = [
-    {file = "flake8-bugbear-22.7.1.tar.gz", hash = "sha256:e450976a07e4f9d6c043d4f72b17ec1baf717fe37f7997009c8ae58064f88305"},
-    {file = "flake8_bugbear-22.7.1-py3-none-any.whl", hash = "sha256:db5d7a831ef4412a224b26c708967ff816818cabae415e76b8c58df156c4b8e5"},
 ]
 flake8-cognitive-complexity = [
     {file = "flake8_cognitive_complexity-0.1.0.tar.gz", hash = "sha256:f202df054e4f6ff182b659c261922b9c684628a47beb19cb0973c50d6a7831c1"},
