@@ -25,6 +25,7 @@ class ConversionError(Exception):
 
 class Config:
     raise_on_interrupt: bool = False
+    # TODO: handle global setting of strict
     strict: bool = True
 
 
@@ -53,13 +54,13 @@ def reset_lines(num_lines):
         sys.stdout.write("\x1b[2K\033[F\x1b[2K")
 
 
-T = TypeVar("T")
-
-
 def render(secure, return_value, prompt):
     render_value = len(return_value) * "*" if secure else return_value
     console.print(f"{prompt}\n> {render_value}")
     reset_lines(2)
+
+
+T = TypeVar("T")
 
 
 def prompt(

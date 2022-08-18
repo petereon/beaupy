@@ -89,7 +89,9 @@ pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 
 - [x] PyPI Release
 - [x] Achieve >90% test coverage
-- [ ] Extend `select` with filterability
+- [ ] Update docs
+- [ ] Update API doc
+- [ ] Add filter function that will allow selection and text based filtering over a list of options
 - [ ] ...
 
 ## Documentation
