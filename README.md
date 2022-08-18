@@ -103,7 +103,41 @@ pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 - opinionated
 - configurable
 
-<!-- TODO: extend docs a bit  -->
+For styling you can leverage [numerous styling options](https://rich.readthedocs.io/en/stable/style.html) provided by rich, for example:
+
+
+
+```python
+res_index = select(options = ["red", "on", "white"], 
+                   cursor = "x ", 
+                   cursor_style= "red on white")
+```
+to print a read `x` character on a white background, or
+
+```python
+res_index = select(options = ["ok", "ko"], 
+                   cursor = "k ", 
+                   cursor_style="#af00ff)
+```
+to print a purple `k` in front of the currently selected option.
+
+You can also use whatever as a cursor:
+```python
+res_index = select(options = ["here", "comes", "the", "sun"], 
+                   cursor = "🌞 ")
+```
+to use a sun emoji, or
+```python
+res_index = select(options = ["hardcore", "unicode"], 
+                   cursor = "⇉ ")
+```
+to use `⇉`.
+
+You don't even have to use one character, this also works perfectly fine:
+```python
+res_index = select(options = ["this", "other thing"], 
+                   cursor = "selected ")
+```
 
 For API doc, please refer to [`APIDOC.md`](https://github.com/petereon/beaupy/blob/master/APIDOC.md)
 
@@ -116,6 +150,8 @@ This repository has a [associated GitHub project](https://github.com/users/peter
 If you want to contribute, please feel free to suggest features or implement them yourself.
 
 Also **please report any issues and bugs you might find!**
+
+### Development
 
 To start development you can clone the repository:
 
