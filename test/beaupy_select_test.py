@@ -193,7 +193,7 @@ def _():
     Config.raise_on_interrupt = True
     readchar.readkey = lambda: next(steps)
     with raises(KeyboardInterrupt):
-        res = select(
+        select(
             options=["test1", "test2", "test3", "test4"],
             cursor="x ",
             cursor_style="green",

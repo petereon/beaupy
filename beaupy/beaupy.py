@@ -167,16 +167,14 @@ def select(
         keypress = readchar.readkey()
         if keypress in Config.default_keys.up:
             new_index = cursor_index
-            while new_index > 0:
+            if new_index > 0:
                 new_index -= 1
                 cursor_index = new_index
-                break
         elif keypress in Config.default_keys.down:
             new_index = cursor_index
-            while new_index < len(options) - 1:
+            if new_index < len(options) - 1:
                 new_index += 1
                 cursor_index = new_index
-                break
         elif keypress in Config.default_keys.confirm:
             return cursor_index
         elif keypress in Config.default_keys.interrupt:
@@ -252,16 +250,14 @@ def select_multiple(
         keypress = readchar.readkey()
         if keypress in Config.default_keys.up:
             new_index = cursor_index
-            while new_index > 0:
+            if new_index > 0:
                 new_index -= 1
                 cursor_index = new_index
-                break
         elif keypress in Config.default_keys.down:
             new_index = cursor_index
-            while new_index + 1 <= max_index:
+            if new_index + 1 <= max_index:
                 new_index += 1
                 cursor_index = new_index
-                break
         elif keypress in Config.default_keys.select:
             if cursor_index in ticked_indices:
                 if len(ticked_indices) - 1 >= minimal_count:
