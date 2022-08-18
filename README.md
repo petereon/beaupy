@@ -92,15 +92,6 @@ poetry build
 pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 ```
 
-## Roadmap
-
-- [x] PyPI Release
-- [x] Achieve >90% test coverage
-- [x] Update docs
-- [x] Update API doc
-- [ ] Add filter function that will allow selection and text based filtering over a list of options
-- [ ] ...
-
 ## Documentation
 
 **BeauPy** is a library of interactive TUI elements for CLI applications.
@@ -112,7 +103,18 @@ pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
 - opinionated
 - configurable
 
+<!-- TODO: extend docs a bit  -->
+
 For API doc, please refer to [`APIDOC.md`](https://github.com/petereon/beaupy/blob/master/APIDOC.md)
+
+## Roadmap
+
+- [x] PyPI Release
+- [x] Achieve >90% test coverage
+- [x] Update docs
+- [x] Update API doc
+- [ ] Add filter function that will allow selection and text based filtering over a list of options
+- [ ] ...
 
 ## Contributing
 
