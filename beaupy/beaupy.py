@@ -7,7 +7,7 @@ __license__ = "MIT"
 
 import ast
 import sys
-from typing import Any, Callable, List, Optional, Type, TypeVar, Union
+from typing import Any, Callable, List, Optional, Type, TypeVar, Union, cast
 
 import readchar  # type: ignore
 from rich.console import Console
@@ -45,11 +45,12 @@ class DefaultKeys:
 
 class Config:
     """A map of default configuration
-    
+
     Attributes:
-        raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input, 
+        raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input,
         otherwise, they will return some sane alternative to their usual return (e.g.: None, [] ). Defaults to False.
     """
+
     raise_on_interrupt: bool = False
     default_keys = DefaultKeys
 
@@ -65,15 +66,12 @@ def __render(secure, return_value, prompt):
     __reset_lines(2)
 
 
-T = TypeVar("T")
-
-
 def prompt(
     prompt: str,
-    target_type: Union[Type[T], Type[str]] = str,
+    target_type: Type = str,
     validator: Callable[[Any], bool] = lambda input: True,
     secure: bool = False,
-) -> Union[T, str]:
+) -> Any:
     """Function that prompts the user for written input
 
     Args:
@@ -90,39 +88,40 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
-    return_value: str = ""
+    value: str = ""
     __render(secure, "", prompt)
     while True:
         char = readchar.readkey()
         if char in Config.default_keys.confirm:
             try:
                 if target_type is bool:
-                    return_value = ast.literal_eval(return_value)
-                    if not isinstance(return_value, bool):
+                    result: bool = ast.literal_eval(value)
+                    if not isinstance(result, bool):
                         raise ValueError()
                 else:
-                    return_value = target_type(return_value)
-                if validator(return_value):
-                    return return_value
+                    result: target_type = target_type(value) # type: ignore
+                
+                if validator(result):
+                    return result
                 else:
                     raise ValidationError(
-                        f"`{'secure input' if secure else return_value}` cannot be validated"
+                        f"`{'secure input' if secure else value}` cannot be validated"
                     )
             except ValueError:
                 raise ConversionError(
-                    f"`{'secure input' if secure else return_value}` cannot be converted to type `{target_type}`"
+                    f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`"
                 )
         elif char in Config.default_keys.delete:
-            return_value = return_value[:-1]
-            __render(secure, return_value, prompt)
+            value = value[:-1]
+            __render(secure, value, prompt)
         elif char in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt()
             else:
                 return None
         else:
-            return_value += char
-            __render(secure, return_value, prompt)
+            value += char
+            __render(secure, value, prompt)
 
 
 def select(
@@ -144,7 +143,7 @@ def select(
     Raises:
         ValueError: Thrown if no `options` are povided and strict is `True`
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
-    
+
     Returns:
         Union[int, None]: Index of a selected option or `None`
     """
