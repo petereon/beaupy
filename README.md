@@ -109,12 +109,7 @@ For API doc, please refer to [`APIDOC.md`](https://github.com/petereon/beaupy/bl
 
 ## Roadmap
 
-- [x] PyPI Release
-- [x] Achieve >90% test coverage
-- [x] Update docs
-- [x] Update API doc
-- [ ] Add filter function that will allow selection and text based filtering over a list of options
-- [ ] ...
+This repository has a [associated GitHub project](https://github.com/users/petereon/projects/3/views/1) where work that is currently done can be seen
 
 ## Contributing
 
