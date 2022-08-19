@@ -44,7 +44,7 @@ def _():
         "\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"
     )
     assert console.print.call_count == 4
-    assert res == [0, 1]
+    assert res == ["test1", "test2"]
 
 
 @test(
@@ -71,7 +71,7 @@ def _():
         "\\[ ] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2"
     )
     assert console.print.call_count == 3
-    assert res == [1]
+    assert res == ["test2"]
 
 
 @test(
@@ -99,7 +99,7 @@ def _():
         "\\[[yellow1]✓[/yellow1]] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2"
     )
     assert console.print.call_count == 3
-    assert res == [0, 1]
+    assert res == ["test1", "test2"]
 
 
 @test(
@@ -128,7 +128,7 @@ def _():
         "\\[[pink1]😋[/pink1]] test1\n\\[ ] [pink1]test2[/pink1]"
     )
     assert console.print.call_count == 4
-    assert res == [0]
+    assert res == ["test1"]
 
 
 @test(
@@ -170,7 +170,7 @@ def _():
         "\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"
     )
     assert console.print.call_count == 6
-    assert res == [0, 1]
+    assert res == ["test1", "test2"]
 
 
 @test(

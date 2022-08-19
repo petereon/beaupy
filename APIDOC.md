@@ -59,9 +59,9 @@ A map of default configuration
 
 ```python
 def prompt(prompt: str,
-           target_type: Union[Type[T], Type[str]] = str,
+           target_type: Type = str,
            validator: Callable[[Any], bool] = lambda input: True,
-           secure: bool = False) -> Union[T, str]
+           secure: bool = False) -> Any
 ```
 
 Function that prompts the user for written input
@@ -92,9 +92,10 @@ Function that prompts the user for written input
 ```python
 def select(options: List[str],
            cursor: str = "> ",
-           cursor_style="pink1",
+           cursor_style: str = "pink1",
            cursor_index: int = 0,
-           strict: bool = False) -> Union[int, None]
+           return_index: bool = False,
+           strict: bool = False) -> Union[int, str, None]
 ```
 
 A prompt that allows selecting one option from a list of options
@@ -105,7 +106,9 @@ A prompt that allows selecting one option from a list of options
 - `cursor` _str, optional_ - Cursor that is going to appear in front of currently selected option. Defaults to '> '.
 - `cursor_style` _str, optional_ - Rich friendly style for the cursor. Defaults to 'pink1'.
 - `cursor_index` _int, optional_ - Option can be preselected based on its list index. Defaults to 0.
-- `strict` _bool, optional_ - If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
+- `return_index` _bool, optional_ - If `True`, `select` will return the index of selected element in options. Defaults to `False`.
+- `strict` _bool, optional_ - If empty `options` is provided and strict is `False`, None will be returned,
+  if it's `True`, `ValueError` will be thrown. Defaults to False.
   
 
 **Raises**:
@@ -116,7 +119,7 @@ A prompt that allows selecting one option from a list of options
 
 **Returns**:
 
-  Union[int, None]: Index of a selected option or `None`
+  Union[int, str, None]: Selected value or the index of a selected option or `None`
 
 <a id="beaupy.select_multiple"></a>
 
@@ -131,7 +134,8 @@ def select_multiple(options: List[str],
                     cursor_index: int = 0,
                     minimal_count: int = 0,
                     maximal_count: Optional[int] = None,
-                    strict: bool = False) -> List[int]
+                    return_indices: bool = False,
+                    strict: bool = False) -> Union[List[str], List[int]]
 ```
 
 A prompt that allows selecting multiple options from a list of options
@@ -146,6 +150,7 @@ A prompt that allows selecting multiple options from a list of options
 - `cursor_index` _int, optional_ - Index of the option cursor starts at. Defaults to 0.
 - `minimal_count` _int, optional_ - Minimal count of options that need to be selected. Defaults to 0.
 - `maximal_count` _Optional[int], optional_ - Maximal count of options that need to be selected. Defaults to None.
+- `return_indices` _bool, optional_ - If `True`, `select_multiple` will return the indices of ticked elements in options. Defaults to `False`.
 - `strict` _bool, optional_ - If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
   
 
@@ -156,7 +161,7 @@ A prompt that allows selecting multiple options from a list of options
 
 **Returns**:
 
-- `List[int]` - A list of selected indices
+  Union[List[str], List[int]]: A list of selected values or indices of selected options
 
 <a id="beaupy.confirm"></a>
 

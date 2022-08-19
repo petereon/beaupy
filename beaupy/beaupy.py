@@ -129,8 +129,9 @@ def select(
     cursor: str = "> ",
     cursor_style: str = "pink1",
     cursor_index: int = 0,
+    return_index: bool = False,
     strict: bool = False,
-) -> Union[int, None]:
+) -> Union[int, str, None]:
     """A prompt that allows selecting one option from a list of options
 
     Args:
@@ -138,6 +139,7 @@ def select(
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
         cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         cursor_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
+        return_index (bool, optional): If `True`, `select` will return the index of selected element in options. Defaults to `False`.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
         if it's `True`, `ValueError` will be thrown. Defaults to False.
 
@@ -146,7 +148,7 @@ def select(
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
 
     Returns:
-        Union[int, None]: Index of a selected option or `None`
+        Union[int, str, None]: Selected value or the index of a selected option or `None`
     """
     if not options:
         if strict:
@@ -170,7 +172,9 @@ def select(
                 new_index += 1
                 cursor_index = new_index
         elif keypress in Config.default_keys.confirm:
-            return cursor_index
+            if return_index:
+                return cursor_index
+            return options[cursor_index]
         elif keypress in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
@@ -197,8 +201,9 @@ def select_multiple(
     cursor_index: int = 0,
     minimal_count: int = 0,
     maximal_count: Optional[int] = None,
+    return_indices: bool = False,
     strict: bool = False,
-) -> List[int]:
+) -> Union[List[str], List[int]]:
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
@@ -210,18 +215,19 @@ def select_multiple(
         cursor_index (int, optional): Index of the option cursor starts at. Defaults to 0.
         minimal_count (int, optional): Minimal count of options that need to be selected. Defaults to 0.
         maximal_count (Optional[int], optional): Maximal count of options that need to be selected. Defaults to None.
+        return_indices (bool, optional): If `True`, `select_multiple` will return the indices of ticked elements in options. Defaults to `False`.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
 
     Raises:
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
 
     Returns:
-        List[int]: A list of selected indices
+        Union[List[str], List[int]]: A list of selected values or indices of selected options
     """
     if not options:
         if strict:
             raise ValueError("`options` cannot be empty")
-        return []
+        return []  # type: ignore
     if ticked_indices is None:
         ticked_indices = []
     max_index = len(options) - (1 if True else 0)
@@ -273,11 +279,13 @@ def select_multiple(
         elif keypress in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
-            return []
+            return []  # type: ignore
         if error_message != "":
             console.print(error_message)
             error_message = ""
-    return ticked_indices
+    if return_indices:
+        return ticked_indices
+    return [options[i] for i in ticked_indices]
 
 
 def confirm(

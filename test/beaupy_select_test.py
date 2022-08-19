@@ -82,7 +82,7 @@ def _():
     )
 
     assert console.print.call_count == 5
-    assert res == 3
+    assert res == 'test4'
 
 
 @test(
@@ -112,7 +112,7 @@ def _():
         "  test1\n  test2\n  test3\n[green]x [/green]test4"
     )
     assert console.print.call_count == 4
-    assert res == 3
+    assert res == "test4"
 
 
 @test(
@@ -136,7 +136,7 @@ def _():
         "[green]x [/green]test1\n  test2\n  test3\n  test4"
     )
     assert console.print.call_count == 2
-    assert res == 0
+    assert res == "test1"
     
 
 @test(
@@ -160,7 +160,7 @@ def _():
         "[green]x [/green]test1\n  test2\n  test3\n  test4"
     )
     assert console.print.call_count == 2
-    assert res == 0
+    assert res == "test1"
 
 
 @test(
@@ -171,6 +171,7 @@ def _():
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
+    Config.raise_on_interrupt = False
     res = select(
         options=["test1", "test2", "test3", "test4"],
         cursor="x ",
@@ -183,8 +184,39 @@ def _():
     )
     assert console.print.call_count == 1
     assert res == None
+    
 
-  
+@test(
+    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value"
+)
+def _():
+    steps = iter(
+        [readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER]
+    )
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4"], cursor="x ", cursor_style="green", return_index=True,
+    )
+
+    assert console.print.call_args_list[0] == mock.call(
+        "[green]x [/green]test1\n  test2\n  test3\n  test4"
+    )
+    assert console.print.call_args_list[1] == mock.call(
+        "  test1\n[green]x [/green]test2\n  test3\n  test4"
+    )
+    assert console.print.call_args_list[2] == mock.call(
+        "  test1\n  test2\n[green]x [/green]test3\n  test4"
+    )
+    assert console.print.call_args_list[3] == mock.call(
+        "  test1\n  test2\n  test3\n[green]x [/green]test4"
+    )
+    
+    assert console.print.call_count == 4
+    assert res == 3
+
+
 @test(
     "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt True"
 )
