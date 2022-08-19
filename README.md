@@ -46,7 +46,7 @@ def main():
             "Sir Galahad the Pure",
         ]
 
-        name = names[beaupy.select(names, cursor_index=3)]
+        name = beaupy.select(names, cursor_index=3)
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
         age = beaupy.prompt("What is your age?", target_type=int, validator=lambda val: val > 0)
@@ -61,12 +61,7 @@ def main():
         ]
         print("Choose your nemeses")
         # Choose multiple options from a list
-        nemeses_indices = beaupy.select_multiple(nemeses_options)
-        nemeses = [
-            nemesis
-            for nemesis_index, nemesis in enumerate(nemeses_options)
-            if nemesis_index in nemeses_indices
-        ]
+        nemeses = beaupy.select_multiple(nemeses_options)
         # Get input without showing it being typed
         quest = beaupy.prompt("What is your quest?", secure=True)
         print(f"{name}'s quest (who is {age}) is {quest}.")
