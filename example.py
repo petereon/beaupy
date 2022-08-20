@@ -16,7 +16,7 @@ def main():
             "Sir Galahad the Pure",
         ]
 
-        name = beaupy.select(names, cursor_index=3)
+        name = beaupy.select(names, cursor_index=3, cursor="🏰")
         print(f"Welcome, {name}")
         # Get an integer greater or equal to 0
         age = beaupy.prompt("What is your age?", target_type=int, validator=lambda val: val > 0)

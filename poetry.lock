@@ -291,6 +291,17 @@ python-versions = ">=3.6"
 test = ["pytest", "black"]
 
 [[package]]
+name = "emoji"
+version = "2.0.0"
+description = "Emoji for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["pytest", "coverage", "coveralls"]
+
+[[package]]
 name = "eradicate"
 version = "2.1.0"
 description = "Removes commented-out code."
@@ -933,6 +944,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "types-emoji"
+version = "2.0.1"
+description = "Typing stubs for emoji"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.3.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1046,7 +1065,7 @@ docs = ["jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "jaraco.packaging (>=9)
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.7.8'
-content-hash = "e1e1133e203cba96c6f9464e0e96294d945a9efcc458bae4a709fce6510c2e3d"
+content-hash = "97451243a4be6d98f7897a93db3c5a1ba3931737c7b1e516fd3875bef58624a8"
 
 [metadata.files]
 astor = [
@@ -1199,6 +1218,9 @@ docspec-python = [
 ]
 docstring-parser = [
     {file = "docstring_parser-0.11.tar.gz", hash = "sha256:93b3f8f481c7d24e37c5d9f30293c89e2933fa209421c8abd731dd3ef0715ecb"},
+]
+emoji = [
+    {file = "emoji-2.0.0.tar.gz", hash = "sha256:297fac7ec9e86f7b602792c28eb6f04819ba67ab88a34c56afcde52243a9a105"},
 ]
 eradicate = [
     {file = "eradicate-2.1.0-py3-none-any.whl", hash = "sha256:8bfaca181db9227dc88bdbce4d051a9627604c2243e7d85324f6d6ce0fd08bb2"},
@@ -1567,6 +1589,10 @@ typed-ast = [
     {file = "typed_ast-1.5.4-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:98f80dee3c03455e92796b58b98ff6ca0b2a6f652120c263efdba4d6c5e58f72"},
     {file = "typed_ast-1.5.4-cp39-cp39-win_amd64.whl", hash = "sha256:0fdbcf2fef0ca421a3f5912555804296f0b0960f0418c440f5d6d3abb549f3e1"},
     {file = "typed_ast-1.5.4.tar.gz", hash = "sha256:39e21ceb7388e4bb37f4c679d72707ed46c2fbf2a5609b8b8ebc4b067d977df2"},
+]
+types-emoji = [
+    {file = "types-emoji-2.0.1.tar.gz", hash = "sha256:aa8fc23a9d4a5d1f367b27d269242ecf638f5bf05144f48ec7ceb219419f349b"},
+    {file = "types_emoji-2.0.1-py3-none-any.whl", hash = "sha256:7af47823924415b64909b7de0248339c6715667e155bf3616d294e7556464757"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.3.0-py3-none-any.whl", hash = "sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02"},

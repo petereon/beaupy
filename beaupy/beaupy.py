@@ -6,21 +6,21 @@ A Python library of interactive CLI elements you have been looking for
 __license__ = "MIT"
 
 import ast
-import sys
 from typing import Any, Callable, List, Optional, Type, Union
 
 import readchar
 from rich.console import Console
 
+from beaupy.internals import (
+    ConversionError,
+    ValidationError,
+    format_option_select,
+    format_option_select_multiple,
+    render,
+    reset_lines,
+)
+
 console = Console()
-
-
-class ValidationError(Exception):
-    pass
-
-
-class ConversionError(Exception):
-    pass
 
 
 class DefaultKeys:
@@ -55,17 +55,6 @@ class Config:
     default_keys = DefaultKeys
 
 
-def __reset_lines(num_lines: int) -> None:
-    for _ in range(num_lines):
-        sys.stdout.write("\x1b[2K\033[F\x1b[2K")
-
-
-def __render(secure: bool, return_value: str, prompt: str) -> None:
-    render_value = len(return_value) * "*" if secure else return_value
-    console.print(f"{prompt}\n> {render_value}")
-    __reset_lines(2)
-
-
 def prompt(
     prompt: str,
     target_type: Type = str,
@@ -89,7 +78,7 @@ def prompt(
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
     value: str = ""
-    __render(secure, "", prompt)
+    render(secure, "", prompt, console)
     while True:
         char = readchar.readkey()
         if char in Config.default_keys.confirm:
@@ -109,7 +98,7 @@ def prompt(
                 raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
         elif char in Config.default_keys.delete:
             value = value[:-1]
-            __render(secure, value, prompt)
+            render(secure, value, prompt, console)
         elif char in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt()
@@ -117,16 +106,12 @@ def prompt(
                 return None
         else:
             value += char
-            __render(secure, value, prompt)
-
-
-def __format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
-    return "{}{}".format(f"[{cursor_style}]{cursor}[/{cursor_style}]" if i == cursor_index else " " * len(cursor), option)
+            render(secure, value, prompt, console)
 
 
 def select(
     options: List[str],
-    cursor: str = "> ",
+    cursor: str = ">",
     cursor_style: str = "pink1",
     cursor_index: int = 0,
     return_index: bool = False,
@@ -155,11 +140,9 @@ def select(
             raise ValueError("`options` cannot be empty")
         return None
     while True:
-        console.print(
-            "\n".join([__format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)])
-        )
+        console.print("\n".join([format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)]))
 
-        __reset_lines(len(options))
+        reset_lines(len(options))
         keypress = readchar.readkey()
         if keypress in Config.default_keys.up:
             new_index = cursor_index
@@ -179,17 +162,6 @@ def select(
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
-
-
-def __format_option_select_multiple(
-    option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
-) -> str:
-    prefix = "\[ ]"  # noqa: W605
-    if ticked:
-        prefix = f"\[[{tick_style}]{tick_character}[/{tick_style}]]"  # noqa: W605
-    if selected:
-        option = f"[{cursor_style}]{option}[/{cursor_style}]"
-    return f"{prefix} {option}"
 
 
 def select_multiple(
@@ -236,7 +208,7 @@ def select_multiple(
         console.print(
             "\n".join(
                 [
-                    __format_option_select_multiple(
+                    format_option_select_multiple(
                         option=option,
                         ticked=i in ticked_indices,
                         tick_character=tick_character,
@@ -248,7 +220,7 @@ def select_multiple(
                 ]
             )
         )
-        __reset_lines(len(options))
+        reset_lines(len(options))
         keypress = readchar.readkey()
         if keypress in Config.default_keys.up:
             new_index = cursor_index
@@ -331,7 +303,7 @@ def confirm(
         console.print(
             f"{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}"
         )
-        __reset_lines(3)
+        reset_lines(3)
         keypress = readchar.readkey()
         if keypress in Config.default_keys.down or keypress in Config.default_keys.up:
             is_yes = not is_yes
