@@ -9,10 +9,6 @@
   * [select\_multiple](#beaupy.select_multiple)
   * [confirm](#beaupy.confirm)
 
-<a id="__init__"></a>
-
-# \_\_init\_\_
-
 <a id="beaupy"></a>
 
 # beaupy
@@ -91,7 +87,7 @@ Function that prompts the user for written input
 
 ```python
 def select(options: List[str],
-           cursor: str = "> ",
+           cursor: str = ">",
            cursor_style: str = "pink1",
            cursor_index: int = 0,
            return_index: bool = False,
@@ -202,4 +198,3 @@ A prompt that asks a question and offers two responses
 **Returns**:
 
   Optional[bool]
-
