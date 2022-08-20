@@ -13,7 +13,7 @@ class ConversionError(Exception):
 
 
 def __replace_emojis(text: str) -> str:
-    return emoji.replace_emoji(text, "  ")
+    return str(emoji.replace_emoji(text, "  "))
 
 
 def format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
