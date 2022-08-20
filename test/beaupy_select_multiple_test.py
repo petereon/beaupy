@@ -32,13 +32,13 @@ def _():
     console.print = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert console.print.call_args_list[0] == mock.call(
-        "\\[ ] [pink1]test1[/pink1]\n\\[ ] test2"
+        "\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"
     )
     assert console.print.call_args_list[1] == mock.call(
-        "\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[ ] test2"
+        "\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"
     )
     assert console.print.call_args_list[2] == mock.call(
-        "\\[[pink1]😋[/pink1]] test1\n\\[ ] [pink1]test2[/pink1]"
+        "\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"
     )
     assert console.print.call_args_list[3] == mock.call(
         "\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"
@@ -116,16 +116,16 @@ def _():
         options=["test1", "test2"], tick_character="😋", maximal_count=1
     )
     assert console.print.call_args_list[0] == mock.call(
-        "\\[ ] [pink1]test1[/pink1]\n\\[ ] test2"
+        "\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"
     )
     assert console.print.call_args_list[1] == mock.call(
-        "\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[ ] test2"
+        "\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"
     )
     assert console.print.call_args_list[2] == mock.call(
-        "\\[[pink1]😋[/pink1]] test1\n\\[ ] [pink1]test2[/pink1]"
+        "\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"
     )
     assert console.print.call_args_list[3] == mock.call(
-        "\\[[pink1]😋[/pink1]] test1\n\\[ ] [pink1]test2[/pink1]"
+        "\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"
     )
     assert console.print.call_count == 4
     assert res == ["test1"]
@@ -152,19 +152,19 @@ def _():
     )
     print(console.print.call_args_list[5])
     assert console.print.call_args_list[0] == mock.call(
-        "\\[ ] [pink1]test1[/pink1]\n\\[ ] test2"
+        "\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"
     )
     assert console.print.call_args_list[1] == mock.call(
-        "\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[ ] test2"
+        "\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"
     )
     assert console.print.call_args_list[2] == mock.call(
-        "\\[[pink1]😋[/pink1]] test1\n\\[ ] [pink1]test2[/pink1]"
+        "\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"
     )
     assert console.print.call_args_list[3] == mock.call(
         "Must select at least 2 options"
     )
     assert console.print.call_args_list[4] == mock.call(
-        "\\[[pink1]😋[/pink1]] test1\n\\[ ] [pink1]test2[/pink1]"
+        "\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"
     )
     assert console.print.call_args_list[5] == mock.call(
         "\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"
@@ -185,7 +185,7 @@ def _():
     console.print = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert console.print.call_args_list[0] == mock.call(
-        "\\[ ] [pink1]test1[/pink1]\n\\[ ] test2"
+        "\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"
     )
     assert console.print.call_count == 1
     assert res == []

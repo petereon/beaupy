@@ -291,6 +291,17 @@ python-versions = ">=3.6"
 test = ["pytest", "black"]
 
 [[package]]
+name = "emoji"
+version = "2.0.0"
+description = "Emoji for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["pytest", "coverage", "coveralls"]
+
+[[package]]
 name = "eradicate"
 version = "2.1.0"
 description = "Removes commented-out code."
@@ -1046,7 +1057,7 @@ docs = ["jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "jaraco.packaging (>=9)
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.7.8'
-content-hash = "e1e1133e203cba96c6f9464e0e96294d945a9efcc458bae4a709fce6510c2e3d"
+content-hash = "24e1d1d6da4f02e37d0fd33906b43cf8d1463248307abdb257cf5cd9f0d0ec9a"
 
 [metadata.files]
 astor = [
@@ -1199,6 +1210,9 @@ docspec-python = [
 ]
 docstring-parser = [
     {file = "docstring_parser-0.11.tar.gz", hash = "sha256:93b3f8f481c7d24e37c5d9f30293c89e2933fa209421c8abd731dd3ef0715ecb"},
+]
+emoji = [
+    {file = "emoji-2.0.0.tar.gz", hash = "sha256:297fac7ec9e86f7b602792c28eb6f04819ba67ab88a34c56afcde52243a9a105"},
 ]
 eradicate = [
     {file = "eradicate-2.1.0-py3-none-any.whl", hash = "sha256:8bfaca181db9227dc88bdbce4d051a9627604c2243e7d85324f6d6ce0fd08bb2"},

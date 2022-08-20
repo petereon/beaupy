@@ -107,14 +107,14 @@ For styling you can leverage [numerous styling options](https://rich.readthedocs
 
 
 ```python
-res_index = select(options = ["red", "on", "white"], 
-                   cursor = "x ", 
-                   cursor_style= "red on white")
+result = select(options = ["red", "on", "white"], 
+                cursor = "x", 
+                cursor_style= "red on white")
 ```
 to use a red `x` character on a white background, or
 
 ```python
-res_indices = select_multiple(options = ["ok", "ko"], 
+result_list = select_multiple(options = ["ok", "ko"], 
                               tick_character = "k", 
                               tick_style="#af00ff)
 ```
@@ -122,20 +122,20 @@ to use a purple `k` as in a tick in checked option
 
 You can also use whatever as a cursor:
 ```python
-res_index = select(options = ["here", "comes", "the", "sun"], 
-                   cursor = "🌞 ")
+result = select(options = ["here", "comes", "the", "sun"], 
+                cursor = "🌞")
 ```
 to use a sun emoji, or
 ```python
-res_index = select(options = ["hardcore", "unicode"], 
-                   cursor = "⇉ ")
+result = select(options = ["hardcore", "unicode"], 
+                cursor = "⇉")
 ```
 to use `⇉`.
 
 You don't even have to use one character, this also works perfectly fine:
 ```python
-res_index = select(options = ["this", "other thing"], 
-                   cursor = "selected ")
+result = select(options = ["this", "other thing"], 
+                cursor = "selected ")
 ```
 
 As you can see, world is your oyster. 
