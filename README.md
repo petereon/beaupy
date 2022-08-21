@@ -13,6 +13,8 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 
+For documentation but more and prettier see [**here**](https://petereon.github.io/beaupy/)
+
 ## Acknowledgment
 BeauPy stands on the shoulders of giants. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
 
@@ -22,10 +24,10 @@ BeauPy stands on the shoulders of giants. It is based on another library with wh
 
 | Function                                                                                                  | Functionality                                                                              |
 |:----------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------|
-| [`select`](https://github.com/petereon/beaupy/blob/master/APIDOC.md#beaupy.select)                        | Prompt to pick a choice from a list                                                        |
-| [`select_multiple`](https://github.com/petereon/beaupy/blob/master/APIDOC.md#beaupy.select_multiple)      | Prompt to select one or multiple choices from a list                                       |
-| [`confirm`](https://github.com/petereon/beaupy/blob/master/APIDOC.md#beaupy.confirm)                      | Prompt with a question and yes/no options                                                  |
-| [`prompt`](https://github.com/petereon/beaupy/blob/master/APIDOC.md#beaupy.prompt)                        | Prompt that takes free input with optional validation, type conversion and input hiding |
+| [`select`](https://petereon.github.io/beaupy/api/#select)                        | Prompt to pick a choice from a list                                                        |
+| [`select_multiple`](https://petereon.github.io/beaupy/api/#select_multiple)      | Prompt to select one or multiple choices from a list                                       |
+| [`confirm`](https://petereon.github.io/beaupy/api/#confirm)                      | Prompt with a question and yes/no options                                                  |
+| [`prompt`](https://petereon.github.io/beaupy/api/#prompt)                        | Prompt that takes free input with optional validation, type conversion and input hiding |
 
 ## Getting Started
 
@@ -102,6 +104,7 @@ def main():
             print("He has no nemesis.")
 ```
 
+For more information refer to [more_examples](https://petereon.github.io/beaupy/examples/) or definitive, but much less exciting [api documentation](https://petereon.github.io/beaupy/api/)
 
 ## Roadmap
 
