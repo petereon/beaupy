@@ -1,0 +1,4 @@
+mkdocs
+mkdocs-material
+novella==1.1.1
+pydoc-markdown

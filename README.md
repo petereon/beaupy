@@ -1,3 +1,5 @@
+# BeauPy
+
 ![beaupy](https://user-images.githubusercontent.com/47027005/185082011-cb588f57-d38f-42d8-8312-3981ae1bc479.png)
 
 
@@ -14,7 +16,7 @@
 ## Acknowledgment
 BeauPy stands on the shoulders of giants. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
 
-# Overview
+## Overview
 
 **BeauPy** implements a number of common interactive elements:
 
@@ -25,7 +27,33 @@ BeauPy stands on the shoulders of giants. It is based on another library with wh
 | [`confirm`](https://github.com/petereon/beaupy/blob/master/APIDOC.md#beaupy.confirm)                      | Prompt with a question and yes/no options                                                  |
 | [`prompt`](https://github.com/petereon/beaupy/blob/master/APIDOC.md#beaupy.prompt)                        | Prompt that takes free input with optional validation, type conversion and input hiding |
 
-## Usage
+## Getting Started
+
+**BeauPy** is a library of interactive TUI elements for CLI applications.
+
+**BeauPy** is
+
+- [rich](https://rich.readthedocs.io/en/stable/) friendly
+- stylable
+- opinionated
+- configurable
+### Installation
+
+From PyPI:
+
+```sh
+pip install beaupy
+```
+
+From source:
+
+```sh
+git clone https://github.com/petereon/beaupy.git
+poetry build
+pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
+```
+
+### Example
 
 ![example](https://raw.githubusercontent.com/petereon/beaupy/master/example.gif)
 
@@ -72,75 +100,8 @@ def main():
                 print(f'His nemeses are {" and ".join(nemeses)}.')
         else:
             print("He has no nemesis.")
-
 ```
 
-## Installation
-
-From PyPI:
-
-```sh
-pip install beaupy
-```
-
-From source:
-
-```sh
-git clone https://github.com/petereon/beaupy.git
-poetry build
-pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
-```
-
-## Documentation
-
-**BeauPy** is a library of interactive TUI elements for CLI applications.
-
-**BeauPy** is
-
-- [rich](https://rich.readthedocs.io/en/stable/) friendly
-- stylable
-- opinionated
-- configurable
-
-For styling you can leverage [numerous styling options](https://rich.readthedocs.io/en/stable/style.html) provided by rich, for example:
-
-
-
-```python
-result = select(options = ["red", "on", "white"], 
-                cursor = "x", 
-                cursor_style= "red on white")
-```
-to use a red `x` character on a white background, or
-
-```python
-result_list = select_multiple(options = ["ok", "ko"], 
-                              tick_character = "k", 
-                              tick_style="#af00ff)
-```
-to use a purple `k` as in a tick in checked option
-
-You can also use whatever as a cursor:
-```python
-result = select(options = ["here", "comes", "the", "sun"], 
-                cursor = "🌞")
-```
-to use a sun emoji, or
-```python
-result = select(options = ["hardcore", "unicode"], 
-                cursor = "⇉")
-```
-to use `⇉`.
-
-You don't even have to use one character, this also works perfectly fine:
-```python
-result = select(options = ["this", "other thing"], 
-                cursor = "selected ")
-```
-
-As you can see, world is your oyster. 
-
-To see more exciting stuff in less exciting format, please refer to [`APIDOC.md`](https://github.com/petereon/beaupy/blob/master/APIDOC.md)
 
 ## Roadmap
 

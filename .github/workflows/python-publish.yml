@@ -41,6 +41,18 @@ jobs:
       run: |
         export PYTHONPATH=$(pwd)
         poe test
+    
+    - name: Install dependencies
+      run: pip install -r docs/requirements.txt
+    - name: Build documentation
+      run: cd docs && novella
+    - name: Publish docs
+      uses: JamesIves/github-pages-deploy-action@4.1.4
+      with:
+        branch: gh-pages
+        folder: docs/_site
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
