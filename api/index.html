@@ -1,0 +1,671 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.0">
+    
+    
+      
+        <title>API Documentation - BeauPy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.69437709.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="BeauPy" class="md-header__button md-logo" aria-label="BeauPy" data-md-component="logo">
+      
+  <img src="../icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BeauPy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Documentation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/petereon/beaupy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="BeauPy" class="md-nav__button md-logo" aria-label="BeauPy" data-md-component="logo">
+      
+  <img src="../icon.png" alt="logo">
+
+    </a>
+    BeauPy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/petereon/beaupy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          API Documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        API Documentation
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#class-defaultkeys" class="md-nav__link">
+    Class DefaultKeys
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-config" class="md-nav__link">
+    Class Config
+  </a>
+  
+    <nav class="md-nav" aria-label="Class Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    prompt
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    select
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select_multiple" class="md-nav__link">
+    select_multiple
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirm" class="md-nav__link">
+    confirm
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        More Examples
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#class-defaultkeys" class="md-nav__link">
+    Class DefaultKeys
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-config" class="md-nav__link">
+    Class Config
+  </a>
+  
+    <nav class="md-nav" aria-label="Class Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    prompt
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    select
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select_multiple" class="md-nav__link">
+    select_multiple
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confirm" class="md-nav__link">
+    confirm
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/petereon/beaupy/blob/None/docs/content/api.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="api-documentation">API Documentation</h1>
+<p>A Python library of interactive CLI elements you have been looking for</p>
+<p><a id="beaupy.beaupy.DefaultKeys"></a></p>
+<p><a id="pydoc:beaupy.beaupy.DefaultKeys"></a></p>
+<h2 id="class-defaultkeys">Class DefaultKeys</h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">DefaultKeys</span><span class="p">()</span>
+</code></pre></div>
+<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L26">[view_source]</a></p>
+<p>A map of default keybindings.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>interrupt(List[str])</code> - Keys that cause a keyboard interrupt.</li>
+<li><code>select(List[str])</code> - Keys that trigger list element selection.</li>
+<li><code>confirm(List[str])</code> - Keys that trigger list confirmation.</li>
+<li><code>delete(List[str])</code> - Keys that trigger character deletion.</li>
+<li><code>down(List[str])</code> - Keys that select the element below.</li>
+<li><code>up(List[str])</code> - Keys that select the element above.</li>
+</ul>
+<p><a id="beaupy.beaupy.Config"></a></p>
+<p><a id="pydoc:beaupy.beaupy.Config"></a></p>
+<h2 id="class-config">Class Config</h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Config</span><span class="p">()</span>
+</code></pre></div>
+<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L46">[view_source]</a></p>
+<p>A map of default configuration</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>raise_on_interrupt(bool)</code> - If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input,
+  otherwise, they will return some sane alternative to their usual return (e.g.: None, [] ). Defaults to False.</li>
+</ul>
+<p><a id="beaupy.beaupy.prompt"></a></p>
+<p><a id="pydoc:beaupy.beaupy.prompt"></a></p>
+<h4 id="prompt">prompt</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+           <span class="n">target_type</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
+           <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+           <span class="n">secure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+</code></pre></div>
+<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L58">[view_source]</a></p>
+<p>Function that prompts the user for written input</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>prompt</code> <em>str</em> - The prompt that will be displayed</li>
+<li><code>target_type</code> <em>Union[Type[T], Type[str]], optional</em> - Type to convert the answer to. Defaults to str.</li>
+<li><code>validator</code> <em>Callable[[Any], bool], optional</em> - Optional function to validate the input. Defaults to lambdainput:True.</li>
+<li><code>secure</code> <em>bool, optional</em> - If True, input will be hidden. Defaults to False.</li>
+</ul>
+<p><strong>Raises</strong>:</p>
+<ul>
+<li><code>ValidationError</code> - Raised if validation with provided validator fails</li>
+<li><code>ConversionError</code> - Raised if the value cannot be converted to provided type</li>
+<li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>Union[T, str]: Returns a value formatted as provided type or string if no type is provided</p>
+<p><a id="beaupy.beaupy.select"></a></p>
+<p><a id="pydoc:beaupy.beaupy.select"></a></p>
+<h4 id="select">select</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+           <span class="n">cursor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span>
+           <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
+           <span class="n">cursor_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+           <span class="n">return_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+           <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</code></pre></div>
+<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L112">[view_source]</a></p>
+<p>A prompt that allows selecting one option from a list of options</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>options</code> <em>List[str]</em> - A list of options to select from</li>
+<li><code>cursor</code> <em>str, optional</em> - Cursor that is going to appear in front of currently selected option. Defaults to '&gt; '.</li>
+<li><code>cursor_style</code> <em>str, optional</em> - Rich friendly style for the cursor. Defaults to 'pink1'.</li>
+<li><code>cursor_index</code> <em>int, optional</em> - Option can be preselected based on its list index. Defaults to 0.</li>
+<li><code>return_index</code> <em>bool, optional</em> - If <code>True</code>, <code>select</code> will return the index of selected element in options. Defaults to <code>False</code>.</li>
+<li><code>strict</code> <em>bool, optional</em> - If empty <code>options</code> is provided and strict is <code>False</code>, None will be returned,
+  if it's <code>True</code>, <code>ValueError</code> will be thrown. Defaults to False.</li>
+</ul>
+<p><strong>Raises</strong>:</p>
+<ul>
+<li><code>ValueError</code> - Thrown if no <code>options</code> are povided and strict is <code>True</code></li>
+<li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>Union[int, str, None]: Selected value or the index of a selected option or <code>None</code></p>
+<p><a id="beaupy.beaupy.select_multiple"></a></p>
+<p><a id="pydoc:beaupy.beaupy.select_multiple"></a></p>
+<h4 id="select_multiple">select_multiple</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select_multiple</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+                    <span class="n">tick_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;✓&quot;</span><span class="p">,</span>
+                    <span class="n">tick_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
+                    <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
+                    <span class="n">ticked_indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">cursor_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="n">minimal_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="n">maximal_count</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">return_indices</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+</code></pre></div>
+<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L167">[view_source]</a></p>
+<p>A prompt that allows selecting multiple options from a list of options</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>options</code> <em>List[str]</em> - A list of options to select from</li>
+<li><code>tick_character</code> <em>str, optional</em> - Character that will be used as a tick in a checkbox. Defaults to 'x'.</li>
+<li><code>tick_style</code> <em>str, optional</em> - Rich friendly style for the tick character. Defaults to 'pink1'.</li>
+<li><code>cursor_style</code> <em>str, optional</em> - Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.</li>
+<li><code>ticked_indices</code> <em>Optional[List[int]], optional</em> - Indices of options that are pre-ticked when the prompt appears. Defaults to None.</li>
+<li><code>cursor_index</code> <em>int, optional</em> - Index of the option cursor starts at. Defaults to 0.</li>
+<li><code>minimal_count</code> <em>int, optional</em> - Minimal count of options that need to be selected. Defaults to 0.</li>
+<li><code>maximal_count</code> <em>Optional[int], optional</em> - Maximal count of options that need to be selected. Defaults to None.</li>
+<li><code>return_indices</code> <em>bool, optional</em> - If <code>True</code>, <code>select_multiple</code> will return the indices of ticked elements in options. Defaults to <code>False</code>.</li>
+<li><code>strict</code> <em>bool, optional</em> - If empty <code>options</code> is provided and strict is <code>False</code>, None will be returned, if it's <code>True</code>, <code>ValueError</code> will be thrown. Defaults to False.</li>
+</ul>
+<p><strong>Raises</strong>:</p>
+<ul>
+<li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>Union[List[str], List[int]]: A list of selected values or indices of selected options</p>
+<p><a id="beaupy.beaupy.confirm"></a></p>
+<p><a id="pydoc:beaupy.beaupy.confirm"></a></p>
+<h4 id="confirm">confirm</h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">confirm</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">yes_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Yes&quot;</span><span class="p">,</span>
+            <span class="n">no_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;No&quot;</span><span class="p">,</span>
+            <span class="n">has_to_match_case</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">enter_empty_confirms</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="n">default_is_yes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">cursor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&gt; &quot;</span><span class="p">,</span>
+            <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
+            <span class="n">char_prompt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+</code></pre></div>
+<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L263">[view_source]</a></p>
+<p>A prompt that asks a question and offers two responses</p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>question</code> <em>str</em> - Question to be asked</li>
+<li><code>yes_text</code> <em>str, optional</em> - Text of the positive response. Defaults to 'Yes'.</li>
+<li><code>no_text</code> <em>str, optional</em> - Text of the negative response. Defaults to 'No'.</li>
+<li><code>has_to_match_case</code> <em>bool, optional</em> - Check if typed response matches case. Defaults to False.</li>
+<li><code>enter_empty_confirms</code> <em>bool, optional</em> - No response is confirmation. Defaults to True.</li>
+<li><code>default_is_yes</code> <em>bool, optional</em> - Default is Yes. Defaults to False.</li>
+<li><code>cursor</code> <em>str, optional</em> - What character(s) to use as a cursor. Defaults to '&gt; '.</li>
+<li><code>cursor_style</code> <em>str, optional</em> - Rich friendly style for the cursor. Defaults to 'pink1'.</li>
+<li><code>char_prompt</code> <em>bool, optional</em> - Print [Y/n] after the question. Defaults to True.</li>
+</ul>
+<p><strong>Raises</strong>:</p>
+<ul>
+<li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True</li>
+</ul>
+<p><strong>Returns</strong>:</p>
+<p>Optional[bool]</p>
+
+
+
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Index" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Index
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../examples/" class="md-footer__link md-footer__link--next" aria-label="Next: More Examples" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              More Examples
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.9c69f0bc.min.js"></script>
+      
+    
+  </body>
+</html>
