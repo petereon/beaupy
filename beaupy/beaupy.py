@@ -6,7 +6,9 @@ A Python library of interactive CLI elements you have been looking for
 __license__ = "MIT"
 
 import ast
+import logging
 from typing import Any, Callable, List, Optional, Type, Union
+import warnings
 
 import readchar
 from rich.console import Console
@@ -139,6 +141,9 @@ def select(
         if strict:
             raise ValueError("`options` cannot be empty")
         return None
+    if cursor_style in ['', None]:
+        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
+        cursor_style = "white"
     while True:
         console.print("\n".join([format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)]))
 
@@ -200,6 +205,12 @@ def select_multiple(
         if strict:
             raise ValueError("`options` cannot be empty")
         return []  # type: ignore
+    if cursor_style in ['', None]:
+        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
+        cursor_style = "white"
+    if tick_style in ['', None]:
+        logging.warning("`tick_style` should be a valid style, defaulting to `white`")
+        tick_style = "white"
     if ticked_indices is None:
         ticked_indices = []
     max_index = len(options) - (1 if True else 0)
@@ -290,6 +301,9 @@ def confirm(
     Returns:
         Optional[bool]
     """
+    if cursor_style in ['', None]:
+        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
+        cursor_style = "white"
     is_yes = default_is_yes
     is_selected = enter_empty_confirms
     current_message = ""
