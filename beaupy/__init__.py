@@ -1,1 +1,1 @@
-from beaupy.beaupy import *
+from beaupy.beaupy import *  # noqa

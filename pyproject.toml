@@ -59,7 +59,6 @@ line-length = 140
 profile = "black"
 
 [tool.flake8]
-ignore = ["E203", "E266", "E501", "W503", "F403", "F401"]
 max-line-length = 140
 max-complexity = 18
 select = ["B","E","F","W","T4","B9"]
