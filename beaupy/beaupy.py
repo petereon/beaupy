@@ -7,8 +7,8 @@ __license__ = "MIT"
 
 import ast
 import logging
-from typing import Any, Callable, List, Optional, Type, Union
 import warnings
+from typing import Any, Callable, List, Optional, Type, Union
 
 import readchar
 from rich.console import Console
@@ -141,7 +141,7 @@ def select(
         if strict:
             raise ValueError("`options` cannot be empty")
         return None
-    if cursor_style in ['', None]:
+    if cursor_style in ["", None]:
         logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
         cursor_style = "white"
     while True:
@@ -205,10 +205,10 @@ def select_multiple(
         if strict:
             raise ValueError("`options` cannot be empty")
         return []  # type: ignore
-    if cursor_style in ['', None]:
+    if cursor_style in ["", None]:
         logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
         cursor_style = "white"
-    if tick_style in ['', None]:
+    if tick_style in ["", None]:
         logging.warning("`tick_style` should be a valid style, defaulting to `white`")
         tick_style = "white"
     if ticked_indices is None:
@@ -301,7 +301,7 @@ def confirm(
     Returns:
         Optional[bool]
     """
-    if cursor_style in ['', None]:
+    if cursor_style in ["", None]:
         logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
         cursor_style = "white"
     is_yes = default_is_yes
