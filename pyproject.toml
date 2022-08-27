@@ -77,9 +77,9 @@ path = ['test']
 hook_module = ["ward_coverage"]
 
 [tool.ward.plugins.coverage]
-omit = "*test*"
+omit = ["*test*", "example.py", "**/__init__.py"]
 report_type = ["term", "xml"]
-source = ["./beaupy"]
+source = ["."]
 
 [tool.poetry.dev-dependencies]
 # Code Scanning and Formatting
