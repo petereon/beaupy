@@ -36,9 +36,6 @@ jobs:
       run: |
         export PYTHONPATH=$(pwd)
         poe test
-    - name: fix code coverage paths
-      run: |
-        sed -i 's/\/home\/runner\/work\/beaupy\/beaypy\//\/github\/workspace\//g' coverage.xml
     - name: Typecheck the code
       run: |
         poetry run poe mypy
