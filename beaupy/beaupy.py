@@ -6,6 +6,7 @@ A Python library of interactive CLI elements you have been looking for
 __license__ = "MIT"
 
 import ast
+import logging
 from typing import Any, Callable, List, Optional, Type, Union
 
 import readchar
@@ -139,6 +140,9 @@ def select(
         if strict:
             raise ValueError("`options` cannot be empty")
         return None
+    if cursor_style in ["", None]:
+        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
+        cursor_style = "white"
     while True:
         console.print("\n".join([format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)]))
 
@@ -187,8 +191,10 @@ def select_multiple(
         cursor_index (int, optional): Index of the option cursor starts at. Defaults to 0.
         minimal_count (int, optional): Minimal count of options that need to be selected. Defaults to 0.
         maximal_count (Optional[int], optional): Maximal count of options that need to be selected. Defaults to None.
-        return_indices (bool, optional): If `True`, `select_multiple` will return the indices of ticked elements in options. Defaults to `False`.
-        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned, if it's `True`, `ValueError` will be thrown. Defaults to False.
+        return_indices (bool, optional): If `True`, `select_multiple` will return the indices
+                                         of ticked elements in options. Defaults to `False`.
+        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
+                                 if it's `True`, `ValueError` will be thrown. Defaults to False.
 
     Raises:
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
@@ -200,6 +206,12 @@ def select_multiple(
         if strict:
             raise ValueError("`options` cannot be empty")
         return []  # type: ignore
+    if cursor_style in ["", None]:
+        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
+        cursor_style = "white"
+    if tick_style in ["", None]:
+        logging.warning("`tick_style` should be a valid style, defaulting to `white`")
+        tick_style = "white"
     if ticked_indices is None:
         ticked_indices = []
     max_index = len(options) - (1 if True else 0)
@@ -290,6 +302,9 @@ def confirm(
     Returns:
         Optional[bool]
     """
+    if cursor_style in ["", None]:
+        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
+        cursor_style = "white"
     is_yes = default_is_yes
     is_selected = enter_empty_confirms
     current_message = ""
@@ -300,9 +315,9 @@ def confirm(
         yes = is_yes and is_selected
         no = not is_yes and is_selected
         question_line = f"{question}{yn_prompt}{current_message}"
-        console.print(
-            f"{question_line}\n{selected_prefix if yes else deselected_prefix}{yes_text}\n{selected_prefix if no else deselected_prefix}{no_text}"
-        )
+        yes_prefix = selected_prefix if yes else deselected_prefix
+        no_prefix = selected_prefix if no else deselected_prefix
+        console.print(f"{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}")
         reset_lines(3)
         keypress = readchar.readkey()
         if keypress in Config.default_keys.down or keypress in Config.default_keys.up:
