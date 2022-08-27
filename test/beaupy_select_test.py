@@ -1,6 +1,6 @@
 from unittest import mock
 from ward import test, raises
-from beaupy import select, console, Config
+from beaupy import select, console, Config, logging
 import readchar
 
 
@@ -231,3 +231,16 @@ def _():
             cursor_style="green",
             cursor_index=1,
         )
+        
+@test(
+    "`select` with 2 options and invalid cursor style"
+)
+def _():
+    steps = iter(
+        [readchar.key.ENTER]
+    )
+    readchar.readkey = lambda: next(steps)
+    logging.warning = mock.MagicMock()
+    select(options=["test1", "test2"], cursor_style="")
+    logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    

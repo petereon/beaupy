@@ -3,6 +3,8 @@ from beaupy import prompt, console, ConversionError, ValidationError
 import readchar
 from unittest import mock
 
+from beaupy.beaupy import Config
+
 @test('Empty prompt with immediately pressing confirm')
 def _():
     steps = iter([readchar.key.ENTER])
@@ -107,3 +109,32 @@ def _():
         assert console.print.call_args_list[0] == mock.call("\n> ")
         assert console.print.call_args_list[1] == mock.call("\n> *")
         assert console.print.call_args_list[2] == mock.call("\n> **")
+        
+@test("Prompt with typing `J`, then deleting it and typing `No`")
+def _():
+    steps = iter(['J', readchar.key.BACKSPACE, 'N', 'o', readchar.key.ENTER])
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = prompt(prompt="Try test")
+    assert res == 'No'
+    
+@test("Prompt with interrupt and raise on keyboard iterrupt as Falsr")
+def _():
+    steps = iter([readchar.key.CTRL_C])
+    Config.raise_on_interrupt = False
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    ret = prompt(prompt="Try test")
+    
+    assert ret is None
+
+@test("Prompt with interrupt and raise on keyboard iterrupt as True")
+def _():
+    steps = iter([readchar.key.CTRL_C])
+    Config.raise_on_interrupt = True
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    
+    with raises(KeyboardInterrupt):
+        prompt(prompt="Try test")

@@ -1,6 +1,6 @@
 from unittest import mock
 from ward import test, raises
-from beaupy import select_multiple, console, Config
+from beaupy import select_multiple, console, Config, logging
 import readchar
 
 
@@ -180,7 +180,7 @@ def _():
     steps = iter(
         [readchar.key.CTRL_C]
     )
-
+    Config.raise_on_interrupt = False
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
@@ -203,4 +203,29 @@ def _():
     console.print = mock.MagicMock()
     with raises(KeyboardInterrupt):
         select_multiple(options=["test1", "test2"], tick_character="😋")
+        
+
+@test(
+    "`select_multiple` with 2 options and invalid tick style"
+)
+def _():
+    steps = iter(
+        [readchar.key.ENTER]
+    )
+    readchar.readkey = lambda: next(steps)
+    logging.warning = mock.MagicMock()
+    select_multiple(options=["test1", "test2"], tick_style="")
+    logging.warning.assert_called_once_with("`tick_style` should be a valid style, defaulting to `white`")
+
+@test(
+    "`select_multiple` with 2 options and invalid cursor style"
+)
+def _():
+    steps = iter(
+        [readchar.key.ENTER]
+    )
+    readchar.readkey = lambda: next(steps)
+    logging.warning = mock.MagicMock()
+    select_multiple(options=["test1", "test2"], cursor_style="")
+    logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
     

@@ -250,6 +250,3 @@ def _():
     )
     assert console.print.call_count == 1
     assert res == True
-    
-
-# TODO: include tests for the `enter_empty_confirms`

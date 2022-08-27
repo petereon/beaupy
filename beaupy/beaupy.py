@@ -81,8 +81,8 @@ def prompt(
     value: str = ""
     render(secure, "", prompt, console)
     while True:
-        char = readchar.readkey()
-        if char in Config.default_keys.confirm:
+        keypress = readchar.readkey()
+        if keypress in Config.default_keys.confirm:
             try:
                 if target_type is bool:
                     result: bool = ast.literal_eval(value)
@@ -97,16 +97,15 @@ def prompt(
                     raise ValidationError(f"`{'secure input' if secure else value}` cannot be validated")
             except ValueError:
                 raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
-        elif char in Config.default_keys.delete:
+        elif keypress in Config.default_keys.delete:
             value = value[:-1]
             render(secure, value, prompt, console)
-        elif char in Config.default_keys.interrupt:
+        elif keypress in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
-                raise KeyboardInterrupt()
-            else:
-                return None
+                raise KeyboardInterrupt
+            return None
         else:
-            value += char
+            value += keypress
             render(secure, value, prompt, console)
 
 
@@ -145,7 +144,6 @@ def select(
         cursor_style = "white"
     while True:
         console.print("\n".join([format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)]))
-
         reset_lines(len(options))
         keypress = readchar.readkey()
         if keypress in Config.default_keys.up:
