@@ -1,4 +1,4 @@
-import sys
+from sys import stdout
 
 import emoji
 from rich.console import Console
@@ -35,7 +35,7 @@ def format_option_select_multiple(
 
 def reset_lines(num_lines: int) -> None:
     for _ in range(num_lines):
-        sys.stdout.write('\x1b[2K\033[F\x1b[2K')
+        stdout.write('\x1b[2K\033[F\x1b[2K')
 
 
 def render(secure: bool, return_value: str, prompt: str, console: Console) -> None:

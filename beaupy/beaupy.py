@@ -5,8 +5,8 @@ A Python library of interactive CLI elements you have been looking for
 
 __license__ = 'MIT'
 
-import ast
 import logging
+from ast import literal_eval
 from typing import Any, Callable, List, Optional, Type, Union
 
 import readchar
@@ -53,7 +53,6 @@ class Config:
     """
 
     raise_on_interrupt: bool = False
-    default_keys = DefaultKeys
 
 
 def prompt(
@@ -82,10 +81,10 @@ def prompt(
     render(secure, '', prompt, console)
     while True:
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.confirm:
+        if keypress in DefaultKeys.confirm:
             try:
                 if target_type is bool:
-                    result: bool = ast.literal_eval(value)
+                    result: bool = literal_eval(value)
                     if not isinstance(result, bool):
                         raise ValueError()
                 else:
@@ -97,10 +96,10 @@ def prompt(
                     raise ValidationError(f"`{'secure input' if secure else value}` cannot be validated")
             except ValueError:
                 raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
-        elif keypress in Config.default_keys.delete:
+        elif keypress in DefaultKeys.delete:
             value = value[:-1]
             render(secure, value, prompt, console)
-        elif keypress in Config.default_keys.interrupt:
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
@@ -156,17 +155,17 @@ def select(
         )
         reset_lines(len(options))
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.up:
+        if keypress in DefaultKeys.up:
             if index > 0:
                 index -= 1
-        elif keypress in Config.default_keys.down:
+        elif keypress in DefaultKeys.down:
             if index < len(options) - 1:
                 index += 1
-        elif keypress in Config.default_keys.confirm:
+        elif keypress in DefaultKeys.confirm:
             if return_index:
                 return index
             return options[index]
-        elif keypress in Config.default_keys.interrupt:
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
@@ -241,13 +240,13 @@ def select_multiple(
         )
         reset_lines(len(options))
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.up:
+        if keypress in DefaultKeys.up:
             if index > 0:
                 index -= 1
-        elif keypress in Config.default_keys.down:
+        elif keypress in DefaultKeys.down:
             if index + 1 <= max_index:
                 index += 1
-        elif keypress in Config.default_keys.select:
+        elif keypress in DefaultKeys.select:
             if index in ticked_indices:
                 if len(ticked_indices) - 1 >= minimal_count:
                     ticked_indices.remove(index)
@@ -258,12 +257,12 @@ def select_multiple(
                     error_message = f'Must select at most {maximal_count} options'
             else:
                 ticked_indices.append(index)
-        elif keypress in Config.default_keys.confirm:
+        elif keypress in DefaultKeys.confirm:
             if minimal_count > len(ticked_indices):
                 error_message = f'Must select at least {minimal_count} options'
             else:
                 break
-        elif keypress in Config.default_keys.interrupt:
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return []  # type: ignore
@@ -323,18 +322,18 @@ def confirm(
         console.print(f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}')
         reset_lines(3)
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.down or keypress in Config.default_keys.up:
+        if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
             is_yes = not is_yes
             is_selected = True
             current_message = yes_text if is_yes else no_text
-        elif keypress in Config.default_keys.delete:
+        elif keypress in DefaultKeys.delete:
             if current_message:
                 current_message = current_message[:-1]
-        elif keypress in Config.default_keys.interrupt:
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
-        elif keypress in Config.default_keys.confirm:
+        elif keypress in DefaultKeys.confirm:
             if is_selected:
                 break
         elif keypress in '\t':
