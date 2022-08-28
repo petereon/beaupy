@@ -265,7 +265,7 @@ def select_multiple(
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return []  # type: ignore
-        if error_message != '':
+        if error_message:
             console.print(error_message)
             error_message = ''
     if return_indices:
@@ -356,6 +356,3 @@ def confirm(
             else:
                 is_selected = False
     return is_selected and is_yes
-
-
-# TODO: Add filter function that will allow for list of options and text based filter
