@@ -1,6 +1,6 @@
 from unittest import mock
-from ward import test
-from beaupy import confirm, console
+from ward import test, raises
+from beaupy import confirm, console, logging, Config
 import readchar
 
 
@@ -214,3 +214,39 @@ def _():
     assert console.print.call_args_list == [mock.call("Try test (Y/N) \n[bold orange1]> [/bold orange1]Yes\n  No")]
     assert console.print.call_count == 1
     assert res == True
+    
+@test(
+    "`confirm` with `Test` as a question and empty cursor style"
+)
+def _():
+    steps = iter([readchar.key.ENTER])
+
+    readchar.readkey = lambda: next(steps)
+    logging.warning = mock.MagicMock()
+    confirm(question="Test", cursor_style="")
+    
+    logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    
+
+@test(
+    "`confirm` with `Test` as a question and empty cursor style, with KeyboardInterrupt and raise_on_interrupt as False"
+)
+def _():
+    steps = iter([readchar.key.CTRL_C])
+    Config.raise_on_interrupt = False
+    readchar.readkey = lambda: next(steps)
+    res = confirm(question="Test", cursor_style="red")
+    
+    assert res == None
+    
+
+@test(
+    "`confirm` with `Test` as a question and empty cursor style, with KeyboardInterrupt and raise_on_interrupt as True"
+)
+def _():
+    steps = iter([readchar.key.CTRL_C])
+    Config.raise_on_interrupt = True
+    readchar.readkey = lambda: next(steps)
+    
+    with raises(KeyboardInterrupt):
+        confirm(question="Test", cursor_style="red")

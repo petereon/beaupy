@@ -27,8 +27,6 @@ def _():
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
-    print(console.print.call_args_list)
-    # assert False
     assert console.print.call_args_list == [
         mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
@@ -37,6 +35,23 @@ def _():
     ]
     assert console.print.call_count == 4
     assert res == ["test1", "test2"]
+    
+
+@test("`select_multiple` with 2 options starting from first selecting going down and selecting second also with return_indices as True")
+def _():
+    steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋", return_indices=True)
+    assert console.print.call_args_list == [
+        mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
+        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
+    ]
+    assert console.print.call_count == 4
+    assert res == [0, 1]
 
 
 @test("`select_multiple` with 2 options `✓` as tick character and yellow1 as color starting from second selecting and going up")
@@ -96,9 +111,10 @@ def _():
         mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
+        mock.call('Must select at most 1 options'),
         mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
     ]
-    assert console.print.call_count == 4
+    assert console.print.call_count == 5
     assert res == ["test1"]
 
 

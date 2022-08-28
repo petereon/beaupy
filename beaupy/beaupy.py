@@ -249,13 +249,13 @@ def select_multiple(
             elif maximal_count is not None:
                 if len(ticked_indices) + 1 <= maximal_count:
                     ticked_indices.append(cursor_index)
+                else:
+                    error_message = f"Must select at most {maximal_count} options"
             else:
                 ticked_indices.append(cursor_index)
         elif keypress in Config.default_keys.confirm:
             if minimal_count > len(ticked_indices):
                 error_message = f"Must select at least {minimal_count} options"
-            elif maximal_count is not None and maximal_count < len(ticked_indices):
-                error_message = f"Must select at most {maximal_count} options"
             else:
                 break
         elif keypress in Config.default_keys.interrupt:
