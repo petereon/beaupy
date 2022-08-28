@@ -4,14 +4,14 @@ from beaupy import select, console, Config, logging
 import readchar
 
 
-@test("`select` with no options permissive")
+@test("`select` with no options permissive", tags=["v1", "select"])
 def _():
     readchar.readkey = lambda: readchar.key.ENTER
     res = select(options=[])
     assert res == None
 
 
-@test("`select` with no options strict")
+@test("`select` with no options strict", tags=["v1", "select"])
 def _():
     readchar.readkey = lambda: readchar.key.ENTER
     with raises(ValueError) as e:
@@ -20,7 +20,7 @@ def _():
     assert str(e.raised) == "`options` cannot be empty"
 
 
-@test("`select` with 1 option")
+@test("`select` with 1 option", tags=["v1", "select"])
 def _():
     steps = iter([readchar.key.ENTER])
 
@@ -33,7 +33,7 @@ def _():
     assert console.print.call_count == 1
 
 
-@test("`select` with 1 option and down step")
+@test("`select` with 1 option and down step", tags=["v1", "select"])
 def _():
     steps = iter([readchar.key.DOWN, readchar.key.ENTER])
 
@@ -45,7 +45,7 @@ def _():
     assert console.print.call_count == 2
 
 
-@test("`select` with 4 options stepping down through all with random character inbetween and selecting last")
+@test("`select` with 4 options stepping down through all with random character inbetween and selecting last", tags=["v1", "select"])
 def _():
     steps = iter(
         [
@@ -73,7 +73,10 @@ def _():
     assert res == "test4"
 
 
-@test("`select` with 4 options stepping down through all and selecting last with `x` as a cursor and `green` as a cursor color")
+@test(
+    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor and `green` as a cursor color",
+    tags=["v1", "select"],
+)
 def _():
     steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
 
@@ -91,7 +94,7 @@ def _():
     assert res == "test4"
 
 
-@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color")
+@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color", tags=["v1", "select"])
 def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
 
@@ -107,7 +110,7 @@ def _():
     assert res == "test1"
 
 
-@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color")
+@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color", tags=["v1", "select"])
 def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
 
@@ -124,7 +127,8 @@ def _():
 
 
 @test(
-    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt False"
+    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt False",
+    tags=["v1", "select"],
 )
 def _():
     steps = iter([readchar.key.CTRL_C])
@@ -145,7 +149,8 @@ def _():
 
 
 @test(
-    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value"
+    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value",
+    tags=["v1", "select"],
 )
 def _():
     steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
@@ -171,7 +176,8 @@ def _():
 
 
 @test(
-    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt True"
+    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt True",
+    tags=["v1", "select"],
 )
 def _():
     steps = iter([readchar.key.CTRL_C])
@@ -186,7 +192,7 @@ def _():
         )
 
 
-@test("`select` with 2 options and invalid cursor style")
+@test("`select` with 2 options and invalid cursor style", tags=["v1", "select"])
 def _():
     steps = iter([readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)

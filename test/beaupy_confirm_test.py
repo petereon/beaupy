@@ -4,7 +4,7 @@ from beaupy import confirm, console, logging, Config
 import readchar
 
 
-@test("`confirm` with `Try test` as a question and defaults otherwise")
+@test("`confirm` with `Try test` as a question and defaults otherwise", tags=["v1", "confirm"])
 def _():
     readchar.readkey = lambda: readchar.key.ENTER
     console.print = mock.MagicMock()
@@ -14,7 +14,7 @@ def _():
     assert res == False
 
 
-@test("`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise")
+@test("`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise", tags=["v1", "confirm"])
 def _():
     readchar.readkey = lambda: readchar.key.ENTER
     console.print = mock.MagicMock()
@@ -25,7 +25,8 @@ def _():
 
 
 @test(
-    "`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise, doing a step up to switch to yes"
+    "`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise, doing a step up to switch to yes",
+    tags=["v1", "confirm"],
 )
 def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
@@ -41,7 +42,7 @@ def _():
     assert res == True
 
 
-@test("`confirm` with `Try test` as a question and yes as a default")
+@test("`confirm` with `Try test` as a question and yes as a default", tags=["v1", "confirm"])
 def _():
     steps = iter([readchar.key.ENTER])
 
@@ -53,7 +54,7 @@ def _():
     assert res == True
 
 
-@test("`confirm` with `Try test` as a question and yes as a default, going down to select no")
+@test("`confirm` with `Try test` as a question and yes as a default, going down to select no", tags=["v1", "confirm"])
 def _():
     steps = iter([readchar.key.DOWN, readchar.key.ENTER])
 
@@ -68,7 +69,7 @@ def _():
     assert res == False
 
 
-@test("`confirm` with `Try test` as a question and yes as a default going up to select no")
+@test("`confirm` with `Try test` as a question and yes as a default going up to select no", tags=["v1", "confirm"])
 def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
 
@@ -83,7 +84,10 @@ def _():
     assert res == False
 
 
-@test("`confirm` with `Try test` as a question and yes as a default going up to select no with `some long text ` as a cursor")
+@test(
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `some long text ` as a cursor",
+    tags=["v1", "confirm"],
+)
 def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
 
@@ -98,22 +102,10 @@ def _():
     assert res == False
 
 
-@test("`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color")
-def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
-
-    readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
-    res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
-    assert console.print.call_args_list == [
-        mock.call("Try test (Y/N) \n[bold orange1]>[/bold orange1] Yes\n  No"),
-        mock.call("Try test (Y/N) No\n  Yes\n[bold orange1]>[/bold orange1] No"),
-    ]
-    assert console.print.call_count == 2
-    assert res == False
-
-
-@test("`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color")
+@test(
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color",
+    tags=["v1", "confirm"],
+)
 def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
 
@@ -129,7 +121,26 @@ def _():
 
 
 @test(
-    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color, typing the `no` answer"
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color",
+    tags=["v1", "confirm"],
+)
+def _():
+    steps = iter([readchar.key.UP, readchar.key.ENTER])
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
+    assert console.print.call_args_list == [
+        mock.call("Try test (Y/N) \n[bold orange1]>[/bold orange1] Yes\n  No"),
+        mock.call("Try test (Y/N) No\n  Yes\n[bold orange1]>[/bold orange1] No"),
+    ]
+    assert console.print.call_count == 2
+    assert res == False
+
+
+@test(
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color, typing the `no` answer",
+    tags=["v1", "confirm"],
 )
 def _():
     steps = iter(["n", "o", readchar.key.ENTER])
@@ -147,7 +158,8 @@ def _():
 
 
 @test(
-    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color, case sensitive typing the `no` answer"
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color, case sensitive typing the `no` answer",
+    tags=["v1", "confirm"],
 )
 def _():
     steps = iter(
@@ -186,7 +198,8 @@ def _():
 
 
 @test(
-    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and no char prompt"
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and no char prompt",
+    tags=["v1", "confirm"],
 )
 def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
@@ -203,7 +216,8 @@ def _():
 
 
 @test(
-    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and enter empty confirms"
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and enter empty confirms",
+    tags=["v1", "confirm"],
 )
 def _():
     steps = iter([readchar.key.ENTER])
@@ -216,7 +230,7 @@ def _():
     assert res == True
 
 
-@test("`confirm` with `Test` as a question and empty cursor style")
+@test("`confirm` with `Test` as a question and empty cursor style", tags=["v1", "confirm"])
 def _():
     steps = iter([readchar.key.ENTER])
 
@@ -227,7 +241,7 @@ def _():
     logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
 
-@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as False")
+@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as False", tags=["v1", "confirm"])
 def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = False
@@ -237,7 +251,7 @@ def _():
     assert res == None
 
 
-@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as True")
+@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as True", tags=["v1", "confirm"])
 def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = True
@@ -247,7 +261,7 @@ def _():
         confirm(question="Test", cursor_style="red")
 
 
-@test("`confirm` with `Test` as a question, typing `N` and pressing `\\t`")
+@test("`confirm` with `Test` as a question, typing `N` and pressing `\\t`", tags=["v1", "confirm"])
 def _():
     steps = iter(["N", "\t", readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
@@ -259,9 +273,9 @@ def _():
         mock.call("Test (Y/N) No\n  Yes\n[red]>[/red] No"),
     ]
     assert ret is False
-    
 
-@test("`confirm` with `Test` as a question, typing `Y`")
+
+@test("`confirm` with `Test` as a question, typing `Y`", tags=["v1", "confirm"])
 def _():
     steps = iter(["Y", readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
@@ -271,5 +285,5 @@ def _():
         mock.call("Test (Y/N) \n[red]>[/red] Yes\n  No"),
         mock.call("Test (Y/N) Y\n[red]>[/red] Yes\n  No"),
     ]
-    
+
     assert ret is True

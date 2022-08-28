@@ -4,14 +4,14 @@ from beaupy import select_multiple, console, Config, logging
 import readchar
 
 
-@test("`select_multiple` with no options permissive")
+@test("`select_multiple` with no options permissive", tags=["v1", "select_multiple"])
 def _():
     readchar.readkey = lambda: readchar.key.ENTER
     res = select_multiple(options=[])
     assert res == []
 
 
-@test("`select_multiple` with no options strict")
+@test("`select_multiple` with no options strict", tags=["v1", "select_multiple"])
 def _():
     readchar.readkey = lambda: readchar.key.ENTER
     with raises(ValueError) as e:
@@ -20,7 +20,7 @@ def _():
     assert str(e.raised) == "`options` cannot be empty"
 
 
-@test("`select_multiple` with 2 options starting from first selecting going down and selecting second also")
+@test("`select_multiple` with 2 options starting from first selecting going down and selecting second also", tags=["v1", "select_multiple"])
 def _():
     steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
 
@@ -35,9 +35,12 @@ def _():
     ]
     assert console.print.call_count == 4
     assert res == ["test1", "test2"]
-    
 
-@test("`select_multiple` with 2 options starting from first selecting going down and selecting second also with return_indices as True")
+
+@test(
+    "`select_multiple` with 2 options starting from first selecting going down and selecting second also with return_indices as True",
+    tags=["v1", "select_multiple"],
+)
 def _():
     steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
 
@@ -54,7 +57,10 @@ def _():
     assert res == [0, 1]
 
 
-@test("`select_multiple` with 2 options `✓` as tick character and yellow1 as color starting from second selecting and going up")
+@test(
+    "`select_multiple` with 2 options `✓` as tick character and yellow1 as color starting from second selecting and going up",
+    tags=["v1", "select_multiple"],
+)
 def _():
     steps = iter([readchar.key.SPACE, readchar.key.UP, readchar.key.ENTER])
 
@@ -76,7 +82,8 @@ def _():
 
 
 @test(
-    "`select_multiple` with 2 options `✓` as tick character and yellow1 as color starting from second selecting and going up with 1st option preselected"
+    "`select_multiple` with 2 options `✓` as tick character and yellow1 as color starting from second selecting and going up with 1st option preselected",
+    tags=["v1", "select_multiple"],
 )
 def _():
     steps = iter([readchar.key.SPACE, readchar.key.UP, readchar.key.ENTER])
@@ -99,7 +106,10 @@ def _():
     assert res == ["test1", "test2"]
 
 
-@test("`select_multiple` with 2 options starting from first selecting going down and selecting second also with `maximal_count` of 1")
+@test(
+    "`select_multiple` with 2 options starting from first selecting going down and selecting second also with `maximal_count` of 1",
+    tags=["v1", "select_multiple"],
+)
 def _():
     steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
 
@@ -111,14 +121,17 @@ def _():
         mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call('Must select at most 1 options'),
+        mock.call("Must select at most 1 options"),
         mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
     ]
     assert console.print.call_count == 5
     assert res == ["test1"]
 
 
-@test("`select_multiple` with 2 options starting from first selecting going down and selecting second also with `minimal_count` of 2")
+@test(
+    "`select_multiple` with 2 options starting from first selecting going down and selecting second also with `minimal_count` of 2",
+    tags=["v1", "select_multiple"],
+)
 def _():
     steps = iter(
         [
@@ -145,7 +158,7 @@ def _():
     assert res == ["test1", "test2"]
 
 
-@test("`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt False")
+@test("`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt False", tags=["v1", "select_multiple"])
 def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = False
@@ -157,7 +170,7 @@ def _():
     assert res == []
 
 
-@test("`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt True")
+@test("`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt True", tags=["v1", "select_multiple"])
 def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = True
@@ -167,7 +180,7 @@ def _():
         select_multiple(options=["test1", "test2"], tick_character="😋")
 
 
-@test("`select_multiple` with 2 options and invalid tick style")
+@test("`select_multiple` with 2 options and invalid tick style", tags=["v1", "select_multiple"])
 def _():
     steps = iter([readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
@@ -176,7 +189,7 @@ def _():
     logging.warning.assert_called_once_with("`tick_style` should be a valid style, defaulting to `white`")
 
 
-@test("`select_multiple` with 2 options and invalid cursor style")
+@test("`select_multiple` with 2 options and invalid cursor style", tags=["v1", "select_multiple"])
 def _():
     steps = iter([readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
