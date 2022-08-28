@@ -3,10 +3,10 @@
 A Python library of interactive CLI elements you have been looking for
 """
 
-__license__ = "MIT"
+__license__ = 'MIT'
 
-import ast
 import logging
+from ast import literal_eval
 from typing import Any, Callable, List, Optional, Type, Union
 
 import readchar
@@ -53,7 +53,6 @@ class Config:
     """
 
     raise_on_interrupt: bool = False
-    default_keys = DefaultKeys
 
 
 def prompt(
@@ -78,29 +77,28 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
-    value: str = ""
-    render(secure, "", prompt, console)
+    value: str = ''
+    render(secure, '', prompt, console)
     while True:
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.confirm:
+        if keypress in DefaultKeys.confirm:
             try:
                 if target_type is bool:
-                    result: bool = ast.literal_eval(value)
+                    result: bool = literal_eval(value)
                     if not isinstance(result, bool):
                         raise ValueError()
                 else:
                     result: target_type = target_type(value)  # type: ignore
-
                 if validator(result):
                     return result
                 else:
                     raise ValidationError(f"`{'secure input' if secure else value}` cannot be validated")
             except ValueError:
                 raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
-        elif keypress in Config.default_keys.delete:
+        elif keypress in DefaultKeys.delete:
             value = value[:-1]
             render(secure, value, prompt, console)
-        elif keypress in Config.default_keys.interrupt:
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
@@ -111,8 +109,8 @@ def prompt(
 
 def select(
     options: List[str],
-    cursor: str = ">",
-    cursor_style: str = "pink1",
+    cursor: str = '>',
+    cursor_style: str = 'pink1',
     cursor_index: int = 0,
     return_index: bool = False,
     strict: bool = False,
@@ -137,30 +135,36 @@ def select(
     """
     if not options:
         if strict:
-            raise ValueError("`options` cannot be empty")
+            raise ValueError('`options` cannot be empty')
         return None
-    if cursor_style in ["", None]:
-        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
-        cursor_style = "white"
+    if cursor_style in ['', None]:
+        logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+        cursor_style = 'white'
+
+    index: int = cursor_index
+
     while True:
-        console.print("\n".join([format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)]))
+        console.print(
+            '\n'.join(
+                [
+                    format_option_select(i=i, cursor_index=index, option=option, cursor_style=cursor_style, cursor=cursor)
+                    for i, option in enumerate(options)
+                ]
+            )
+        )
         reset_lines(len(options))
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.up:
-            new_index = cursor_index
-            if new_index > 0:
-                new_index -= 1
-                cursor_index = new_index
-        elif keypress in Config.default_keys.down:
-            new_index = cursor_index
-            if new_index < len(options) - 1:
-                new_index += 1
-                cursor_index = new_index
-        elif keypress in Config.default_keys.confirm:
+        if keypress in DefaultKeys.up:
+            if index > 0:
+                index -= 1
+        elif keypress in DefaultKeys.down:
+            if index < len(options) - 1:
+                index += 1
+        elif keypress in DefaultKeys.confirm:
             if return_index:
-                return cursor_index
-            return options[cursor_index]
-        elif keypress in Config.default_keys.interrupt:
+                return index
+            return options[index]
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
@@ -168,9 +172,9 @@ def select(
 
 def select_multiple(
     options: List[str],
-    tick_character: str = "✓",
-    tick_style: str = "pink1",
-    cursor_style: str = "pink1",
+    tick_character: str = '✓',
+    tick_style: str = 'pink1',
+    cursor_style: str = 'pink1',
     ticked_indices: Optional[List[int]] = None,
     cursor_index: int = 0,
     minimal_count: int = 0,
@@ -202,28 +206,31 @@ def select_multiple(
     """
     if not options:
         if strict:
-            raise ValueError("`options` cannot be empty")
+            raise ValueError('`options` cannot be empty')
         return []  # type: ignore
-    if cursor_style in ["", None]:
-        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
-        cursor_style = "white"
-    if tick_style in ["", None]:
-        logging.warning("`tick_style` should be a valid style, defaulting to `white`")
-        tick_style = "white"
+    if cursor_style in ['', None]:
+        logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+        cursor_style = 'white'
+    if tick_style in ['', None]:
+        logging.warning('`tick_style` should be a valid style, defaulting to `white`')
+        tick_style = 'white'
     if ticked_indices is None:
         ticked_indices = []
+
+    index = cursor_index
+
     max_index = len(options) - (1 if True else 0)
-    error_message = ""
+    error_message = ''
     while True:
         console.print(
-            "\n".join(
+            '\n'.join(
                 [
                     format_option_select_multiple(
                         option=option,
                         ticked=i in ticked_indices,
                         tick_character=tick_character,
                         tick_style=tick_style,
-                        selected=i == cursor_index,
+                        selected=i == index,
                         cursor_style=cursor_style,
                     )
                     for i, option in enumerate(options)
@@ -232,39 +239,35 @@ def select_multiple(
         )
         reset_lines(len(options))
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.up:
-            new_index = cursor_index
-            if new_index > 0:
-                new_index -= 1
-                cursor_index = new_index
-        elif keypress in Config.default_keys.down:
-            new_index = cursor_index
-            if new_index + 1 <= max_index:
-                new_index += 1
-                cursor_index = new_index
-        elif keypress in Config.default_keys.select:
-            if cursor_index in ticked_indices:
+        if keypress in DefaultKeys.up:
+            if index > 0:
+                index -= 1
+        elif keypress in DefaultKeys.down:
+            if index + 1 <= max_index:
+                index += 1
+        elif keypress in DefaultKeys.select:
+            if index in ticked_indices:
                 if len(ticked_indices) - 1 >= minimal_count:
-                    ticked_indices.remove(cursor_index)
+                    ticked_indices.remove(index)
             elif maximal_count is not None:
                 if len(ticked_indices) + 1 <= maximal_count:
-                    ticked_indices.append(cursor_index)
+                    ticked_indices.append(index)
                 else:
-                    error_message = f"Must select at most {maximal_count} options"
+                    error_message = f'Must select at most {maximal_count} options'
             else:
-                ticked_indices.append(cursor_index)
-        elif keypress in Config.default_keys.confirm:
+                ticked_indices.append(index)
+        elif keypress in DefaultKeys.confirm:
             if minimal_count > len(ticked_indices):
-                error_message = f"Must select at least {minimal_count} options"
+                error_message = f'Must select at least {minimal_count} options'
             else:
                 break
-        elif keypress in Config.default_keys.interrupt:
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return []  # type: ignore
-        if error_message != "":
+        if error_message:
             console.print(error_message)
-            error_message = ""
+            error_message = ''
     if return_indices:
         return ticked_indices
     return [options[i] for i in ticked_indices]
@@ -272,13 +275,13 @@ def select_multiple(
 
 def confirm(
     question: str,
-    yes_text: str = "Yes",
-    no_text: str = "No",
+    yes_text: str = 'Yes',
+    no_text: str = 'No',
     has_to_match_case: bool = False,
     enter_empty_confirms: bool = True,
     default_is_yes: bool = False,
-    cursor: str = ">",
-    cursor_style: str = "pink1",
+    cursor: str = '>',
+    cursor_style: str = 'pink1',
     char_prompt: bool = True,
 ) -> Optional[bool]:
     """A prompt that asks a question and offers two responses
@@ -300,39 +303,39 @@ def confirm(
     Returns:
         Optional[bool]
     """
-    if cursor_style in ["", None]:
-        logging.warning("`cursor_style` should be a valid style, defaulting to `white`")
-        cursor_style = "white"
+    if cursor_style in ['', None]:
+        logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+        cursor_style = 'white'
     is_yes = default_is_yes
     is_selected = enter_empty_confirms
-    current_message = ""
-    yn_prompt = f" ({yes_text[0]}/{no_text[0]}) " if char_prompt else ": "
-    selected_prefix = f"[{cursor_style}]{cursor}[/{cursor_style}] "
-    deselected_prefix = (" " * len(cursor)) + " "
+    current_message = ''
+    yn_prompt = f' ({yes_text[0]}/{no_text[0]}) ' if char_prompt else ': '
+    selected_prefix = f'[{cursor_style}]{cursor}[/{cursor_style}] '
+    deselected_prefix = (' ' * len(cursor)) + ' '
     while True:
         yes = is_yes and is_selected
         no = not is_yes and is_selected
-        question_line = f"{question}{yn_prompt}{current_message}"
+        question_line = f'{question}{yn_prompt}{current_message}'
         yes_prefix = selected_prefix if yes else deselected_prefix
         no_prefix = selected_prefix if no else deselected_prefix
-        console.print(f"{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}")
+        console.print(f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}')
         reset_lines(3)
         keypress = readchar.readkey()
-        if keypress in Config.default_keys.down or keypress in Config.default_keys.up:
+        if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
             is_yes = not is_yes
             is_selected = True
             current_message = yes_text if is_yes else no_text
-        elif keypress in Config.default_keys.delete:
+        elif keypress in DefaultKeys.delete:
             if current_message:
                 current_message = current_message[:-1]
-        elif keypress in Config.default_keys.interrupt:
+        elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
             return None
-        elif keypress in Config.default_keys.confirm:
+        elif keypress in DefaultKeys.confirm:
             if is_selected:
                 break
-        elif keypress in "\t":
+        elif keypress in '\t':
             if is_selected:
                 current_message = yes_text if is_yes else no_text
         else:
@@ -353,6 +356,3 @@ def confirm(
             else:
                 is_selected = False
     return is_selected and is_yes
-
-
-# TODO: Add filter function that will allow for list of options and text based filter
