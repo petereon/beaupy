@@ -81,8 +81,8 @@ def prompt(
     value: str = ""
     render(secure, "", prompt, console)
     while True:
-        char = readchar.readkey()
-        if char in Config.default_keys.confirm:
+        keypress = readchar.readkey()
+        if keypress in Config.default_keys.confirm:
             try:
                 if target_type is bool:
                     result: bool = ast.literal_eval(value)
@@ -97,16 +97,15 @@ def prompt(
                     raise ValidationError(f"`{'secure input' if secure else value}` cannot be validated")
             except ValueError:
                 raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
-        elif char in Config.default_keys.delete:
+        elif keypress in Config.default_keys.delete:
             value = value[:-1]
             render(secure, value, prompt, console)
-        elif char in Config.default_keys.interrupt:
+        elif keypress in Config.default_keys.interrupt:
             if Config.raise_on_interrupt:
-                raise KeyboardInterrupt()
-            else:
-                return None
+                raise KeyboardInterrupt
+            return None
         else:
-            value += char
+            value += keypress
             render(secure, value, prompt, console)
 
 
@@ -145,7 +144,6 @@ def select(
         cursor_style = "white"
     while True:
         console.print("\n".join([format_option_select(i, cursor_index, option, cursor_style, cursor) for i, option in enumerate(options)]))
-
         reset_lines(len(options))
         keypress = readchar.readkey()
         if keypress in Config.default_keys.up:
@@ -251,13 +249,13 @@ def select_multiple(
             elif maximal_count is not None:
                 if len(ticked_indices) + 1 <= maximal_count:
                     ticked_indices.append(cursor_index)
+                else:
+                    error_message = f"Must select at most {maximal_count} options"
             else:
                 ticked_indices.append(cursor_index)
         elif keypress in Config.default_keys.confirm:
             if minimal_count > len(ticked_indices):
                 error_message = f"Must select at least {minimal_count} options"
-            elif maximal_count is not None and maximal_count < len(ticked_indices):
-                error_message = f"Must select at most {maximal_count} options"
             else:
                 break
         elif keypress in Config.default_keys.interrupt:
@@ -279,7 +277,7 @@ def confirm(
     has_to_match_case: bool = False,
     enter_empty_confirms: bool = True,
     default_is_yes: bool = False,
-    cursor: str = "> ",
+    cursor: str = ">",
     cursor_style: str = "pink1",
     char_prompt: bool = True,
 ) -> Optional[bool]:
@@ -309,8 +307,8 @@ def confirm(
     is_selected = enter_empty_confirms
     current_message = ""
     yn_prompt = f" ({yes_text[0]}/{no_text[0]}) " if char_prompt else ": "
-    selected_prefix = f"[{cursor_style}]{cursor}[/{cursor_style}]"
-    deselected_prefix = " " * len(cursor)
+    selected_prefix = f"[{cursor_style}]{cursor}[/{cursor_style}] "
+    deselected_prefix = (" " * len(cursor)) + " "
     while True:
         yes = is_yes and is_selected
         no = not is_yes and is_selected

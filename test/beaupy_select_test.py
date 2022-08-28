@@ -1,6 +1,6 @@
 from unittest import mock
 from ward import test, raises
-from beaupy import select, console, Config
+from beaupy import select, console, Config, logging
 import readchar
 
 
@@ -28,7 +28,7 @@ def _():
     console.print = mock.MagicMock()
     select(options=["test"])
 
-    assert console.print.call_args_list[0] == mock.call("[pink1]>[/pink1] test")
+    assert console.print.call_args_list == [mock.call("[pink1]>[/pink1] test")]
 
     assert console.print.call_count == 1
 
@@ -41,15 +41,11 @@ def _():
     console.print = mock.MagicMock()
     select(options=["test"])
 
-    assert console.print.call_args_list[0] == mock.call("[pink1]>[/pink1] test")
-    assert console.print.call_args_list[1] == mock.call("[pink1]>[/pink1] test")
-
+    assert console.print.call_args_list == [mock.call("[pink1]>[/pink1] test"), mock.call("[pink1]>[/pink1] test")]
     assert console.print.call_count == 2
 
 
-@test(
-    "`select` with 4 options stepping down through all with random character inbetween and selecting last"
-)
+@test("`select` with 4 options stepping down through all with random character inbetween and selecting last")
 def _():
     steps = iter(
         [
@@ -65,100 +61,64 @@ def _():
     console.print = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"])
 
-    assert console.print.call_args_list[0] == mock.call(
-        "[pink1]>[/pink1] test1\n  test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[1] == mock.call(
-        "  test1\n[pink1]>[/pink1] test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[2] == mock.call(
-        "  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"
-    )
-    assert console.print.call_args_list[3] == mock.call(
-        "  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"
-    )
-    assert console.print.call_args_list[4] == mock.call(
-        "  test1\n  test2\n  test3\n[pink1]>[/pink1] test4"
-    )
+    assert console.print.call_args_list == [
+        mock.call("[pink1]>[/pink1] test1\n  test2\n  test3\n  test4"),
+        mock.call("  test1\n[pink1]>[/pink1] test2\n  test3\n  test4"),
+        mock.call("  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"),
+        mock.call("  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"),
+        mock.call("  test1\n  test2\n  test3\n[pink1]>[/pink1] test4"),
+    ]
 
     assert console.print.call_count == 5
-    assert res == 'test4'
+    assert res == "test4"
 
 
-@test(
-    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor and `green` as a cursor color"
-)
+@test("`select` with 4 options stepping down through all and selecting last with `x` as a cursor and `green` as a cursor color")
 def _():
-    steps = iter(
-        [readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER]
-    )
+    steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = select(
-        options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green"
-    )
+    res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
-    assert console.print.call_args_list[0] == mock.call(
-        "[green]x[/green] test1\n  test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[1] == mock.call(
-        "  test1\n[green]x[/green] test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[2] == mock.call(
-        "  test1\n  test2\n[green]x[/green] test3\n  test4"
-    )
-    assert console.print.call_args_list[3] == mock.call(
-        "  test1\n  test2\n  test3\n[green]x[/green] test4"
-    )
+    assert console.print.call_args_list == [
+        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
+        mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4"),
+        mock.call("  test1\n  test2\n[green]x[/green] test3\n  test4"),
+        mock.call("  test1\n  test2\n  test3\n[green]x[/green] test4"),
+    ]
     assert console.print.call_count == 4
     assert res == "test4"
 
 
-@test(
-    "`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color"
-)
+@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color")
 def _():
-    steps = iter(
-        [readchar.key.UP, readchar.key.ENTER]
-    )
+    steps = iter([readchar.key.UP, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = select(
-        options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green"
-    )
+    res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
-    assert console.print.call_args_list[0] == mock.call(
-        "[green]x[/green] test1\n  test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[1] == mock.call(
-        "[green]x[/green] test1\n  test2\n  test3\n  test4"
-    )
+    assert console.print.call_args_list == [
+        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
+        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
+    ]
     assert console.print.call_count == 2
     assert res == "test1"
-    
 
-@test(
-    "`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color"
-)
+
+@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color")
 def _():
-    steps = iter(
-        [readchar.key.UP, readchar.key.ENTER]
-    )
+    steps = iter([readchar.key.UP, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
-    res = select(
-        options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1
-    )
+    res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
 
-    assert console.print.call_args_list[0] == mock.call(
-        "  test1\n[green]x[/green] test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[1] == mock.call(
-        "[green]x[/green] test1\n  test2\n  test3\n  test4"
-    )
+    assert console.print.call_args_list == [
+        mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4"),
+        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
+    ]
     assert console.print.call_count == 2
     assert res == "test1"
 
@@ -179,40 +139,33 @@ def _():
         cursor_index=1,
     )
 
-    assert console.print.call_args_list[0] == mock.call(
-        "  test1\n[green]x[/green] test2\n  test3\n  test4"
-    )
+    assert console.print.call_args_list == [mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4")]
     assert console.print.call_count == 1
     assert res == None
-    
+
 
 @test(
     "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value"
 )
 def _():
-    steps = iter(
-        [readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER]
-    )
+    steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = select(
-        options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", return_index=True,
+        options=["test1", "test2", "test3", "test4"],
+        cursor="x",
+        cursor_style="green",
+        return_index=True,
     )
 
-    assert console.print.call_args_list[0] == mock.call(
-        "[green]x[/green] test1\n  test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[1] == mock.call(
-        "  test1\n[green]x[/green] test2\n  test3\n  test4"
-    )
-    assert console.print.call_args_list[2] == mock.call(
-        "  test1\n  test2\n[green]x[/green] test3\n  test4"
-    )
-    assert console.print.call_args_list[3] == mock.call(
-        "  test1\n  test2\n  test3\n[green]x[/green] test4"
-    )
-    
+    assert console.print.call_args_list == [
+        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
+        mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4"),
+        mock.call("  test1\n  test2\n[green]x[/green] test3\n  test4"),
+        mock.call("  test1\n  test2\n  test3\n[green]x[/green] test4"),
+    ]
+
     assert console.print.call_count == 4
     assert res == 3
 
@@ -231,3 +184,12 @@ def _():
             cursor_style="green",
             cursor_index=1,
         )
+
+
+@test("`select` with 2 options and invalid cursor style")
+def _():
+    steps = iter([readchar.key.ENTER])
+    readchar.readkey = lambda: next(steps)
+    logging.warning = mock.MagicMock()
+    select(options=["test1", "test2"], cursor_style="")
+    logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
