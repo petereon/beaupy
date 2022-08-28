@@ -89,7 +89,6 @@ def prompt(
                         raise ValueError()
                 else:
                     result: target_type = target_type(value)  # type: ignore
-
                 if validator(result):
                     return result
                 else:
