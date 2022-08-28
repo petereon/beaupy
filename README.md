@@ -2,7 +2,6 @@
 
 ![beaupy](https://user-images.githubusercontent.com/47027005/185082011-cb588f57-d38f-42d8-8312-3981ae1bc479.png)
 
-
 > A Python library of interactive CLI elements you have been looking for
 
 ---
@@ -10,13 +9,14 @@
 [![Tests](https://github.com/petereon/beaupy/actions/workflows/python-test.yml/badge.svg)](https://github.com/petereon/beaupy/actions/workflows/python-test.yml)
 [![Lint](https://github.com/petereon/beaupy/actions/workflows/python-lint.yml/badge.svg)](https://github.com/petereon/beaupy/actions/workflows/python-lint.yml)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=coverage)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
+[![codecov](https://codecov.io/gh/petereon/beaupy/branch/master/graph/badge.svg?token=HSG6MGTXBC)](https://codecov.io/gh/petereon/beaupy)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 
 For documentation but more and prettier see [**here**](https://petereon.github.io/beaupy/)
 
 ## Acknowledgment
+
 BeauPy stands on the shoulders of giants. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
 
 ## Overview
@@ -40,6 +40,7 @@ BeauPy stands on the shoulders of giants. It is based on another library with wh
 - stylable
 - opinionated
 - configurable
+
 ### Installation
 
 From PyPI:
