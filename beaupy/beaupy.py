@@ -277,7 +277,7 @@ def confirm(
     has_to_match_case: bool = False,
     enter_empty_confirms: bool = True,
     default_is_yes: bool = False,
-    cursor: str = "> ",
+    cursor: str = ">",
     cursor_style: str = "pink1",
     char_prompt: bool = True,
 ) -> Optional[bool]:
@@ -307,8 +307,8 @@ def confirm(
     is_selected = enter_empty_confirms
     current_message = ""
     yn_prompt = f" ({yes_text[0]}/{no_text[0]}) " if char_prompt else ": "
-    selected_prefix = f"[{cursor_style}]{cursor}[/{cursor_style}]"
-    deselected_prefix = " " * len(cursor)
+    selected_prefix = f"[{cursor_style}]{cursor}[/{cursor_style}] "
+    deselected_prefix = (" " * len(cursor)) + " "
     while True:
         yes = is_yes and is_selected
         no = not is_yes and is_selected
