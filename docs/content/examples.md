@@ -115,7 +115,7 @@ answer = prompt(prompt="What is the answer to life the universe and everything?"
 
 You might want to convert types for some sort of downstream functionality using `target_type`,
 
-!!! tip
+!!! note
     Validation is always second to type conversion
 
 ```python
