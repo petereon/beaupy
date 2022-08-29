@@ -9,7 +9,7 @@
 Selective elements default to return the selected item (in case of `select`) or list of items (in case of `select_multiple`). This behavior can be modified by `return_index` parameter (or `return_indices` in case of the latter), see example,
 
 ```python
-result_index = select(option=['select', 'one'], 
+result_index = select(options=['I\'ll be returned as 0', 'I\'ll be returned as 1'], 
                       return_index=True)
 ```
 
@@ -18,8 +18,27 @@ result_index = select(option=['select', 'one'],
 By default cursor is placed on the first element, this can be configured by `cursor_index` parameter as follows,
 
 ```python
-results = select_multiple(['options', 'to', 'select', 'from'],
-                           cursor_index=2)
+results = select(['Not here either', 'Not here', 'Start from here'],
+                 cursor_index=1)
+```
+
+#### Preticked indices for `select_multiple`
+
+You can have preticked options using `ticked_indices` in `select_multiple`:
+
+```python
+loved_children = select_multiple(['Oldest child', 'Middle child', 'Youngest Child'],
+                                 ticked_indices=[0,2])
+```
+
+#### Maximal and minimal count for `select_multiple`
+
+With `select_multiple` you can restrict maximum and minimum count of elements using `maximal_count` and `minimal_count` respectively,
+
+```python
+pizza_toppings = select_mutliple(['pineapple', 'olives', 'anchovies', 'mozzarella', 'parma ham']
+                                 maximal_count=3,
+                                 minimal_count=1)
 ```
 
 ### Styling
@@ -30,39 +49,86 @@ results = select_multiple(['options', 'to', 'select', 'from'],
 #### Style as text
 
 ```python
-result = select(options = ["red", "on", "white"], 
-                cursor = "x", 
-                cursor_style= "red on white")
+stylish = select(options = ["red", "on", "white"], 
+                 cursor = "x", 
+                 cursor_style= "red on white")
 ```
 
 #### Style as hex
 
 ```python
-result_list = select_multiple(options = ["ok", "ko"], 
-                              tick_character = "k", 
-                              tick_style="#af00ff)
+selections = select_multiple(options = ["s", "h", "e", "", "b", "e", "l", "i", "e", "v", "e", "d"], 
+                             tick_style="#af00ff",
+                             ticked_indices=[1,2,6,7,8,11])
 ```
 
 ### Cursor characters
 
 #### Emoji as a cursor
+
 !!! bug
     Some emojis can appear as one character instead of two!
+
 ```python
 result = select(options = ["here", "comes", "the", "sun"], 
                 cursor = "🌞")
 ```
+
 #### Non-ascii as a cursor
+
 ```python
 result = select(options = ["hardcore", "unicode"], 
                 cursor = "⇉")
 ```
+
 #### Multi-character cursors/ticks
 
 !!! tip
     You can use multiple characters as a cursor
 
 ```python
-result = select_multiple(options = ["this", "other thing"], 
-                tick_character = "selected")
+correct_abba_lyric = select_multiple(options = ["queen", "bean"], 
+                                     tick_character = "dancing")
+```
+
+## `prompt`
+
+### Functionality
+
+You can have a default prompt, which will collect the user typed response to the mood variable as string
+
+```python
+mood = prompt("How are you today?")
+```
+
+#### Validation
+
+Additionally, you can validate the input using some sort of Callable `validator`, for example a lambda expression to make sure input is not numeric,
+
+```python
+answer = prompt(prompt="What is the answer to life the universe and everything?"
+                validator=lambda val: not val.isnumeric())
+
+```
+
+#### Type Conversion
+
+You might want to convert types for some sort of downstream functionality using `target_type`,
+
+!!! tip
+    Validation is always second to type conversion
+
+```python
+number_between_1_and_10 = prompt("Give me a number between 1 and 10",
+                                 target_type=int
+                                 validator=lambda n: 0 < n <= 10)
+```
+
+#### Hidden/secure input
+
+For sensitive input, `secure` flag can be utilized, replacing user entered input with `*`
+
+```python
+very_secret_info = prompt("Type you API key, hehe",
+                          secure=True)
 ```
