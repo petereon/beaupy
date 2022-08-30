@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.0">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.2">
     
     
       
@@ -320,6 +320,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#preticked-indices-for-select_multiple" class="md-nav__link">
+    Preticked indices for select_multiple
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maximal-and-minimal-count-for-select_multiple" class="md-nav__link">
+    Maximal and minimal count for select_multiple
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -377,6 +391,53 @@
           <li class="md-nav__item">
   <a href="#multi-character-cursorsticks" class="md-nav__link">
     Multi-character cursors/ticks
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    prompt
+  </a>
+  
+    <nav class="md-nav" aria-label="prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functionality_1" class="md-nav__link">
+    Functionality
+  </a>
+  
+    <nav class="md-nav" aria-label="Functionality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    Validation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-conversion" class="md-nav__link">
+    Type Conversion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hiddensecure-input" class="md-nav__link">
+    Hidden/secure input
   </a>
   
 </li>
@@ -455,6 +516,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#preticked-indices-for-select_multiple" class="md-nav__link">
+    Preticked indices for select_multiple
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maximal-and-minimal-count-for-select_multiple" class="md-nav__link">
+    Maximal and minimal count for select_multiple
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -526,6 +601,53 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    prompt
+  </a>
+  
+    <nav class="md-nav" aria-label="prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#functionality_1" class="md-nav__link">
+    Functionality
+  </a>
+  
+    <nav class="md-nav" aria-label="Functionality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    Validation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-conversion" class="md-nav__link">
+    Type Conversion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hiddensecure-input" class="md-nav__link">
+    Hidden/secure input
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -549,13 +671,24 @@
 <h3 id="functionality">Functionality</h3>
 <h4 id="return-index">Return index</h4>
 <p>Selective elements default to return the selected item (in case of <code>select</code>) or list of items (in case of <code>select_multiple</code>). This behavior can be modified by <code>return_index</code> parameter (or <code>return_indices</code> in case of the latter), see example,</p>
-<div class="highlight"><pre><span></span><code><span class="n">result_index</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">option</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">],</span> 
+<div class="highlight"><pre><span></span><code><span class="n">result_index</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 0&#39;</span><span class="p">,</span> <span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 1&#39;</span><span class="p">],</span> 
                       <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="starting-cursor-index">Starting cursor index</h4>
 <p>By default cursor is placed on the first element, this can be configured by <code>cursor_index</code> parameter as follows,</p>
-<div class="highlight"><pre><span></span><code><span class="n">results</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">([</span><span class="s1">&#39;options&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="s1">&#39;from&#39;</span><span class="p">],</span>
-                           <span class="n">cursor_index</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">results</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="s1">&#39;Not here either&#39;</span><span class="p">,</span> <span class="s1">&#39;Not here&#39;</span><span class="p">,</span> <span class="s1">&#39;Start from here&#39;</span><span class="p">],</span>
+                 <span class="n">cursor_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="preticked-indices-for-select_multiple">Preticked indices for <code>select_multiple</code></h4>
+<p>You can have preticked options using <code>ticked_indices</code> in <code>select_multiple</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">loved_children</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">([</span><span class="s1">&#39;Oldest child&#39;</span><span class="p">,</span> <span class="s1">&#39;Middle child&#39;</span><span class="p">,</span> <span class="s1">&#39;Youngest Child&#39;</span><span class="p">],</span>
+                                 <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+</code></pre></div>
+<h4 id="maximal-and-minimal-count-for-select_multiple">Maximal and minimal count for <code>select_multiple</code></h4>
+<p>With <code>select_multiple</code> you can restrict maximum and minimum count of elements using <code>maximal_count</code> and <code>minimal_count</code> respectively,</p>
+<div class="highlight"><pre><span></span><code><span class="n">pizza_toppings</span> <span class="o">=</span> <span class="n">select_mutliple</span><span class="p">([</span><span class="s1">&#39;pineapple&#39;</span><span class="p">,</span> <span class="s1">&#39;olives&#39;</span><span class="p">,</span> <span class="s1">&#39;anchovies&#39;</span><span class="p">,</span> <span class="s1">&#39;mozzarella&#39;</span><span class="p">,</span> <span class="s1">&#39;parma ham&#39;</span><span class="p">]</span>
+                                 <span class="n">maximal_count</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                 <span class="n">minimal_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="styling">Styling</h3>
 <div class="admonition tip">
@@ -563,14 +696,14 @@
 <p>For styling you can leverage <a href="https://rich.readthedocs.io/en/stable/style.html">numerous styling options</a> provided by rich</p>
 </div>
 <h4 id="style-as-text">Style as text</h4>
-<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">],</span> 
-                <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> 
-                <span class="n">cursor_style</span><span class="o">=</span> <span class="s2">&quot;red on white&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">stylish</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">],</span> 
+                 <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> 
+                 <span class="n">cursor_style</span><span class="o">=</span> <span class="s2">&quot;red on white&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="style-as-hex">Style as hex</h4>
-<div class="highlight"><pre><span></span><code><span class="n">result_list</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ok&quot;</span><span class="p">,</span> <span class="s2">&quot;ko&quot;</span><span class="p">],</span> 
-                              <span class="n">tick_character</span> <span class="o">=</span> <span class="s2">&quot;k&quot;</span><span class="p">,</span> 
-                              <span class="n">tick_style</span><span class="o">=</span><span class="s2">&quot;#af00ff)</span>
+<div class="highlight"><pre><span></span><code><span class="n">selections</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span> 
+                             <span class="n">tick_style</span><span class="o">=</span><span class="s2">&quot;#af00ff&quot;</span><span class="p">,</span>
+                             <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">11</span><span class="p">])</span>
 </code></pre></div>
 <h3 id="cursor-characters">Cursor characters</h3>
 <h4 id="emoji-as-a-cursor">Emoji as a cursor</h4>
@@ -590,8 +723,33 @@
 <p class="admonition-title">Tip</p>
 <p>You can use multiple characters as a cursor</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;this&quot;</span><span class="p">,</span> <span class="s2">&quot;other thing&quot;</span><span class="p">],</span> 
-                <span class="n">tick_character</span> <span class="o">=</span> <span class="s2">&quot;selected&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">correct_abba_lyric</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;queen&quot;</span><span class="p">,</span> <span class="s2">&quot;bean&quot;</span><span class="p">],</span> 
+                                     <span class="n">tick_character</span> <span class="o">=</span> <span class="s2">&quot;dancing&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="prompt"><code>prompt</code></h2>
+<h3 id="functionality_1">Functionality</h3>
+<p>You can have a default prompt, which will collect the user typed response to the mood variable as string</p>
+<div class="highlight"><pre><span></span><code><span class="n">mood</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;How are you today?&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="validation">Validation</h4>
+<p>Additionally, you can validate the input using some sort of Callable <code>validator</code>, for example a lambda expression to make sure input is not numeric,</p>
+<div class="highlight"><pre><span></span><code><span class="n">answer</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;What is the answer to life the universe and everything?&quot;</span>
+                <span class="n">validator</span><span class="o">=</span><span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="ow">not</span> <span class="n">val</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">())</span>
+</code></pre></div>
+<h4 id="type-conversion">Type Conversion</h4>
+<p>You might want to convert types for some sort of downstream functionality using <code>target_type</code>,</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Validation is always second to type conversion</p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="n">number_between_1_and_10</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;Give me a number between 1 and 10&quot;</span><span class="p">,</span>
+                                 <span class="n">target_type</span><span class="o">=</span><span class="nb">int</span>
+                                 <span class="n">validator</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="hiddensecure-input">Hidden/secure input</h4>
+<p>For sensitive input, <code>secure</code> flag can be utilized, replacing user entered input with <code>*</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">very_secret_info</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;Type you API key, hehe&quot;</span><span class="p">,</span>
+                          <span class="n">secure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 
 

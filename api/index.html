@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.0">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.2">
     
     
       
@@ -445,7 +445,7 @@
 <h2 id="class-defaultkeys">Class DefaultKeys</h2>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">DefaultKeys</span><span class="p">()</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L26">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L27">[view_source]</a></p>
 <p>A map of default keybindings.</p>
 <p><strong>Attributes</strong>:</p>
 <ul>
@@ -461,7 +461,7 @@
 <h2 id="class-config">Class Config</h2>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Config</span><span class="p">()</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L46">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L47">[view_source]</a></p>
 <p>A map of default configuration</p>
 <p><strong>Attributes</strong>:</p>
 <ul>
@@ -476,7 +476,7 @@
            <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
            <span class="n">secure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L58">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L58">[view_source]</a></p>
 <p>Function that prompts the user for written input</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -497,13 +497,13 @@
 <p><a id="pydoc:beaupy.beaupy.select"></a></p>
 <h4 id="select">select</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-           <span class="n">cursor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span>
-           <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
+           <span class="n">cursor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span>
+           <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
            <span class="n">cursor_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
            <span class="n">return_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
            <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L112">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L110">[view_source]</a></p>
 <p>A prompt that allows selecting one option from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -526,9 +526,9 @@
 <p><a id="pydoc:beaupy.beaupy.select_multiple"></a></p>
 <h4 id="select_multiple">select_multiple</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select_multiple</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-                    <span class="n">tick_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;✓&quot;</span><span class="p">,</span>
-                    <span class="n">tick_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
-                    <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
+                    <span class="n">tick_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;✓&#39;</span><span class="p">,</span>
+                    <span class="n">tick_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
+                    <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
                     <span class="n">ticked_indices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">cursor_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                     <span class="n">minimal_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -536,7 +536,7 @@
                     <span class="n">return_indices</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                     <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L167">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L173">[view_source]</a></p>
 <p>A prompt that allows selecting multiple options from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -548,8 +548,10 @@
 <li><code>cursor_index</code> <em>int, optional</em> - Index of the option cursor starts at. Defaults to 0.</li>
 <li><code>minimal_count</code> <em>int, optional</em> - Minimal count of options that need to be selected. Defaults to 0.</li>
 <li><code>maximal_count</code> <em>Optional[int], optional</em> - Maximal count of options that need to be selected. Defaults to None.</li>
-<li><code>return_indices</code> <em>bool, optional</em> - If <code>True</code>, <code>select_multiple</code> will return the indices of ticked elements in options. Defaults to <code>False</code>.</li>
-<li><code>strict</code> <em>bool, optional</em> - If empty <code>options</code> is provided and strict is <code>False</code>, None will be returned, if it's <code>True</code>, <code>ValueError</code> will be thrown. Defaults to False.</li>
+<li><code>return_indices</code> <em>bool, optional</em> - If <code>True</code>, <code>select_multiple</code> will return the indices
+  of ticked elements in options. Defaults to <code>False</code>.</li>
+<li><code>strict</code> <em>bool, optional</em> - If empty <code>options</code> is provided and strict is <code>False</code>, None will be returned,
+  if it's <code>True</code>, <code>ValueError</code> will be thrown. Defaults to False.</li>
 </ul>
 <p><strong>Raises</strong>:</p>
 <ul>
@@ -561,16 +563,16 @@
 <p><a id="pydoc:beaupy.beaupy.confirm"></a></p>
 <h4 id="confirm">confirm</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">confirm</span><span class="p">(</span><span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-            <span class="n">yes_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Yes&quot;</span><span class="p">,</span>
-            <span class="n">no_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;No&quot;</span><span class="p">,</span>
+            <span class="n">yes_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Yes&#39;</span><span class="p">,</span>
+            <span class="n">no_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;No&#39;</span><span class="p">,</span>
             <span class="n">has_to_match_case</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
             <span class="n">enter_empty_confirms</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
             <span class="n">default_is_yes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-            <span class="n">cursor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&gt; &quot;</span><span class="p">,</span>
-            <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pink1&quot;</span><span class="p">,</span>
+            <span class="n">cursor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span>
+            <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
             <span class="n">char_prompt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/46818998784615968c7f276b121a8783f5223a9d/docs/../beaupy/beaupy.py#L263">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L276">[view_source]</a></p>
 <p>A prompt that asks a question and offers two responses</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
