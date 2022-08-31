@@ -196,3 +196,22 @@ def _():
     logging.warning = mock.MagicMock()
     select_multiple(options=["test1", "test2"], cursor_style="")
     logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+
+@test(
+    "`select_multiple` with 2 options starting from first selecting going down and selecting second also with preprocessor",
+    tags=["v1", "select_multiple"],
+)
+def _():
+    steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋", preprocessor=lambda val: val[-1])
+    assert console.print.call_args_list == [
+        mock.call("\\[  ] [pink1]1[/pink1]\n\\[  ] 2"),
+        mock.call("\\[[pink1]😋[/pink1]] [pink1]1[/pink1]\n\\[  ] 2"),
+        mock.call("\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]"),
+        mock.call("\\[[pink1]😋[/pink1]] 1\n\\[[pink1]😋[/pink1]] [pink1]2[/pink1]"),
+    ]
+    assert console.print.call_count == 4
+    assert res == ['test1', 'test2']

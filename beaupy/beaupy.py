@@ -55,12 +55,15 @@ class Config:
     raise_on_interrupt: bool = False
 
 
+TargetType = Any
+
+
 def prompt(
     prompt: str,
-    target_type: Type = str,
-    validator: Callable[[Any], bool] = lambda input: True,
+    target_type: Type[TargetType] = str,
+    validator: Callable[[TargetType], bool] = lambda input: True,
     secure: bool = False,
-) -> Any:
+) -> TargetType:
     """Function that prompts the user for written input
 
     Args:
@@ -107,18 +110,26 @@ def prompt(
             render(secure, value, prompt, console)
 
 
+Selection = Union[int, Any]
+
+
 def select(
-    options: List[str],
+    options: List[Any],
+    preprocessor: Callable[[Any], Any] = lambda val: val,
     cursor: str = '>',
     cursor_style: str = 'pink1',
     cursor_index: int = 0,
     return_index: bool = False,
     strict: bool = False,
-) -> Union[int, str, None]:
+) -> Union[Selection, None]:
     """A prompt that allows selecting one option from a list of options
 
     Args:
-        options (List[str]): A list of options to select from
+        options (List[Any]): A list of options to select from
+        preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
+                                             For example, if you passed a `Person` object with `name` attribute, preprocessor
+                                             could be `lambda person: person.name` to just show the content of `name` attribute
+                                             in the select dialog. Defaults to `lambda val: val`
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
         cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         cursor_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
@@ -147,7 +158,7 @@ def select(
         console.print(
             '\n'.join(
                 [
-                    format_option_select(i=i, cursor_index=index, option=option, cursor_style=cursor_style, cursor=cursor)
+                    format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
                     for i, option in enumerate(options)
                 ]
             )
@@ -170,8 +181,12 @@ def select(
             return None
 
 
+Selections = List[Selection]
+
+
 def select_multiple(
-    options: List[str],
+    options: List[Any],
+    preprocessor: Callable[[Any], Any] = lambda val: val,
     tick_character: str = '✓',
     tick_style: str = 'pink1',
     cursor_style: str = 'pink1',
@@ -181,11 +196,15 @@ def select_multiple(
     maximal_count: Optional[int] = None,
     return_indices: bool = False,
     strict: bool = False,
-) -> Union[List[str], List[int]]:
+) -> Selections:
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
-        options (List[str]): A list of options to select from
+        options (List[Any]): A list of options to select from
+        preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
+                                             For example, if you passed a `Person` object with `name` attribute, preprocessor
+                                             could be `lambda person: person.name` to just show the content of `name` attribute
+                                             in the select dialog. Defaults to `lambda val: val`
         tick_character (str, optional): Character that will be used as a tick in a checkbox. Defaults to 'x'.
         tick_style (str, optional): Rich friendly style for the tick character. Defaults to 'pink1'.
         cursor_style (str, optional): Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.
@@ -207,7 +226,7 @@ def select_multiple(
     if not options:
         if strict:
             raise ValueError('`options` cannot be empty')
-        return []  # type: ignore
+        return []
     if cursor_style in ['', None]:
         logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
         cursor_style = 'white'
@@ -226,7 +245,7 @@ def select_multiple(
             '\n'.join(
                 [
                     format_option_select_multiple(
-                        option=option,
+                        option=preprocessor(option),
                         ticked=i in ticked_indices,
                         tick_character=tick_character,
                         tick_style=tick_style,
@@ -264,7 +283,7 @@ def select_multiple(
         elif keypress in DefaultKeys.interrupt:
             if Config.raise_on_interrupt:
                 raise KeyboardInterrupt
-            return []  # type: ignore
+            return []
         if error_message:
             console.print(error_message)
             error_message = ''
