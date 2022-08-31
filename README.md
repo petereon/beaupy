@@ -12,6 +12,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/beaupy?color=g&label=%F0%9F%93%A5%20Downloads)
 
 For documentation but more and prettier see [**here**](https://petereon.github.io/beaupy/)
 
