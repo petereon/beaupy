@@ -9,7 +9,6 @@
 [![Tests](https://github.com/petereon/beaupy/actions/workflows/python-test.yml/badge.svg)](https://github.com/petereon/beaupy/actions/workflows/python-test.yml)
 [![Lint](https://github.com/petereon/beaupy/actions/workflows/python-lint.yml/badge.svg)](https://github.com/petereon/beaupy/actions/workflows/python-lint.yml)
 [![codecov](https://codecov.io/gh/petereon/beaupy/branch/master/graph/badge.svg?token=HSG6MGTXBC)](https://codecov.io/gh/petereon/beaupy)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/beaupy?color=g&label=%F0%9F%93%A5%20Downloads)
