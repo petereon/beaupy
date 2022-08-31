@@ -120,7 +120,7 @@ expycted = '*'
 
 # Unit Testing
 ward = '*'
-ward-coverage = { git = "https://github.com/petereon/ward-coverage.git" }
+ward-coverage = "*"
 mock = '*'
 watchdog = '*'
 
