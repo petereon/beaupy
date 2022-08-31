@@ -199,3 +199,32 @@ def _():
     logging.warning = mock.MagicMock()
     select(options=["test1", "test2"], cursor_style="")
     logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    
+    
+
+@test(
+    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value and preprocessor selecting the last element",
+    tags=["select"],
+)
+def _():
+    steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
+
+    readchar.readkey = lambda: next(steps)
+    console.print = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4"],
+        preprocessor=lambda val: val[-1],
+        cursor="x",
+        cursor_style="green",
+        return_index=True,
+    )
+
+    assert console.print.call_args_list == [
+        mock.call("[green]x[/green] 1\n  2\n  3\n  4"),
+        mock.call("  1\n[green]x[/green] 2\n  3\n  4"),
+        mock.call("  1\n  2\n[green]x[/green] 3\n  4"),
+        mock.call("  1\n  2\n  3\n[green]x[/green] 4"),
+    ]
+
+    assert console.print.call_count == 4
+    assert res == 3
