@@ -15,6 +15,7 @@ from rich.console import Console
 from beaupy.internals import (
     ConversionError,
     ValidationError,
+    cursor_hidden,
     format_option_select,
     format_option_select_multiple,
     render,
@@ -42,6 +43,10 @@ class DefaultKeys:
     delete: List[str] = [readchar.key.BACKSPACE]
     down: List[str] = [readchar.key.DOWN]
     up: List[str] = [readchar.key.UP]
+    left: List[str] = [readchar.key.LEFT]
+    right: List[str] = [readchar.key.RIGHT]
+    home: List[str] = [readchar.key.HOME]
+    end: List[str] = [readchar.key.END]
 
 
 class Config:
@@ -80,34 +85,50 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
-    value: str = ''
-    render(secure, '', prompt, console)
-    while True:
-        keypress = readchar.readkey()
-        if keypress in DefaultKeys.confirm:
-            try:
-                if target_type is bool:
-                    result: bool = literal_eval(value)
-                    if not isinstance(result, bool):
-                        raise ValueError()
-                else:
-                    result: target_type = target_type(value)  # type: ignore
-                if validator(result):
-                    return result
-                else:
-                    raise ValidationError(f"`{'secure input' if secure else value}` cannot be validated")
-            except ValueError:
-                raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
-        elif keypress in DefaultKeys.delete:
-            value = value[:-1]
-            render(secure, value, prompt, console)
-        elif keypress in DefaultKeys.interrupt:
-            if Config.raise_on_interrupt:
-                raise KeyboardInterrupt
-            return None
-        else:
-            value += keypress
-            render(secure, value, prompt, console)
+    with cursor_hidden():
+        value: List[str] = []
+        cursor_index = 0
+        render(secure, [], prompt, len(value), console)
+        while True:
+            keypress = readchar.readkey()
+            if keypress in DefaultKeys.confirm:
+                str_value = ''.join(value)
+                try:
+                    if target_type is bool:
+                        result: bool = literal_eval(str_value)
+                        if not isinstance(result, bool):
+                            raise ValueError()
+                    else:
+                        result: target_type = target_type(str_value)  # type: ignore
+                    if validator(result):
+                        return result
+                    else:
+                        raise ValidationError(f"`{'secure input' if secure else str_value}` cannot be validated")
+                except ValueError:
+                    raise ConversionError(
+                        f"`{'secure input' if secure else str_value}` cannot be converted to type `{target_type}`"
+                    ) from None
+            elif keypress in DefaultKeys.delete:
+                if cursor_index > 0:
+                    cursor_index -= 1
+                    del value[cursor_index]
+                    render(secure, value, prompt, cursor_index, console)
+            elif keypress in DefaultKeys.left:
+                if cursor_index > 0:
+                    cursor_index -= 1
+                    render(secure, value, prompt, cursor_index, console)
+            elif keypress in DefaultKeys.right:
+                if cursor_index < len(value):
+                    cursor_index += 1
+                    render(secure, value, prompt, cursor_index, console)
+            elif keypress in DefaultKeys.interrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt
+                return None
+            else:
+                value.insert(cursor_index, keypress)
+                cursor_index += 1
+                render(secure, value, prompt, cursor_index, console)
 
 
 Selection = Union[int, Any]
@@ -144,41 +165,42 @@ def select(
     Returns:
         Union[int, str, None]: Selected value or the index of a selected option or `None`
     """
-    if not options:
-        if strict:
-            raise ValueError('`options` cannot be empty')
-        return None
-    if cursor_style in ['', None]:
-        logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
-        cursor_style = 'white'
-
-    index: int = cursor_index
-
-    while True:
-        console.print(
-            '\n'.join(
-                [
-                    format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
-                    for i, option in enumerate(options)
-                ]
-            )
-        )
-        reset_lines(len(options))
-        keypress = readchar.readkey()
-        if keypress in DefaultKeys.up:
-            if index > 0:
-                index -= 1
-        elif keypress in DefaultKeys.down:
-            if index < len(options) - 1:
-                index += 1
-        elif keypress in DefaultKeys.confirm:
-            if return_index:
-                return index
-            return options[index]
-        elif keypress in DefaultKeys.interrupt:
-            if Config.raise_on_interrupt:
-                raise KeyboardInterrupt
+    with cursor_hidden():
+        if not options:
+            if strict:
+                raise ValueError('`options` cannot be empty')
             return None
+        if cursor_style in ['', None]:
+            logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+            cursor_style = 'white'
+
+        index: int = cursor_index
+
+        while True:
+            console.print(
+                '\n'.join(
+                    [
+                        format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
+                        for i, option in enumerate(options)
+                    ]
+                )
+            )
+            reset_lines(len(options))
+            keypress = readchar.readkey()
+            if keypress in DefaultKeys.up:
+                if index > 0:
+                    index -= 1
+            elif keypress in DefaultKeys.down:
+                if index < len(options) - 1:
+                    index += 1
+            elif keypress in DefaultKeys.confirm:
+                if return_index:
+                    return index
+                return options[index]
+            elif keypress in DefaultKeys.interrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt
+                return None
 
 
 Selections = List[Selection]
@@ -223,73 +245,74 @@ def select_multiple(
     Returns:
         Union[List[str], List[int]]: A list of selected values or indices of selected options
     """
-    if not options:
-        if strict:
-            raise ValueError('`options` cannot be empty')
-        return []
-    if cursor_style in ['', None]:
-        logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
-        cursor_style = 'white'
-    if tick_style in ['', None]:
-        logging.warning('`tick_style` should be a valid style, defaulting to `white`')
-        tick_style = 'white'
-    if ticked_indices is None:
-        ticked_indices = []
-
-    index = cursor_index
-
-    max_index = len(options) - (1 if True else 0)
-    error_message = ''
-    while True:
-        console.print(
-            '\n'.join(
-                [
-                    format_option_select_multiple(
-                        option=preprocessor(option),
-                        ticked=i in ticked_indices,
-                        tick_character=tick_character,
-                        tick_style=tick_style,
-                        selected=i == index,
-                        cursor_style=cursor_style,
-                    )
-                    for i, option in enumerate(options)
-                ]
-            )
-        )
-        reset_lines(len(options))
-        keypress = readchar.readkey()
-        if keypress in DefaultKeys.up:
-            if index > 0:
-                index -= 1
-        elif keypress in DefaultKeys.down:
-            if index + 1 <= max_index:
-                index += 1
-        elif keypress in DefaultKeys.select:
-            if index in ticked_indices:
-                if len(ticked_indices) - 1 >= minimal_count:
-                    ticked_indices.remove(index)
-            elif maximal_count is not None:
-                if len(ticked_indices) + 1 <= maximal_count:
-                    ticked_indices.append(index)
-                else:
-                    error_message = f'Must select at most {maximal_count} options'
-            else:
-                ticked_indices.append(index)
-        elif keypress in DefaultKeys.confirm:
-            if minimal_count > len(ticked_indices):
-                error_message = f'Must select at least {minimal_count} options'
-            else:
-                break
-        elif keypress in DefaultKeys.interrupt:
-            if Config.raise_on_interrupt:
-                raise KeyboardInterrupt
+    with cursor_hidden():
+        if not options:
+            if strict:
+                raise ValueError('`options` cannot be empty')
             return []
-        if error_message:
-            console.print(error_message)
-            error_message = ''
-    if return_indices:
-        return ticked_indices
-    return [options[i] for i in ticked_indices]
+        if cursor_style in ['', None]:
+            logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+            cursor_style = 'white'
+        if tick_style in ['', None]:
+            logging.warning('`tick_style` should be a valid style, defaulting to `white`')
+            tick_style = 'white'
+        if ticked_indices is None:
+            ticked_indices = []
+
+        index = cursor_index
+
+        max_index = len(options) - (1 if True else 0)
+        error_message = ''
+        while True:
+            console.print(
+                '\n'.join(
+                    [
+                        format_option_select_multiple(
+                            option=preprocessor(option),
+                            ticked=i in ticked_indices,
+                            tick_character=tick_character,
+                            tick_style=tick_style,
+                            selected=i == index,
+                            cursor_style=cursor_style,
+                        )
+                        for i, option in enumerate(options)
+                    ]
+                )
+            )
+            reset_lines(len(options))
+            keypress = readchar.readkey()
+            if keypress in DefaultKeys.up:
+                if index > 0:
+                    index -= 1
+            elif keypress in DefaultKeys.down:
+                if index + 1 <= max_index:
+                    index += 1
+            elif keypress in DefaultKeys.select:
+                if index in ticked_indices:
+                    if len(ticked_indices) - 1 >= minimal_count:
+                        ticked_indices.remove(index)
+                elif maximal_count is not None:
+                    if len(ticked_indices) + 1 <= maximal_count:
+                        ticked_indices.append(index)
+                    else:
+                        error_message = f'Must select at most {maximal_count} options'
+                else:
+                    ticked_indices.append(index)
+            elif keypress in DefaultKeys.confirm:
+                if minimal_count > len(ticked_indices):
+                    error_message = f'Must select at least {minimal_count} options'
+                else:
+                    break
+            elif keypress in DefaultKeys.interrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt
+                return []
+            if error_message:
+                console.print(error_message)
+                error_message = ''
+        if return_indices:
+            return ticked_indices
+        return [options[i] for i in ticked_indices]
 
 
 def confirm(
@@ -322,56 +345,57 @@ def confirm(
     Returns:
         Optional[bool]
     """
-    if cursor_style in ['', None]:
-        logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
-        cursor_style = 'white'
-    is_yes = default_is_yes
-    is_selected = enter_empty_confirms
-    current_message = ''
-    yn_prompt = f' ({yes_text[0]}/{no_text[0]}) ' if char_prompt else ': '
-    selected_prefix = f'[{cursor_style}]{cursor}[/{cursor_style}] '
-    deselected_prefix = (' ' * len(cursor)) + ' '
-    while True:
-        yes = is_yes and is_selected
-        no = not is_yes and is_selected
-        question_line = f'{question}{yn_prompt}{current_message}'
-        yes_prefix = selected_prefix if yes else deselected_prefix
-        no_prefix = selected_prefix if no else deselected_prefix
-        console.print(f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}')
-        reset_lines(3)
-        keypress = readchar.readkey()
-        if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
-            is_yes = not is_yes
-            is_selected = True
-            current_message = yes_text if is_yes else no_text
-        elif keypress in DefaultKeys.delete:
-            if current_message:
-                current_message = current_message[:-1]
-        elif keypress in DefaultKeys.interrupt:
-            if Config.raise_on_interrupt:
-                raise KeyboardInterrupt
-            return None
-        elif keypress in DefaultKeys.confirm:
-            if is_selected:
-                break
-        elif keypress in '\t':
-            if is_selected:
+    with cursor_hidden():
+        if cursor_style in ['', None]:
+            logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+            cursor_style = 'white'
+        is_yes = default_is_yes
+        is_selected = enter_empty_confirms
+        current_message = ''
+        yn_prompt = f' ({yes_text[0]}/{no_text[0]}) ' if char_prompt else ': '
+        selected_prefix = f'[{cursor_style}]{cursor}[/{cursor_style}] '
+        deselected_prefix = (' ' * len(cursor)) + ' '
+        while True:
+            yes = is_yes and is_selected
+            no = not is_yes and is_selected
+            question_line = f'{question}{yn_prompt}{current_message}'
+            yes_prefix = selected_prefix if yes else deselected_prefix
+            no_prefix = selected_prefix if no else deselected_prefix
+            console.print(f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}')
+            reset_lines(3)
+            keypress = readchar.readkey()
+            if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
+                is_yes = not is_yes
+                is_selected = True
                 current_message = yes_text if is_yes else no_text
-        else:
-            current_message += keypress
-            match_yes = yes_text
-            match_no = no_text
-            match_text = current_message
-            if not has_to_match_case:
-                match_yes = match_yes.upper()
-                match_no = match_no.upper()
-                match_text = match_text.upper()
-            if match_no.startswith(match_text):
-                is_selected = True
-                is_yes = False
-            elif match_yes.startswith(match_text):
-                is_selected = True
-                is_yes = True
+            elif keypress in DefaultKeys.delete:
+                if current_message:
+                    current_message = current_message[:-1]
+            elif keypress in DefaultKeys.interrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt
+                return None
+            elif keypress in DefaultKeys.confirm:
+                if is_selected:
+                    break
+            elif keypress in '\t':
+                if is_selected:
+                    current_message = yes_text if is_yes else no_text
             else:
-                is_selected = False
-    return is_selected and is_yes
+                current_message += keypress
+                match_yes = yes_text
+                match_no = no_text
+                match_text = current_message
+                if not has_to_match_case:
+                    match_yes = match_yes.upper()
+                    match_no = match_no.upper()
+                    match_text = match_text.upper()
+                if match_no.startswith(match_text):
+                    is_selected = True
+                    is_yes = False
+                elif match_yes.startswith(match_text):
+                    is_selected = True
+                    is_yes = True
+                else:
+                    is_selected = False
+        return is_selected and is_yes

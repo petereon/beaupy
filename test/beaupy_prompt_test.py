@@ -14,7 +14,7 @@ def _():
     console.print = mock.MagicMock()
     res = prompt("")
 
-    console.print.assert_called_once_with("\n> ")
+    console.print.assert_called_once_with("\n> [black on white] [/black on white]")
     assert res == ""
 
 
@@ -26,11 +26,11 @@ def _():
     res = prompt("")
 
     assert console.print.call_args_list == [
-        mock.call("\n> "),
-        mock.call("\n> j"),
-        mock.call("\n> jo"),
-        mock.call("\n> joz"),
-        mock.call("\n> jozo"),
+        mock.call("\n> [black on white] [/black on white]"),
+        mock.call("\n> j[black on white] [/black on white]"),
+        mock.call("\n> jo[black on white] [/black on white]"),
+        mock.call("\n> joz[black on white] [/black on white]"),
+        mock.call("\n> jozo[black on white] [/black on white]"),
     ]
     assert res == "jozo"
 
@@ -43,11 +43,11 @@ def _():
     res = prompt("", secure=True)
 
     assert console.print.call_args_list == [
-        mock.call("\n> "),
-        mock.call("\n> *"),
-        mock.call("\n> **"),
-        mock.call("\n> ***"),
-        mock.call("\n> ****"),
+        mock.call("\n> [black on white] [/black on white]"),
+        mock.call("\n> *[black on white] [/black on white]"),
+        mock.call("\n> **[black on white] [/black on white]"),
+        mock.call("\n> ***[black on white] [/black on white]"),
+        mock.call("\n> ****[black on white] [/black on white]"),
     ]
     assert res == "jozo"
 
@@ -60,11 +60,11 @@ def _():
     res = prompt("", secure=True, target_type=bool)
 
     assert console.print.call_args_list == [
-        mock.call("\n> "),
-        mock.call("\n> *"),
-        mock.call("\n> **"),
-        mock.call("\n> ***"),
-        mock.call("\n> ****"),
+        mock.call("\n> [black on white] [/black on white]"),
+        mock.call("\n> *[black on white] [/black on white]"),
+        mock.call("\n> **[black on white] [/black on white]"),
+        mock.call("\n> ***[black on white] [/black on white]"),
+        mock.call("\n> ****[black on white] [/black on white]"),
     ]
     assert res is True
 
@@ -76,22 +76,24 @@ def _():
     console.print = mock.MagicMock()
     res = prompt("", secure=True, target_type=float)
 
-    assert console.print.call_args_list == [mock.call("\n> "), mock.call("\n> *"), mock.call("\n> **")]
+    assert console.print.call_args_list == [mock.call("\n> [black on white] [/black on white]"), mock.call("\n> *[black on white] [/black on white]"), mock.call("\n> **[black on white] [/black on white]")]
     assert isinstance(res, float)
     assert res == 12.0
 
 
 @test("`Ask an actual question goddammit` as a prompt typing `No` and validating it is `No`", tags=["v1", "prompt"])
 def _():
-    steps = iter(["N", "o", readchar.key.ENTER])
+    steps = iter(["o", readchar.key.LEFT, readchar.key.LEFT, "N", readchar.key.RIGHT, readchar.key.RIGHT, readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = prompt("Ask an actual question goddammit", validator=lambda val: val == "No")
 
     assert console.print.call_args_list == [
-        mock.call("Ask an actual question goddammit\n> "),
-        mock.call("Ask an actual question goddammit\n> N"),
-        mock.call("Ask an actual question goddammit\n> No"),
+        mock.call("Ask an actual question goddammit\n> [black on white] [/black on white]"),
+        mock.call("Ask an actual question goddammit\n> o[black on white] [/black on white]"),
+        mock.call("Ask an actual question goddammit\n> [black on white]o[/black on white] "),
+        mock.call("Ask an actual question goddammit\n> N[black on white]o[/black on white] "),
+        mock.call("Ask an actual question goddammit\n> No[black on white] [/black on white]")
     ]
     assert isinstance(res, str)
     assert res == "No"
@@ -116,12 +118,12 @@ def _():
 
     with raises(ValidationError):
         prompt("", secure=True, target_type=float, validator=lambda val: val > 20)
-        assert console.print.call_args_list == [mock.call("\n> "), mock.call("\n> *"), mock.call("\n> **")]
+        assert console.print.call_args_list == [mock.call("\n> [black on white] [/black on white]"), mock.call("\n> *[black on white] [/black on white]"), mock.call("\n> **[black on white] [/black on white]")]
 
 
 @test("Prompt with typing `J`, then deleting it and typing `No`", tags=["v1", "prompt"])
 def _():
-    steps = iter(["J", readchar.key.BACKSPACE, "N", "o", readchar.key.ENTER])
+    steps = iter(["J", readchar.key.BACKSPACE, readchar.key.BACKSPACE, "N", "o", readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
