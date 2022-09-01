@@ -39,7 +39,7 @@ def reset_lines(num_lines: int) -> None:
     stdout.write(f'\x1b[{num_lines}F\x1b[0J')
 
 
-def render(secure: bool, return_value: List[str], prompt: str, cursor_position: int, console: Console) -> None:
+def render(secure: bool, return_value: List[str], prompt: str, cursor_position: int, error: str, console: Console) -> None:
     render_value = (len(return_value) * '*' if secure else ''.join(return_value)) + ' '
     render_value = (
         render_value[:cursor_position]
@@ -48,6 +48,9 @@ def render(secure: bool, return_value: List[str], prompt: str, cursor_position: 
         + '[/black on white]'  # noqa: W503
         + render_value[(cursor_position + 1) :]  # noqa: W503,E203
     )
+
+    if error:
+        console.print(error)
     console.print(f'{prompt}\n> {render_value}')
     reset_lines(2)
 

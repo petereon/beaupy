@@ -92,8 +92,10 @@ def _():
         mock.call("Ask an actual question goddammit\n> [black on white] [/black on white]"),
         mock.call("Ask an actual question goddammit\n> o[black on white] [/black on white]"),
         mock.call("Ask an actual question goddammit\n> [black on white]o[/black on white] "),
+        mock.call("Ask an actual question goddammit\n> [black on white]o[/black on white] "),
         mock.call("Ask an actual question goddammit\n> N[black on white]o[/black on white] "),
-        mock.call("Ask an actual question goddammit\n> No[black on white] [/black on white]")
+        mock.call("Ask an actual question goddammit\n> No[black on white] [/black on white]"),
+        mock.call("Ask an actual question goddammit\n> No[black on white] [/black on white]"),
     ]
     assert isinstance(res, str)
     assert res == "No"

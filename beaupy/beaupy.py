@@ -68,6 +68,8 @@ def prompt(
     target_type: Type[TargetType] = str,
     validator: Callable[[TargetType], bool] = lambda input: True,
     secure: bool = False,
+    raise_validation_fail: bool = True,
+    raise_type_conversion_fail: bool = True,
 ) -> TargetType:
     """Function that prompts the user for written input
 
@@ -88,7 +90,8 @@ def prompt(
     with cursor_hidden():
         value: List[str] = []
         cursor_index = 0
-        render(secure, [], prompt, len(value), console)
+        error: str = ''
+        render(secure, [], prompt, len(value), error, console)
         while True:
             keypress = readchar.readkey()
             if keypress in DefaultKeys.confirm:
@@ -103,24 +106,23 @@ def prompt(
                     if validator(result):
                         return result
                     else:
-                        raise ValidationError(f"`{'secure input' if secure else str_value}` cannot be validated")
+                        error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} is invalid"
+                        if raise_validation_fail:
+                            raise ValidationError(error)
                 except ValueError:
-                    raise ConversionError(
-                        f"`{'secure input' if secure else str_value}` cannot be converted to type `{target_type}`"
-                    ) from None
+                    error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} cannot be converted to type `{target_type}`"
+                    if raise_type_conversion_fail:
+                        raise ConversionError(error) from None
             elif keypress in DefaultKeys.delete:
                 if cursor_index > 0:
                     cursor_index -= 1
                     del value[cursor_index]
-                    render(secure, value, prompt, cursor_index, console)
             elif keypress in DefaultKeys.left:
                 if cursor_index > 0:
                     cursor_index -= 1
-                    render(secure, value, prompt, cursor_index, console)
             elif keypress in DefaultKeys.right:
                 if cursor_index < len(value):
                     cursor_index += 1
-                    render(secure, value, prompt, cursor_index, console)
             elif keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt
@@ -128,7 +130,9 @@ def prompt(
             else:
                 value.insert(cursor_index, keypress)
                 cursor_index += 1
-                render(secure, value, prompt, cursor_index, console)
+            render(secure, value, prompt, cursor_index, error, console)
+            if error:
+                error = ''
 
 
 Selection = Union[int, Any]
