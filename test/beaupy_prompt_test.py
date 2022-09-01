@@ -83,7 +83,7 @@ def _():
 
 @test("`Ask an actual question goddammit` as a prompt typing `No` and validating it is `No`", tags=["v1", "prompt"])
 def _():
-    steps = iter(["o", readchar.key.LEFT, "N", readchar.key.RIGHT, readchar.key.ENTER])
+    steps = iter(["o", readchar.key.LEFT, readchar.key.LEFT, "N", readchar.key.RIGHT, readchar.key.RIGHT, readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
     res = prompt("Ask an actual question goddammit", validator=lambda val: val == "No")
@@ -93,7 +93,7 @@ def _():
         mock.call("Ask an actual question goddammit\n> o[black on white] [/black on white]"),
         mock.call("Ask an actual question goddammit\n> [black on white]o[/black on white] "),
         mock.call("Ask an actual question goddammit\n> N[black on white]o[/black on white] "),
-        mock.call("Ask an actual question goddammit\n> No[black on white] [/black on white]"),
+        mock.call("Ask an actual question goddammit\n> No[black on white] [/black on white]")
     ]
     assert isinstance(res, str)
     assert res == "No"
@@ -123,7 +123,7 @@ def _():
 
 @test("Prompt with typing `J`, then deleting it and typing `No`", tags=["v1", "prompt"])
 def _():
-    steps = iter(["J", readchar.key.BACKSPACE, "N", "o", readchar.key.ENTER])
+    steps = iter(["J", readchar.key.BACKSPACE, readchar.key.BACKSPACE, "N", "o", readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
     console.print = mock.MagicMock()
