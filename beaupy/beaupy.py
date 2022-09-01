@@ -103,9 +103,11 @@ def prompt(
                     if validator(result):
                         return result
                     else:
-                        raise ValidationError(f"`{'secure input' if secure else value}` cannot be validated")
+                        raise ValidationError(f"`{'secure input' if secure else str_value}` cannot be validated")
                 except ValueError:
-                    raise ConversionError(f"`{'secure input' if secure else value}` cannot be converted to type `{target_type}`") from None
+                    raise ConversionError(
+                        f"`{'secure input' if secure else str_value}` cannot be converted to type `{target_type}`"
+                    ) from None
             elif keypress in DefaultKeys.delete:
                 if cursor_index > 0:
                     cursor_index -= 1
