@@ -88,18 +88,18 @@ def prompt(
     with cursor_hidden():
         value: List[str] = []
         cursor_index = 0
-        render(secure, '', prompt, len(value), console)
+        render(secure, [], prompt, len(value), console)
         while True:
             keypress = readchar.readkey()
             if keypress in DefaultKeys.confirm:
-                value = ''.join(value)
+                str_value = ''.join(value)
                 try:
                     if target_type is bool:
-                        result: bool = literal_eval(value)
+                        result: bool = literal_eval(str_value)
                         if not isinstance(result, bool):
                             raise ValueError()
                     else:
-                        result: target_type = target_type(value)  # type: ignore
+                        result: target_type = target_type(str_value)  # type: ignore
                     if validator(result):
                         return result
                     else:
