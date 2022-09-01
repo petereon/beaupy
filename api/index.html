@@ -445,7 +445,7 @@
 <h2 id="class-defaultkeys">Class DefaultKeys</h2>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">DefaultKeys</span><span class="p">()</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L27">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/307d37b1a2d6879d2a20d7bdb274a0060ed7ca42/docs/../beaupy/beaupy.py#L28">[view_source]</a></p>
 <p>A map of default keybindings.</p>
 <p><strong>Attributes</strong>:</p>
 <ul>
@@ -461,7 +461,7 @@
 <h2 id="class-config">Class Config</h2>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Config</span><span class="p">()</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L47">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/307d37b1a2d6879d2a20d7bdb274a0060ed7ca42/docs/../beaupy/beaupy.py#L52">[view_source]</a></p>
 <p>A map of default configuration</p>
 <p><strong>Attributes</strong>:</p>
 <ul>
@@ -472,11 +472,11 @@
 <p><a id="pydoc:beaupy.beaupy.prompt"></a></p>
 <h4 id="prompt">prompt</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-           <span class="n">target_type</span><span class="p">:</span> <span class="n">Type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
-           <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-           <span class="n">secure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
+           <span class="n">target_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">TargetType</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
+           <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">TargetType</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+           <span class="n">secure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TargetType</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L58">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/307d37b1a2d6879d2a20d7bdb274a0060ed7ca42/docs/../beaupy/beaupy.py#L66">[view_source]</a></p>
 <p>Function that prompts the user for written input</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -496,18 +496,23 @@
 <p><a id="beaupy.beaupy.select"></a></p>
 <p><a id="pydoc:beaupy.beaupy.select"></a></p>
 <h4 id="select">select</h4>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
+           <span class="n">preprocessor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="n">val</span><span class="p">,</span>
            <span class="n">cursor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span>
            <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
            <span class="n">cursor_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
            <span class="n">return_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-           <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+           <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Selection</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L110">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/307d37b1a2d6879d2a20d7bdb274a0060ed7ca42/docs/../beaupy/beaupy.py#L137">[view_source]</a></p>
 <p>A prompt that allows selecting one option from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>options</code> <em>List[str]</em> - A list of options to select from</li>
+<li><code>options</code> <em>List[Any]</em> - A list of options to select from</li>
+<li><code>preprocessor</code> <em>Callable[[Any], Any]</em> - A callable that can be used to preprocess the list of options prior to printing.
+  For example, if you passed a <code>Person</code> object with <code>name</code> attribute, preprocessor
+  could be <code>lambda person: person.name</code> to just show the content of <code>name</code> attribute
+  in the select dialog. Defaults to <code>lambda val: val</code></li>
 <li><code>cursor</code> <em>str, optional</em> - Cursor that is going to appear in front of currently selected option. Defaults to '&gt; '.</li>
 <li><code>cursor_style</code> <em>str, optional</em> - Rich friendly style for the cursor. Defaults to 'pink1'.</li>
 <li><code>cursor_index</code> <em>int, optional</em> - Option can be preselected based on its list index. Defaults to 0.</li>
@@ -525,7 +530,8 @@
 <p><a id="beaupy.beaupy.select_multiple"></a></p>
 <p><a id="pydoc:beaupy.beaupy.select_multiple"></a></p>
 <h4 id="select_multiple">select_multiple</h4>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select_multiple</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">select_multiple</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
+                    <span class="n">preprocessor</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="n">val</span><span class="p">,</span>
                     <span class="n">tick_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;✓&#39;</span><span class="p">,</span>
                     <span class="n">tick_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
                     <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
@@ -534,13 +540,17 @@
                     <span class="n">minimal_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                     <span class="n">maximal_count</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">return_indices</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+                    <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Selections</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L173">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/307d37b1a2d6879d2a20d7bdb274a0060ed7ca42/docs/../beaupy/beaupy.py#L209">[view_source]</a></p>
 <p>A prompt that allows selecting multiple options from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>options</code> <em>List[str]</em> - A list of options to select from</li>
+<li><code>options</code> <em>List[Any]</em> - A list of options to select from</li>
+<li><code>preprocessor</code> <em>Callable[[Any], Any]</em> - A callable that can be used to preprocess the list of options prior to printing.
+  For example, if you passed a <code>Person</code> object with <code>name</code> attribute, preprocessor
+  could be <code>lambda person: person.name</code> to just show the content of <code>name</code> attribute
+  in the select dialog. Defaults to <code>lambda val: val</code></li>
 <li><code>tick_character</code> <em>str, optional</em> - Character that will be used as a tick in a checkbox. Defaults to 'x'.</li>
 <li><code>tick_style</code> <em>str, optional</em> - Rich friendly style for the tick character. Defaults to 'pink1'.</li>
 <li><code>cursor_style</code> <em>str, optional</em> - Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.</li>
@@ -572,7 +582,7 @@
             <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pink1&#39;</span><span class="p">,</span>
             <span class="n">char_prompt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/d79c0751bc165e2545ec6f014db9549749d2f8e2/docs/../beaupy/beaupy.py#L276">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/307d37b1a2d6879d2a20d7bdb274a0060ed7ca42/docs/../beaupy/beaupy.py#L318">[view_source]</a></p>
 <p>A prompt that asks a question and offers two responses</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
