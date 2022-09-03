@@ -134,7 +134,6 @@ def prompt(
             else:
                 value.insert(cursor_index, keypress)
                 cursor_index += 1
-                
 
 
 Selection = Union[int, Any]

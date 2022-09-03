@@ -55,6 +55,7 @@ def render(secure: bool, return_value: List[str], prompt: str, cursor_position: 
         render_value = f'{render_value}\n[red]Error:[/red] {error}'
     return render_value
 
+
 @contextmanager
 def cursor_hidden(console: Console) -> Iterator:
     console.show_cursor(False)
