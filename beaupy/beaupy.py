@@ -18,8 +18,8 @@ from beaupy.internals import (
     ValidationError,
     cursor_hidden,
     format_option_select,
-    format_option_select_multiple,
-    render,
+    render_option_select_multiple,
+    render_prompt,
     update_rendered,
 )
 
@@ -94,7 +94,7 @@ def prompt(
         cursor_index = 0
         error: str = ''
         while True:
-            rendered = render(secure, value, prompt, cursor_index, error, console)
+            rendered = render_prompt(secure, value, prompt, cursor_index, error)
             error = ''
             update_rendered(live, rendered)
             keypress = readchar.readkey()
@@ -272,7 +272,7 @@ def select_multiple(
         while True:
             rendered = '\n'.join(
                 [
-                    format_option_select_multiple(
+                    render_option_select_multiple(
                         option=preprocessor(option),
                         ticked=i in ticked_indices,
                         tick_character=tick_character,

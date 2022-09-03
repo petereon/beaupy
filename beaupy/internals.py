@@ -24,7 +24,7 @@ def format_option_select(i: int, cursor_index: int, option: str, cursor_style: s
     )
 
 
-def format_option_select_multiple(
+def render_option_select_multiple(
     option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
 ) -> str:
     prefix = '\[{}]'.format(' ' * len(__replace_emojis(tick_character)))  # noqa: W605
@@ -40,8 +40,8 @@ def update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> No
     live.refresh()
 
 
-def render(secure: bool, return_value: List[str], prompt: str, cursor_position: int, error: str, console: Console) -> str:
-    render_value = (len(return_value) * '*' if secure else ''.join(return_value)) + ' '
+def render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str) -> str:
+    render_value = (len(typed_values) * '*' if secure else ''.join(typed_values)) + ' '
     render_value = (
         render_value[:cursor_position]
         + '[black on white]'  # noqa: W503
