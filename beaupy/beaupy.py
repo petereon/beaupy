@@ -11,15 +11,16 @@ from typing import Any, Callable, List, Optional, Type, Union
 
 import readchar
 from rich.console import Console
+from rich.live import Live
 
 from beaupy.internals import (
     ConversionError,
     ValidationError,
     cursor_hidden,
     format_option_select,
-    format_option_select_multiple,
-    render,
-    reset_lines,
+    render_option_select_multiple,
+    render_prompt,
+    update_rendered,
 )
 
 console = Console()
@@ -68,6 +69,8 @@ def prompt(
     target_type: Type[TargetType] = str,
     validator: Callable[[TargetType], bool] = lambda input: True,
     secure: bool = False,
+    raise_validation_fail: bool = True,
+    raise_type_conversion_fail: bool = True,
 ) -> TargetType:
     """Function that prompts the user for written input
 
@@ -85,11 +88,15 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
-    with cursor_hidden():
+    rendered = ''
+    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         value: List[str] = []
         cursor_index = 0
-        render(secure, [], prompt, len(value), console)
+        error: str = ''
         while True:
+            rendered = render_prompt(secure, value, prompt, cursor_index, error)
+            error = ''
+            update_rendered(live, rendered)
             keypress = readchar.readkey()
             if keypress in DefaultKeys.confirm:
                 str_value = ''.join(value)
@@ -103,24 +110,23 @@ def prompt(
                     if validator(result):
                         return result
                     else:
-                        raise ValidationError(f"`{'secure input' if secure else str_value}` cannot be validated")
+                        error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} is invalid"
+                        if raise_validation_fail:
+                            raise ValidationError(error)
                 except ValueError:
-                    raise ConversionError(
-                        f"`{'secure input' if secure else str_value}` cannot be converted to type `{target_type}`"
-                    ) from None
+                    error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} cannot be converted to type `{target_type}`"
+                    if raise_type_conversion_fail:
+                        raise ConversionError(error) from None
             elif keypress in DefaultKeys.delete:
                 if cursor_index > 0:
                     cursor_index -= 1
                     del value[cursor_index]
-                    render(secure, value, prompt, cursor_index, console)
             elif keypress in DefaultKeys.left:
                 if cursor_index > 0:
                     cursor_index -= 1
-                    render(secure, value, prompt, cursor_index, console)
             elif keypress in DefaultKeys.right:
                 if cursor_index < len(value):
                     cursor_index += 1
-                    render(secure, value, prompt, cursor_index, console)
             elif keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt
@@ -128,7 +134,6 @@ def prompt(
             else:
                 value.insert(cursor_index, keypress)
                 cursor_index += 1
-                render(secure, value, prompt, cursor_index, console)
 
 
 Selection = Union[int, Any]
@@ -165,7 +170,8 @@ def select(
     Returns:
         Union[int, str, None]: Selected value or the index of a selected option or `None`
     """
-    with cursor_hidden():
+    rendered = ''
+    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         if not options:
             if strict:
                 raise ValueError('`options` cannot be empty')
@@ -177,16 +183,15 @@ def select(
         index: int = cursor_index
 
         while True:
-            console.print(
-                '\n'.join(
-                    [
-                        format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
-                        for i, option in enumerate(options)
-                    ]
-                )
+            rendered = '\n'.join(
+                [
+                    format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
+                    for i, option in enumerate(options)
+                ]
             )
-            reset_lines(len(options))
+            update_rendered(live, rendered)
             keypress = readchar.readkey()
+
             if keypress in DefaultKeys.up:
                 if index > 0:
                     index -= 1
@@ -245,7 +250,8 @@ def select_multiple(
     Returns:
         Union[List[str], List[int]]: A list of selected values or indices of selected options
     """
-    with cursor_hidden():
+    rendered = ''
+    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         if not options:
             if strict:
                 raise ValueError('`options` cannot be empty')
@@ -264,23 +270,25 @@ def select_multiple(
         max_index = len(options) - (1 if True else 0)
         error_message = ''
         while True:
-            console.print(
-                '\n'.join(
-                    [
-                        format_option_select_multiple(
-                            option=preprocessor(option),
-                            ticked=i in ticked_indices,
-                            tick_character=tick_character,
-                            tick_style=tick_style,
-                            selected=i == index,
-                            cursor_style=cursor_style,
-                        )
-                        for i, option in enumerate(options)
-                    ]
-                )
+            rendered = '\n'.join(
+                [
+                    render_option_select_multiple(
+                        option=preprocessor(option),
+                        ticked=i in ticked_indices,
+                        tick_character=tick_character,
+                        tick_style=tick_style,
+                        selected=i == index,
+                        cursor_style=cursor_style,
+                    )
+                    for i, option in enumerate(options)
+                ]
             )
-            reset_lines(len(options))
+            if error_message:
+                rendered = f'{rendered}\n[red]Error:[/red] {error_message}'
+                error_message = ''
+            update_rendered(live, rendered)
             keypress = readchar.readkey()
+
             if keypress in DefaultKeys.up:
                 if index > 0:
                     index -= 1
@@ -289,8 +297,7 @@ def select_multiple(
                     index += 1
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
-                    if len(ticked_indices) - 1 >= minimal_count:
-                        ticked_indices.remove(index)
+                    ticked_indices.remove(index)
                 elif maximal_count is not None:
                     if len(ticked_indices) + 1 <= maximal_count:
                         ticked_indices.append(index)
@@ -307,9 +314,6 @@ def select_multiple(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt
                 return []
-            if error_message:
-                console.print(error_message)
-                error_message = ''
         if return_indices:
             return ticked_indices
         return [options[i] for i in ticked_indices]
@@ -345,7 +349,8 @@ def confirm(
     Returns:
         Optional[bool]
     """
-    with cursor_hidden():
+    rendered = ''
+    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         if cursor_style in ['', None]:
             logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
             cursor_style = 'white'
@@ -361,9 +366,10 @@ def confirm(
             question_line = f'{question}{yn_prompt}{current_message}'
             yes_prefix = selected_prefix if yes else deselected_prefix
             no_prefix = selected_prefix if no else deselected_prefix
-            console.print(f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}')
-            reset_lines(3)
+            rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}'
+            update_rendered(live, rendered)
             keypress = readchar.readkey()
+
             if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
                 is_yes = not is_yes
                 is_selected = True

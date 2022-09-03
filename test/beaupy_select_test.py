@@ -1,7 +1,9 @@
 from unittest import mock
-from ward import test, raises
-from beaupy import select, console, Config, logging
+
 import readchar
+from ward import raises, test
+
+from beaupy import Config, Live, logging, select
 
 
 @test("`select` with no options permissive", tags=["v1", "select"])
@@ -25,12 +27,12 @@ def _():
     steps = iter([readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     select(options=["test"])
 
-    assert console.print.call_args_list == [mock.call("[pink1]>[/pink1] test")]
+    assert Live.update.call_args_list == [mock.call(renderable="[pink1]>[/pink1] test")]
 
-    assert console.print.call_count == 1
+    assert Live.update.call_count == 1
 
 
 @test("`select` with 1 option and down step", tags=["v1", "select"])
@@ -38,11 +40,11 @@ def _():
     steps = iter([readchar.key.DOWN, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     select(options=["test"])
 
-    assert console.print.call_args_list == [mock.call("[pink1]>[/pink1] test"), mock.call("[pink1]>[/pink1] test")]
-    assert console.print.call_count == 2
+    assert Live.update.call_args_list == [mock.call(renderable="[pink1]>[/pink1] test"), mock.call(renderable="[pink1]>[/pink1] test")]
+    assert Live.update.call_count == 2
 
 
 @test("`select` with 4 options stepping down through all with random character inbetween and selecting last", tags=["v1", "select"])
@@ -58,18 +60,18 @@ def _():
     )
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"])
 
-    assert console.print.call_args_list == [
-        mock.call("[pink1]>[/pink1] test1\n  test2\n  test3\n  test4"),
-        mock.call("  test1\n[pink1]>[/pink1] test2\n  test3\n  test4"),
-        mock.call("  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"),
-        mock.call("  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"),
-        mock.call("  test1\n  test2\n  test3\n[pink1]>[/pink1] test4"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4"),
+        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4"),
+        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"),
+        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4"),
     ]
 
-    assert console.print.call_count == 5
+    assert Live.update.call_count == 5
     assert res == "test4"
 
 
@@ -81,16 +83,16 @@ def _():
     steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
-    assert console.print.call_args_list == [
-        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
-        mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4"),
-        mock.call("  test1\n  test2\n[green]x[/green] test3\n  test4"),
-        mock.call("  test1\n  test2\n  test3\n[green]x[/green] test4"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3\n  test4"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4"),
     ]
-    assert console.print.call_count == 4
+    assert Live.update.call_count == 4
     assert res == "test4"
 
 
@@ -99,14 +101,14 @@ def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
-    assert console.print.call_args_list == [
-        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
-        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4"),
     ]
-    assert console.print.call_count == 2
+    assert Live.update.call_count == 2
     assert res == "test1"
 
 
@@ -115,14 +117,14 @@ def _():
     steps = iter([readchar.key.UP, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
 
-    assert console.print.call_args_list == [
-        mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4"),
-        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4"),
     ]
-    assert console.print.call_count == 2
+    assert Live.update.call_count == 2
     assert res == "test1"
 
 
@@ -134,7 +136,7 @@ def _():
     steps = iter([readchar.key.CTRL_C])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     Config.raise_on_interrupt = False
     res = select(
         options=["test1", "test2", "test3", "test4"],
@@ -143,8 +145,8 @@ def _():
         cursor_index=1,
     )
 
-    assert console.print.call_args_list == [mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4")]
-    assert console.print.call_count == 1
+    assert Live.update.call_args_list == [mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4")]
+    assert Live.update.call_count == 1
     assert res == None
 
 
@@ -156,7 +158,7 @@ def _():
     steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select(
         options=["test1", "test2", "test3", "test4"],
         cursor="x",
@@ -164,14 +166,14 @@ def _():
         return_index=True,
     )
 
-    assert console.print.call_args_list == [
-        mock.call("[green]x[/green] test1\n  test2\n  test3\n  test4"),
-        mock.call("  test1\n[green]x[/green] test2\n  test3\n  test4"),
-        mock.call("  test1\n  test2\n[green]x[/green] test3\n  test4"),
-        mock.call("  test1\n  test2\n  test3\n[green]x[/green] test4"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3\n  test4"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4"),
     ]
 
-    assert console.print.call_count == 4
+    assert Live.update.call_count == 4
     assert res == 3
 
 
@@ -199,8 +201,7 @@ def _():
     logging.warning = mock.MagicMock()
     select(options=["test1", "test2"], cursor_style="")
     logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
-    
-    
+
 
 @test(
     "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value and preprocessor selecting the last element",
@@ -210,7 +211,7 @@ def _():
     steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select(
         options=["test1", "test2", "test3", "test4"],
         preprocessor=lambda val: val[-1],
@@ -219,12 +220,12 @@ def _():
         return_index=True,
     )
 
-    assert console.print.call_args_list == [
-        mock.call("[green]x[/green] 1\n  2\n  3\n  4"),
-        mock.call("  1\n[green]x[/green] 2\n  3\n  4"),
-        mock.call("  1\n  2\n[green]x[/green] 3\n  4"),
-        mock.call("  1\n  2\n  3\n[green]x[/green] 4"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] 1\n  2\n  3\n  4"),
+        mock.call(renderable="  1\n[green]x[/green] 2\n  3\n  4"),
+        mock.call(renderable="  1\n  2\n[green]x[/green] 3\n  4"),
+        mock.call(renderable="  1\n  2\n  3\n[green]x[/green] 4"),
     ]
 
-    assert console.print.call_count == 4
+    assert Live.update.call_count == 4
     assert res == 3

@@ -1,7 +1,9 @@
 from unittest import mock
-from ward import test, raises
-from beaupy import select_multiple, console, Config, logging
+
 import readchar
+from ward import raises, test
+
+from beaupy import Config, Live, logging, select_multiple
 
 
 @test("`select_multiple` with no options permissive", tags=["v1", "select_multiple"])
@@ -25,15 +27,15 @@ def _():
     steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
-    assert console.print.call_args_list == [
-        mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
     ]
-    assert console.print.call_count == 4
+    assert Live.update.call_count == 4
     assert res == ["test1", "test2"]
 
 
@@ -45,15 +47,15 @@ def _():
     steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", return_indices=True)
-    assert console.print.call_args_list == [
-        mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
     ]
-    assert console.print.call_count == 4
+    assert Live.update.call_count == 4
     assert res == [0, 1]
 
 
@@ -65,19 +67,19 @@ def _():
     steps = iter([readchar.key.SPACE, readchar.key.UP, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(
         options=["test1", "test2"],
         tick_character="✓",
         tick_style="yellow1",
         cursor_index=1,
     )
-    assert console.print.call_args_list == [
-        mock.call("\\[ ] test1\n\\[ ] [pink1]test2[/pink1]"),
-        mock.call("\\[ ] test1\n\\[[yellow1]✓[/yellow1]] [pink1]test2[/pink1]"),
-        mock.call("\\[ ] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\\[ ] test1\n\\[ ] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[ ] test1\n\\[[yellow1]✓[/yellow1]] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[ ] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2"),
     ]
-    assert console.print.call_count == 3
+    assert Live.update.call_count == 3
     assert res == ["test2"]
 
 
@@ -89,7 +91,7 @@ def _():
     steps = iter([readchar.key.SPACE, readchar.key.UP, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(
         options=["test1", "test2"],
         tick_character="✓",
@@ -97,12 +99,12 @@ def _():
         cursor_index=1,
         ticked_indices=[0],
     )
-    assert console.print.call_args_list == [
-        mock.call("\\[[yellow1]✓[/yellow1]] test1\n\\[ ] [pink1]test2[/pink1]"),
-        mock.call("\\[[yellow1]✓[/yellow1]] test1\n\\[[yellow1]✓[/yellow1]] [pink1]test2[/pink1]"),
-        mock.call("\\[[yellow1]✓[/yellow1]] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\\[[yellow1]✓[/yellow1]] test1\n\\[ ] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[[yellow1]✓[/yellow1]] test1\n\\[[yellow1]✓[/yellow1]] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[[yellow1]✓[/yellow1]] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2"),
     ]
-    assert console.print.call_count == 3
+    assert Live.update.call_count == 3
     assert res == ["test1", "test2"]
 
 
@@ -114,17 +116,16 @@ def _():
     steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", maximal_count=1)
 
-    assert console.print.call_args_list == [
-        mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call("Must select at most 1 options"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
+    assert Live.update.call_args_list[:4] == [
+        mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n[red]Error:[/red] Must select at most 1 options"),
     ]
-    assert console.print.call_count == 5
+    assert Live.update.call_count == 4
     assert res == ["test1"]
 
 
@@ -144,17 +145,16 @@ def _():
     )
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", minimal_count=2)
-    assert console.print.call_args_list == [
-        mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call("Must select at least 2 options"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call("\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n[red]Error:[/red] Must select at least 2 options"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
     ]
-    assert console.print.call_count == 6
+    assert Live.update.call_count == 5
     assert res == ["test1", "test2"]
 
 
@@ -163,10 +163,10 @@ def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = False
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
-    assert console.print.call_args_list == [mock.call("\\[  ] [pink1]test1[/pink1]\n\\[  ] test2")]
-    assert console.print.call_count == 1
+    assert Live.update.call_args_list == [mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2")]
+    assert Live.update.call_count == 1
     assert res == []
 
 
@@ -175,7 +175,7 @@ def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = True
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     with raises(KeyboardInterrupt):
         select_multiple(options=["test1", "test2"], tick_character="😋")
 
@@ -197,6 +197,7 @@ def _():
     select_multiple(options=["test1", "test2"], cursor_style="")
     logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
+
 @test(
     "`select_multiple` with 2 options starting from first selecting going down and selecting second, then deselecting, with preprocessor",
     tags=["v1", "select_multiple"],
@@ -205,14 +206,14 @@ def _():
     steps = iter([readchar.key.SPACE, readchar.key.DOWN, readchar.key.SPACE, readchar.key.SPACE, readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    console.print = mock.MagicMock()
+    Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", preprocessor=lambda val: val[-1])
-    assert console.print.call_args_list == [
-        mock.call("\\[  ] [pink1]1[/pink1]\n\\[  ] 2"),
-        mock.call("\\[[pink1]😋[/pink1]] [pink1]1[/pink1]\n\\[  ] 2"),
-        mock.call("\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]"),
-        mock.call("\\[[pink1]😋[/pink1]] 1\n\\[[pink1]😋[/pink1]] [pink1]2[/pink1]"),
-        mock.call("\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]"),
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\\[  ] [pink1]1[/pink1]\n\\[  ] 2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] [pink1]1[/pink1]\n\\[  ] 2"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] 1\n\\[[pink1]😋[/pink1]] [pink1]2[/pink1]"),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]"),
     ]
-    assert console.print.call_count == 5
-    assert res == ['test1']
+    assert Live.update.call_count == 5
+    assert res == ["test1"]
