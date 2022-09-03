@@ -1,5 +1,4 @@
 from contextlib import contextmanager
-from sys import stdout
 from typing import Iterator, List, Union
 
 import emoji
