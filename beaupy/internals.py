@@ -1,9 +1,10 @@
 from contextlib import contextmanager
 from sys import stdout
-from typing import Iterator, List
+from typing import Iterator, List, Union
 
 import emoji
-from rich.console import Console
+from rich.console import Console, ConsoleRenderable
+from rich.live import Live
 
 
 class ValidationError(Exception):
@@ -35,11 +36,12 @@ def format_option_select_multiple(
     return f'{prefix} {option}'
 
 
-def reset_lines(num_lines: int) -> None:
-    stdout.write(f'\x1b[{num_lines}F\x1b[0J')
+def update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> None:
+    live.update(renderable=renderable)
+    live.refresh()
 
 
-def render(secure: bool, return_value: List[str], prompt: str, cursor_position: int, error: str, console: Console) -> None:
+def render(secure: bool, return_value: List[str], prompt: str, cursor_position: int, error: str, console: Console) -> str:
     render_value = (len(return_value) * '*' if secure else ''.join(return_value)) + ' '
     render_value = (
         render_value[:cursor_position]
@@ -48,23 +50,13 @@ def render(secure: bool, return_value: List[str], prompt: str, cursor_position: 
         + '[/black on white]'  # noqa: W503
         + render_value[(cursor_position + 1) :]  # noqa: W503,E203
     )
-
+    render_value = f'{prompt}\n> {render_value}'
     if error:
-        console.print(error)
-    console.print(f'{prompt}\n> {render_value}')
-    reset_lines(2)
-
-
-def hide_cursor() -> None:
-    stdout.write('\x1b[?25l')
-
-
-def show_cursor() -> None:
-    stdout.write('\x1b[?25h')
-
+        render_value = f'{render_value}\n[red]Error:[/red] {error}'
+    return render_value
 
 @contextmanager
-def cursor_hidden() -> Iterator:
-    hide_cursor()
+def cursor_hidden(console: Console) -> Iterator:
+    console.show_cursor(False)
     yield
-    show_cursor()
+    console.show_cursor(True)
