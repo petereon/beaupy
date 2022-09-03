@@ -95,6 +95,7 @@ def prompt(
         error: str = ''
         while True:
             rendered = render(secure, value, prompt, cursor_index, error, console)
+            error = ''
             update_rendered(live, rendered)
             keypress = readchar.readkey()
             if keypress in DefaultKeys.confirm:
@@ -133,8 +134,7 @@ def prompt(
             else:
                 value.insert(cursor_index, keypress)
                 cursor_index += 1
-            if error:
-                error = ''
+                
 
 
 Selection = Union[int, Any]
