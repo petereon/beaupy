@@ -110,25 +110,53 @@ def _():
     steps = iter(["1", "2", readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
     Live.update = mock.MagicMock()
-
+    Config.raise_on_interrupt = True
     with raises(ConversionError):
         prompt("", secure=True, target_type=bool)
-        assert Live.update.call_args_list == [mock.call(renderable="\n> "), mock.call(renderable="\n> *"), mock.call(renderable="\n> **")]
+    assert Live.update.call_args_list == [mock.call(renderable="\n> [black on white] [/black on white]"), mock.call(renderable="\n> *[black on white] [/black on white]"), mock.call(renderable="\n> **[black on white] [/black on white]")]
 
 
-@test("Empty prompt typing `12` as secure input with bool as type raising ConversionError", tags=["v1", "prompt"])
+@test("Empty prompt typing `12` as secure input with bool as type reporting a ConversionError", tags=["v1", "prompt"])
+def _():
+    steps = iter(["1", "2", readchar.key.ENTER, readchar.key.CTRL_C])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    Config.raise_on_interrupt = False
+    prompt("", secure=True, target_type=bool, raise_type_conversion_fail=False)
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\n> [black on white] [/black on white]"),
+        mock.call(renderable="\n> *[black on white] [/black on white]"),
+        mock.call(renderable="\n> **[black on white] [/black on white]"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n[red]Error:[/red] Input <secure_input> cannot be converted to type `<class 'bool'>`"),
+    ]
+
+
+@test("Empty prompt typing `12` as secure input validating that value is more than 20 and raising ValidationError", tags=["v1", "prompt"])
 def _():
     steps = iter(["1", "2", readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
     Live.update = mock.MagicMock()
-
     with raises(ValidationError):
         prompt("", secure=True, target_type=float, validator=lambda val: val > 20)
-        assert Live.update.call_args_list == [
-            mock.call(renderable="\n> [black on white] [/black on white]"),
-            mock.call(renderable="\n> *[black on white] [/black on white]"),
-            mock.call(renderable="\n> **[black on white] [/black on white]"),
-        ]
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\n> [black on white] [/black on white]"),
+        mock.call(renderable="\n> *[black on white] [/black on white]"),
+        mock.call(renderable="\n> **[black on white] [/black on white]"),
+    ]
+        
+@test("Empty prompt typing `12` as secure input validating that value is more than 20 and reporting ValidationError", tags=["v1", "prompt"])
+def _():
+    steps = iter(["1", "2", readchar.key.ENTER, readchar.key.CTRL_C])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    Config.raise_on_interrupt = False
+    prompt("", secure=True, target_type=float, validator=lambda val: val > 20, raise_validation_fail=False)
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\n> [black on white] [/black on white]"),
+        mock.call(renderable="\n> *[black on white] [/black on white]"),
+        mock.call(renderable="\n> **[black on white] [/black on white]"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n[red]Error:[/red] Input <secure_input> is invalid"),
+    ]
 
 
 @test("Prompt with typing `J`, then deleting it and typing `No`", tags=["v1", "prompt"])
