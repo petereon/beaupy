@@ -1,7 +1,9 @@
 from unittest import mock
-from ward import test, raises
-from beaupy import select, Live, Config, logging
+
 import readchar
+from ward import raises, test
+
+from beaupy import Config, Live, logging, select
 
 
 @test("`select` with no options permissive", tags=["v1", "select"])
@@ -199,8 +201,7 @@ def _():
     logging.warning = mock.MagicMock()
     select(options=["test1", "test2"], cursor_style="")
     logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
-    
-    
+
 
 @test(
     "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value and preprocessor selecting the last element",

@@ -1,7 +1,9 @@
 from unittest import mock
-from ward import test, raises
-from beaupy import confirm, Live, logging, Config
+
 import readchar
+from ward import raises, test
+
+from beaupy import Config, Live, confirm, logging
 
 
 @test("`confirm` with `Try test` as a question and defaults otherwise", tags=["v1", "confirm"])

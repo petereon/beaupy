@@ -1,7 +1,10 @@
-from ward import test, raises
-from beaupy import prompt, Live, ConversionError, ValidationError, Config
-import readchar
 from unittest import mock
+
+import readchar
+from ward import raises, test
+
+from beaupy import Config, ConversionError, Live, ValidationError, prompt
+
 
 @test("Empty prompt with immediately pressing confirm", tags=["v1", "prompt"])
 def _():
@@ -73,7 +76,11 @@ def _():
     Live.update = mock.MagicMock()
     res = prompt("", secure=True, target_type=float)
 
-    assert Live.update.call_args_list == [mock.call(renderable="\n> [black on white] [/black on white]"), mock.call(renderable="\n> *[black on white] [/black on white]"), mock.call(renderable="\n> **[black on white] [/black on white]")]
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\n> [black on white] [/black on white]"),
+        mock.call(renderable="\n> *[black on white] [/black on white]"),
+        mock.call(renderable="\n> **[black on white] [/black on white]"),
+    ]
     assert isinstance(res, float)
     assert res == 12.0
 
@@ -117,7 +124,11 @@ def _():
 
     with raises(ValidationError):
         prompt("", secure=True, target_type=float, validator=lambda val: val > 20)
-        assert Live.update.call_args_list == [mock.call(renderable="\n> [black on white] [/black on white]"), mock.call(renderable="\n> *[black on white] [/black on white]"), mock.call(renderable="\n> **[black on white] [/black on white]")]
+        assert Live.update.call_args_list == [
+            mock.call(renderable="\n> [black on white] [/black on white]"),
+            mock.call(renderable="\n> *[black on white] [/black on white]"),
+            mock.call(renderable="\n> **[black on white] [/black on white]"),
+        ]
 
 
 @test("Prompt with typing `J`, then deleting it and typing `No`", tags=["v1", "prompt"])

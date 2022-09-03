@@ -1,7 +1,9 @@
 from unittest import mock
-from ward import test, raises
-from beaupy import select_multiple, Live, Config, logging
+
 import readchar
+from ward import raises, test
+
+from beaupy import Config, Live, logging, select_multiple
 
 
 @test("`select_multiple` with no options permissive", tags=["v1", "select_multiple"])
@@ -121,7 +123,7 @@ def _():
         mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call(renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call(renderable='\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n[red]Error:[/red] Must select at most 1 options'),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n[red]Error:[/red] Must select at most 1 options"),
     ]
     assert Live.update.call_count == 4
     assert res == ["test1"]
@@ -149,7 +151,7 @@ def _():
         mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call(renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2"),
         mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]"),
-        mock.call(renderable='\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n[red]Error:[/red] Must select at least 2 options'),
+        mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n[red]Error:[/red] Must select at least 2 options"),
         mock.call(renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]"),
     ]
     assert Live.update.call_count == 5
@@ -195,6 +197,7 @@ def _():
     select_multiple(options=["test1", "test2"], cursor_style="")
     logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
+
 @test(
     "`select_multiple` with 2 options starting from first selecting going down and selecting second, then deselecting, with preprocessor",
     tags=["v1", "select_multiple"],
@@ -213,4 +216,4 @@ def _():
         mock.call(renderable="\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]"),
     ]
     assert Live.update.call_count == 5
-    assert res == ['test1']
+    assert res == ["test1"]
