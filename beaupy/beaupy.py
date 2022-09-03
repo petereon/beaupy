@@ -77,8 +77,12 @@ def prompt(
     Args:
         prompt (str): The prompt that will be displayed
         target_type (Union[Type[T], Type[str]], optional): Type to convert the answer to. Defaults to str.
-        validator (Callable[[Any], bool], optional): Optional function to validate the input. Defaults to lambdainput:True.
+        validator (Callable[[Any], bool], optional): Optional function to validate the input. Defaults to lambda input: True.
         secure (bool, optional): If True, input will be hidden. Defaults to False.
+        raise_validation_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ValidationError`, else
+                                                the error will be reported onto the console. Defaults to True.
+        raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ConversionError`, else
+                                                     the error will be reported onto the console. Defaults to True.
 
     Raises:
         ValidationError: Raised if validation with provided validator fails
