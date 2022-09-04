@@ -113,7 +113,11 @@ def _():
     Config.raise_on_interrupt = True
     with raises(ConversionError):
         prompt("", secure=True, target_type=bool)
-    assert Live.update.call_args_list == [mock.call(renderable="\n> [black on white] [/black on white]"), mock.call(renderable="\n> *[black on white] [/black on white]"), mock.call(renderable="\n> **[black on white] [/black on white]")]
+    assert Live.update.call_args_list == [
+        mock.call(renderable="\n> [black on white] [/black on white]"),
+        mock.call(renderable="\n> *[black on white] [/black on white]"),
+        mock.call(renderable="\n> **[black on white] [/black on white]"),
+    ]
 
 
 @test("Empty prompt typing `12` as secure input with bool as type reporting a ConversionError", tags=["v1", "prompt"])
@@ -127,7 +131,9 @@ def _():
         mock.call(renderable="\n> [black on white] [/black on white]"),
         mock.call(renderable="\n> *[black on white] [/black on white]"),
         mock.call(renderable="\n> **[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]\n[red]Error:[/red] Input <secure_input> cannot be converted to type `<class 'bool'>`"),
+        mock.call(
+            renderable="\n> **[black on white] [/black on white]\n[red]Error:[/red] Input <secure_input> cannot be converted to type `<class 'bool'>`"
+        ),
     ]
 
 
@@ -143,7 +149,8 @@ def _():
         mock.call(renderable="\n> *[black on white] [/black on white]"),
         mock.call(renderable="\n> **[black on white] [/black on white]"),
     ]
-        
+
+
 @test("Empty prompt typing `12` as secure input validating that value is more than 20 and reporting ValidationError", tags=["v1", "prompt"])
 def _():
     steps = iter(["1", "2", readchar.key.ENTER, readchar.key.CTRL_C])
