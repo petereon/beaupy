@@ -8,7 +8,7 @@ from beaupy import spinners
 @test("Spinner gets created as expected")
 def _():
     spinners.Live = MagicMock()
-    spinners.CustomSpinner(["t", "e", "s", "t"], "test", 10, False)
+    spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
 
     spinners.Live.assert_called_once()
 
@@ -23,7 +23,7 @@ def _():
 def _():
     spinners.Live = MagicMock()
     with raises(ValueError) as e:
-        spinners.CustomSpinner([], "test", 10, False)
+        spinners.Spinner([], "test", 10, False)
 
     assert str(e.raised) == "`spinner_characters` can't be empty"
 
@@ -31,7 +31,7 @@ def _():
 @test("Spinner callable behaves as expected")
 def _():
     spinners.Live = MagicMock()
-    spinners.CustomSpinner(["t", "e", "s", "t"], "test", 10, False)
+    spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
 
     spinners.Live.assert_called_once()
 
@@ -46,7 +46,7 @@ def _():
 @test("Spinner `start` methods starts a live display")
 def _():
     spinners.Live = MagicMock()
-    result = spinners.CustomSpinner(["t", "e", "s", "t"], "test", 10, False)
+    result = spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
     result.start()
 
     result._live_display.start.assert_called_once()
@@ -54,7 +54,7 @@ def _():
 
 @test("Spinner `stop` methods stops a live display")
 def _():
-    result = spinners.CustomSpinner(["t", "e", "s", "t"], "test", 10, False)
+    result = spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
     result._live_display = MagicMock()
     result.stop()
 
