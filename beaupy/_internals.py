@@ -14,20 +14,20 @@ class ConversionError(Exception):
     pass
 
 
-def __replace_emojis(text: str) -> str:
+def _replace_emojis(text: str) -> str:
     return str(emoji.replace_emoji(text, '  '))
 
 
-def format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
+def _format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
     return '{}{}'.format(
-        f'[{cursor_style}]{cursor}[/{cursor_style}] ' if i == cursor_index else ' ' * (len(__replace_emojis(cursor)) + 1), option
+        f'[{cursor_style}]{cursor}[/{cursor_style}] ' if i == cursor_index else ' ' * (len(_replace_emojis(cursor)) + 1), option
     )
 
 
-def render_option_select_multiple(
+def _render_option_select_multiple(
     option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
 ) -> str:
-    prefix = '\[{}]'.format(' ' * len(__replace_emojis(tick_character)))  # noqa: W605
+    prefix = '\[{}]'.format(' ' * len(_replace_emojis(tick_character)))  # noqa: W605
     if ticked:
         prefix = f'\[[{tick_style}]{tick_character}[/{tick_style}]]'  # noqa: W605
     if selected:
@@ -35,12 +35,12 @@ def render_option_select_multiple(
     return f'{prefix} {option}'
 
 
-def update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> None:
+def _update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> None:
     live.update(renderable=renderable)
     live.refresh()
 
 
-def render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str) -> str:
+def _render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str) -> str:
     render_value = (len(typed_values) * '*' if secure else ''.join(typed_values)) + ' '
     render_value = (
         render_value[:cursor_position]
@@ -56,7 +56,7 @@ def render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_pos
 
 
 @contextmanager
-def cursor_hidden(console: Console) -> Iterator:
+def _cursor_hidden(console: Console) -> Iterator:
     console.show_cursor(False)
     yield
     console.show_cursor(True)

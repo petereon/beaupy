@@ -13,14 +13,14 @@ import readchar
 from rich.console import Console
 from rich.live import Live
 
-from beaupy.internals import (
+from beaupy._internals import (
     ConversionError,
     ValidationError,
-    cursor_hidden,
-    format_option_select,
-    render_option_select_multiple,
-    render_prompt,
-    update_rendered,
+    _cursor_hidden,
+    _format_option_select,
+    _render_option_select_multiple,
+    _render_prompt,
+    _update_rendered,
 )
 
 console = Console()
@@ -93,14 +93,14 @@ def prompt(
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
     rendered = ''
-    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
+    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         value: List[str] = []
         cursor_index = 0
         error: str = ''
         while True:
-            rendered = render_prompt(secure, value, prompt, cursor_index, error)
+            rendered = _render_prompt(secure, value, prompt, cursor_index, error)
             error = ''
-            update_rendered(live, rendered)
+            _update_rendered(live, rendered)
             keypress = readchar.readkey()
             if keypress in DefaultKeys.confirm:
                 str_value = ''.join(value)
@@ -175,7 +175,7 @@ def select(
         Union[int, str, None]: Selected value or the index of a selected option or `None`
     """
     rendered = ''
-    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
+    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         if not options:
             if strict:
                 raise ValueError('`options` cannot be empty')
@@ -189,11 +189,11 @@ def select(
         while True:
             rendered = '\n'.join(
                 [
-                    format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
+                    _format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
                     for i, option in enumerate(options)
                 ]
             )
-            update_rendered(live, rendered)
+            _update_rendered(live, rendered)
             keypress = readchar.readkey()
 
             if keypress in DefaultKeys.up:
@@ -255,7 +255,7 @@ def select_multiple(
         Union[List[str], List[int]]: A list of selected values or indices of selected options
     """
     rendered = ''
-    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
+    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         if not options:
             if strict:
                 raise ValueError('`options` cannot be empty')
@@ -276,7 +276,7 @@ def select_multiple(
         while True:
             rendered = '\n'.join(
                 [
-                    render_option_select_multiple(
+                    _render_option_select_multiple(
                         option=preprocessor(option),
                         ticked=i in ticked_indices,
                         tick_character=tick_character,
@@ -290,7 +290,7 @@ def select_multiple(
             if error_message:
                 rendered = f'{rendered}\n[red]Error:[/red] {error_message}'
                 error_message = ''
-            update_rendered(live, rendered)
+            _update_rendered(live, rendered)
             keypress = readchar.readkey()
 
             if keypress in DefaultKeys.up:
@@ -354,7 +354,7 @@ def confirm(
         Optional[bool]
     """
     rendered = ''
-    with cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
+    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         if cursor_style in ['', None]:
             logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
             cursor_style = 'white'
@@ -371,7 +371,7 @@ def confirm(
             yes_prefix = selected_prefix if yes else deselected_prefix
             no_prefix = selected_prefix if no else deselected_prefix
             rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}'
-            update_rendered(live, rendered)
+            _update_rendered(live, rendered)
             keypress = readchar.readkey()
 
             if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
