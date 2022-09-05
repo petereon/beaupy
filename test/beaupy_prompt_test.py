@@ -14,7 +14,7 @@ def _():
     Live.update = mock.MagicMock()
     res = prompt("")
 
-    Live.update.assert_called_once_with(renderable="\n> [black on white] [/black on white]")
+    Live.update.assert_called_once_with(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])")
     assert res == ""
 
 
@@ -26,11 +26,11 @@ def _():
     res = prompt("")
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> j[black on white] [/black on white]"),
-        mock.call(renderable="\n> jo[black on white] [/black on white]"),
-        mock.call(renderable="\n> joz[black on white] [/black on white]"),
-        mock.call(renderable="\n> jozo[black on white] [/black on white]"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> j[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> jo[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> joz[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> jozo[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
     ]
     assert res == "jozo"
 
@@ -43,11 +43,11 @@ def _():
     res = prompt("", secure=True)
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> *[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]"),
-        mock.call(renderable="\n> ***[black on white] [/black on white]"),
-        mock.call(renderable="\n> ****[black on white] [/black on white]"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> *[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> ***[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> ****[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
     ]
     assert res == "jozo"
 
@@ -60,11 +60,11 @@ def _():
     res = prompt("", secure=True, target_type=bool)
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> *[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]"),
-        mock.call(renderable="\n> ***[black on white] [/black on white]"),
-        mock.call(renderable="\n> ****[black on white] [/black on white]"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> *[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> ***[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> ****[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
     ]
     assert res is True
 
@@ -77,9 +77,9 @@ def _():
     res = prompt("", secure=True, target_type=float)
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> *[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> *[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
     ]
     assert isinstance(res, float)
     assert res == 12.0
@@ -93,13 +93,25 @@ def _():
     res = prompt("Ask an actual question goddammit", validator=lambda val: val == "No")
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="Ask an actual question goddammit\n> [black on white] [/black on white]"),
-        mock.call(renderable="Ask an actual question goddammit\n> o[black on white] [/black on white]"),
-        mock.call(renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] "),
-        mock.call(renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] "),
-        mock.call(renderable="Ask an actual question goddammit\n> N[black on white]o[/black on white] "),
-        mock.call(renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]"),
-        mock.call(renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]"),
+        mock.call(renderable="Ask an actual question goddammit\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(
+            renderable="Ask an actual question goddammit\n> o[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] \n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] \n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="Ask an actual question goddammit\n> N[black on white]o[/black on white] \n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"
+        ),
     ]
     assert isinstance(res, str)
     assert res == "No"
@@ -114,9 +126,9 @@ def _():
     with raises(ConversionError):
         prompt("", secure=True, target_type=bool)
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> *[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> *[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
     ]
 
 
@@ -128,11 +140,11 @@ def _():
     Config.raise_on_interrupt = False
     prompt("", secure=True, target_type=bool, raise_type_conversion_fail=False)
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> *[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> *[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
         mock.call(
-            renderable="\n> **[black on white] [/black on white]\n[red]Error:[/red] Input <secure_input> cannot be converted to type `<class 'bool'>`"
+            renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])\n[red]Error:[/red] Input <secure_input> cannot be converted to type `<class 'bool'>`"
         ),
     ]
 
@@ -145,9 +157,9 @@ def _():
     with raises(ValidationError):
         prompt("", secure=True, target_type=float, validator=lambda val: val > 20)
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> *[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> *[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
     ]
 
 
@@ -159,10 +171,12 @@ def _():
     Config.raise_on_interrupt = False
     prompt("", secure=True, target_type=float, validator=lambda val: val > 20, raise_validation_fail=False)
     assert Live.update.call_args_list == [
-        mock.call(renderable="\n> [black on white] [/black on white]"),
-        mock.call(renderable="\n> *[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]"),
-        mock.call(renderable="\n> **[black on white] [/black on white]\n[red]Error:[/red] Input <secure_input> is invalid"),
+        mock.call(renderable="\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> *[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(
+            renderable="\n> **[black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])\n[red]Error:[/red] Input <secure_input> is invalid"
+        ),
     ]
 
 

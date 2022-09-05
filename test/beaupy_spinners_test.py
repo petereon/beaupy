@@ -1,6 +1,7 @@
 from typing import Callable
-from ward import test, raises
 from unittest.mock import MagicMock
+
+from ward import raises, test
 
 from beaupy.spinners import _spinners
 

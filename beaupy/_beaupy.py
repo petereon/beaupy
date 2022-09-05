@@ -187,11 +187,16 @@ def select(
         index: int = cursor_index
 
         while True:
-            rendered = '\n'.join(
-                [
-                    _format_option_select(i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor)
-                    for i, option in enumerate(options)
-                ]
+            rendered = (
+                '\n'.join(
+                    [
+                        _format_option_select(
+                            i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor
+                        )
+                        for i, option in enumerate(options)
+                    ]
+                )
+                + '\n\n(Confirm with [bold]enter[/bold])'
             )
             _update_rendered(live, rendered)
             keypress = readchar.readkey()
@@ -274,18 +279,21 @@ def select_multiple(
         max_index = len(options) - (1 if True else 0)
         error_message = ''
         while True:
-            rendered = '\n'.join(
-                [
-                    _render_option_select_multiple(
-                        option=preprocessor(option),
-                        ticked=i in ticked_indices,
-                        tick_character=tick_character,
-                        tick_style=tick_style,
-                        selected=i == index,
-                        cursor_style=cursor_style,
-                    )
-                    for i, option in enumerate(options)
-                ]
+            rendered = (
+                '\n'.join(
+                    [
+                        _render_option_select_multiple(
+                            option=preprocessor(option),
+                            ticked=i in ticked_indices,
+                            tick_character=tick_character,
+                            tick_style=tick_style,
+                            selected=i == index,
+                            cursor_style=cursor_style,
+                        )
+                        for i, option in enumerate(options)
+                    ]
+                )
+                + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'
             )
             if error_message:
                 rendered = f'{rendered}\n[red]Error:[/red] {error_message}'
@@ -370,7 +378,7 @@ def confirm(
             question_line = f'{question}{yn_prompt}{current_message}'
             yes_prefix = selected_prefix if yes else deselected_prefix
             no_prefix = selected_prefix if no else deselected_prefix
-            rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}'
+            rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}\n\n(Confirm with [bold]enter[/bold])'
             _update_rendered(live, rendered)
             keypress = readchar.readkey()
 

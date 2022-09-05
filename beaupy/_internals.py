@@ -49,7 +49,7 @@ def _render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_po
         + '[/black on white]'  # noqa: W503
         + render_value[(cursor_position + 1) :]  # noqa: W503,E203
     )
-    render_value = f'{prompt}\n> {render_value}'
+    render_value = f'{prompt}\n> {render_value}\n\n(Confirm with [bold]enter[/bold])'
     if error:
         render_value = f'{render_value}\n[red]Error:[/red] {error}'
     return render_value

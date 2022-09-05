@@ -1,48 +1,77 @@
 #! /usr/bin/env python3
-"""Example script demonstrating usage of cutie.
+"""Example script demonstrating usage of beaupy.
 """
 
-import beaupy
+import time
+from beaupy import *
+from beaupy.spinners import *
 
 
 def main():
     """Main."""
-    if beaupy.confirm("Are you brave enough to continue?"):
+    # Confirm a dialog
+    if confirm("Will you take the ring to Mordor?"):
         names = [
-            "Arthur, King of the Britons",
-            "Sir Lancelot the Brave",
-            "Sir Robin the Not-Quite-So-Brave-as-Sir-Lancelot",
-            "Sir Bedevere the Wise",
-            "Sir Galahad the Pure",
+            "Frodo Baggins",
+            "Samwise Gamgee",
+            "Legolas",
+            "Aragorn",
+            "[red]Sauron[/red]",
         ]
-
-        name = beaupy.select(names, cursor_index=3, cursor="🏰")
-        print(f"Welcome, {name}")
-        # Get an integer greater or equal to 0
-        age = beaupy.prompt("What is your age?", target_type=int, validator=lambda val: val > 0)
-        nemeses_options = [
-            "The French",
-            "The Police",
-            "The Knights Who Say Ni",
-            "Women",
-            "The Black Knight",
-            "The Bridge Keeper",
-            "The Rabbit of Caerbannog",
+        console.print("Who are you?")
+        # Choose one item from a list
+        name = select(names, cursor="🢧", cursor_style="cyan")
+        console.print(f"Alámenë, {name}")
+        
+        
+        item_options = [
+            "The One Ring",
+            "Dagger",
+            "Po-tae-toes",
+            "Lightsaber (Wrong franchise! Nevermind, roll with it!)",
         ]
-        print("Choose your nemeses")
+        console.print("What do you bring with you?")
         # Choose multiple options from a list
-        nemeses = beaupy.select_multiple(nemeses_options)
+        items = select_multiple(item_options, tick_character='🎒', ticked_indices=[0], maximal_count=3)
+        
+        potato_count = 0
+        if "Po-tae-toes" in items:
+            # Prompt with type conversion and validation
+            potato_count = prompt('How many potatoes?', target_type=int, validator=lambda count: count > 0)
+        
+        # Spinner to show while doing some work
+        spinner = Spinner(DOTS, "Packing things...")
+        spinner.start()
+        
+        time.sleep(2)
+        
+        spinner.stop()
         # Get input without showing it being typed
-        quest = beaupy.prompt("What is your quest?", secure=True)
-        print(f"{name}'s quest (who is {age}) is {quest}.")
-        if nemeses:
-            if len(nemeses) == 1:
-                print(f"His nemesis is {nemeses[0]}.")
-            else:
-                print(f'His nemeses are {" and ".join(nemeses)}.')
+        if "friend" == prompt("Speak, [blue bold underline]friend[/blue bold underline], and enter", secure=True).lower():
+            
+            # Custom spinner animation
+            spinner_animation = ['▉▉', '▌▐', '  ', '▌▐', '▉▉']
+            spinner = Spinner(spinner_animation, "Opening the Door of Durin...")
+            spinner.start()
+            
+            time.sleep(2)
+            
+            spinner.stop()
         else:
-            print("He has no nemesis.")
+            spinner_animation = ['🐙🌊    ⚔️ ', '🐙 🌊   ⚔️ ', '🐙  🌊  ⚔️ ', '🐙   🌊 ⚔️ ', '🐙    🌊⚔️ ']
+            spinner = Spinner(spinner_animation, "Getting attacked by an octopus...")
+            spinner.start()
+            
+            time.sleep(2)
+            
+            spinner.stop()
 
+        if 'The One Ring' in items:
+            console.print("[green]You throw The One Ring to a lava from an eagle![/green]")
+        else:
+            console.print("[red]You forgot the right and brought Middle-Earth to its knees![/red]")
+        console.print(f"And you brought {potato_count} taters!")
+                    
 
 if __name__ == "__main__":
     main()

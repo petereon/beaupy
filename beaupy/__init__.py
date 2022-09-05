@@ -5,6 +5,7 @@ from beaupy._beaupy import (  # noqa
     DefaultKeys,
     ValidationError,
     confirm,
+    console,
     prompt,
     select,
     select_multiple,
