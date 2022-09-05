@@ -2,40 +2,40 @@ from typing import Callable
 from ward import test, raises
 from unittest.mock import MagicMock
 
-from beaupy.spinners import spinners
+from beaupy.spinners import _spinners
 
 
 @test("Spinner gets created as expected")
 def _():
-    spinners.Live = MagicMock()
-    spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
+    _spinners.Live = MagicMock()
+    _spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
 
-    spinners.Live.assert_called_once()
+    _spinners.Live.assert_called_once()
 
-    assert spinners.Live.call_args[0] == ("",)
-    assert spinners.Live.call_args[1]["transient"] == False
-    assert spinners.Live.call_args[1]["refresh_per_second"] == 10
+    assert _spinners.Live.call_args[0] == ("",)
+    assert _spinners.Live.call_args[1]["transient"] == False
+    assert _spinners.Live.call_args[1]["refresh_per_second"] == 10
 
-    assert isinstance(spinners.Live.call_args[1]["get_renderable"], Callable)
+    assert isinstance(_spinners.Live.call_args[1]["get_renderable"], Callable)
 
 
 @test("Spinner creation fails if `spinner_characters` are an empty list")
 def _():
-    spinners.Live = MagicMock()
+    _spinners.Live = MagicMock()
     with raises(ValueError) as e:
-        spinners.Spinner([], "test", 10, False)
+        _spinners.Spinner([], "test", 10, False)
 
     assert str(e.raised) == "`spinner_characters` can't be empty"
 
 
 @test("Spinner callable behaves as expected")
 def _():
-    spinners.Live = MagicMock()
-    spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
+    _spinners.Live = MagicMock()
+    _spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
 
-    spinners.Live.assert_called_once()
+    _spinners.Live.assert_called_once()
 
-    get_renderable = spinners.Live.call_args[1]["get_renderable"]
+    get_renderable = _spinners.Live.call_args[1]["get_renderable"]
 
     assert get_renderable() == "t test"
     assert get_renderable() == "e test"
@@ -45,8 +45,8 @@ def _():
 
 @test("Spinner `start` methods starts a live display")
 def _():
-    spinners.Live = MagicMock()
-    result = spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
+    _spinners.Live = MagicMock()
+    result = _spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
     result.start()
 
     result._live_display.start.assert_called_once()
@@ -54,7 +54,7 @@ def _():
 
 @test("Spinner `stop` methods stops a live display")
 def _():
-    result = spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
+    result = _spinners.Spinner(["t", "e", "s", "t"], "test", 10, False)
     result._live_display = MagicMock()
     result.stop()
 
