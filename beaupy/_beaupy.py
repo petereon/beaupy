@@ -196,7 +196,7 @@ def select(
                         for i, option in enumerate(options)
                     ]
                 )
-                + '\n\n(Confirm with [bold]enter[/bold])'
+                + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
             )
             _update_rendered(live, rendered)
             keypress = readchar.readkey()
@@ -293,7 +293,7 @@ def select_multiple(
                         for i, option in enumerate(options)
                     ]
                 )
-                + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'
+                + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'  # noqa: W503
             )
             if error_message:
                 rendered = f'{rendered}\n[red]Error:[/red] {error_message}'
