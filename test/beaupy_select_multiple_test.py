@@ -3,7 +3,7 @@ from unittest import mock
 import readchar
 from ward import raises, test
 
-from beaupy import Config, Live, logging, select_multiple
+from beaupy._beaupy import Config, Live, warnings, select_multiple
 
 
 @test("`select_multiple` with no options permissive", tags=["v1", "select_multiple"])
@@ -184,18 +184,18 @@ def _():
 def _():
     steps = iter([readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
-    logging.warning = mock.MagicMock()
+    warnings.warn = mock.MagicMock()
     select_multiple(options=["test1", "test2"], tick_style="")
-    logging.warning.assert_called_once_with("`tick_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`tick_style` should be a valid style, defaulting to `white`")
 
 
 @test("`select_multiple` with 2 options and invalid cursor style", tags=["v1", "select_multiple"])
 def _():
     steps = iter([readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
-    logging.warning = mock.MagicMock()
+    warnings.warn = mock.MagicMock()
     select_multiple(options=["test1", "test2"], cursor_style="")
-    logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
 
 @test(

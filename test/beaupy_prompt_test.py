@@ -3,7 +3,7 @@ from unittest import mock
 import readchar
 from ward import raises, test
 
-from beaupy import Config, ConversionError, Live, ValidationError, prompt
+from beaupy._beaupy import Config, ConversionError, Live, ValidationError, prompt
 
 
 @test("Empty prompt with immediately pressing confirm", tags=["v1", "prompt"])

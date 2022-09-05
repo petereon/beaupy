@@ -3,7 +3,7 @@ from unittest import mock
 import readchar
 from ward import raises, test
 
-from beaupy import Config, Live, confirm, logging
+from beaupy._beaupy import Config, Live, confirm, warnings
 
 
 @test("`confirm` with `Try test` as a question and defaults otherwise", tags=["v1", "confirm"])
@@ -237,10 +237,10 @@ def _():
     steps = iter([readchar.key.ENTER])
 
     readchar.readkey = lambda: next(steps)
-    logging.warning = mock.MagicMock()
+    warnings.warn = mock.MagicMock()
     confirm(question="Test", cursor_style="")
 
-    logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
 
 @test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as False", tags=["v1", "confirm"])

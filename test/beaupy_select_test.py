@@ -3,7 +3,7 @@ from unittest import mock
 import readchar
 from ward import raises, test
 
-from beaupy import Config, Live, logging, select
+from beaupy._beaupy import Config, Live, warnings, select
 
 
 @test("`select` with no options permissive", tags=["v1", "select"])
@@ -198,9 +198,9 @@ def _():
 def _():
     steps = iter([readchar.key.ENTER])
     readchar.readkey = lambda: next(steps)
-    logging.warning = mock.MagicMock()
+    warnings.warn = mock.MagicMock()
     select(options=["test1", "test2"], cursor_style="")
-    logging.warning.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
 
 @test(

@@ -5,7 +5,7 @@ A Python library of interactive CLI elements you have been looking for
 
 __license__ = 'MIT'
 
-import logging
+import warnings
 from ast import literal_eval
 from typing import Any, Callable, List, Optional, Type, Union
 
@@ -181,7 +181,7 @@ def select(
                 raise ValueError('`options` cannot be empty')
             return None
         if cursor_style in ['', None]:
-            logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
             cursor_style = 'white'
 
         index: int = cursor_index
@@ -261,10 +261,10 @@ def select_multiple(
                 raise ValueError('`options` cannot be empty')
             return []
         if cursor_style in ['', None]:
-            logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
             cursor_style = 'white'
         if tick_style in ['', None]:
-            logging.warning('`tick_style` should be a valid style, defaulting to `white`')
+            warnings.warn('`tick_style` should be a valid style, defaulting to `white`')
             tick_style = 'white'
         if ticked_indices is None:
             ticked_indices = []
@@ -356,7 +356,7 @@ def confirm(
     rendered = ''
     with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         if cursor_style in ['', None]:
-            logging.warning('`cursor_style` should be a valid style, defaulting to `white`')
+            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
             cursor_style = 'white'
         is_yes = default_is_yes
         is_selected = enter_empty_confirms
