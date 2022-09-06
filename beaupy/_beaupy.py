@@ -25,6 +25,8 @@ from beaupy._internals import (
 
 console = Console()
 
+readchar.config.INTERRUPT_KEYS = []
+
 
 class DefaultKeys:
     """A map of default keybindings.
