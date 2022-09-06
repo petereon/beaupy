@@ -322,21 +322,21 @@ python-versions = ">=3.6,<4.0"
 
 [[package]]
 name = "flake8"
-version = "5.0.4"
+version = "4.0.1"
 description = "the modular source code checker: pep8 pyflakes and co"
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">=3.6.1"
+python-versions = ">=3.6"
 
 [package.dependencies]
-importlib-metadata = {version = ">=1.1.0,<4.3", markers = "python_version < \"3.8\""}
-mccabe = ">=0.7.0,<0.8.0"
-pycodestyle = ">=2.9.0,<2.10.0"
-pyflakes = ">=2.5.0,<2.6.0"
+importlib-metadata = {version = "<4.3", markers = "python_version < \"3.8\""}
+mccabe = ">=0.6.0,<0.7.0"
+pycodestyle = ">=2.8.0,<2.9.0"
+pyflakes = ">=2.4.0,<2.5.0"
 
 [[package]]
 name = "flake8-bandit"
-version = "4.1.1"
+version = "3.0.0"
 description = "Automated security testing with bandit and flake8."
 category = "dev"
 optional = false
@@ -344,7 +344,9 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 bandit = ">=1.7.3"
-flake8 = ">=5.0.0"
+flake8 = "*"
+flake8-polyfill = "*"
+pycodestyle = "*"
 
 [[package]]
 name = "flake8-cognitive-complexity"
@@ -406,6 +408,17 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 typing_extensions = "*"
+
+[[package]]
+name = "flake8-polyfill"
+version = "1.0.2"
+description = "Polyfill package for Flake8 plugins"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+flake8 = "*"
 
 [[package]]
 name = "flake8-print"
@@ -486,7 +499,7 @@ python-versions = ">=3.5"
 name = "importlib-metadata"
 version = "4.2.0"
 description = "Read metadata from Python packages"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -558,11 +571,11 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "mccabe"
-version = "0.7.0"
+version = "0.6.1"
 description = "McCabe checker, plugin for flake8"
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = "*"
 
 [[package]]
 name = "mock"
@@ -703,11 +716,11 @@ python-versions = "*"
 
 [[package]]
 name = "pycodestyle"
-version = "2.9.1"
+version = "2.8.0"
 description = "Python style guide checker"
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "pydoc-markdown"
@@ -734,11 +747,11 @@ yapf = ">=0.30.0"
 
 [[package]]
 name = "pyflakes"
-version = "2.5.0"
+version = "2.4.0"
 description = "passive checker of Python programs"
-category = "dev"
+category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pygments"
@@ -778,7 +791,7 @@ testutils = ["gitpython (>3)"]
 name = "pyproject-flake8"
 version = "0.0.1a4"
 description = "pyproject-flake8 (`pflake8`), a monkey patching wrapper to connect flake8 with pyproject.toml configuration"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -908,7 +921,7 @@ tomlkit = ">=0.8.0"
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1059,7 +1072,7 @@ python-versions = "*"
 name = "zipp"
 version = "3.8.1"
 description = "Backport of pathlib-compatible object wrapper for zip files"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -1070,7 +1083,7 @@ docs = ["jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "jaraco.packaging (>=9)
 [metadata]
 lock-version = "1.1"
 python-versions = '^3.7.8'
-content-hash = "072ddf59e2ac30aef107096ed9b155554bf1bb0e111817a79c67e0c8d9db7343"
+content-hash = "d5f5ce5781a4ceb81e51b682dc5122e03f88d7828b23801e37bfa2235a753853"
 
 [metadata.files]
 astor = [
@@ -1245,12 +1258,12 @@ expycted = [
     {file = "expycted-0.5.0.tar.gz", hash = "sha256:a79f976cb02737aa08c08e2c2f1fe9f03bee8c8ddfd0a23f3dbba7eea00d813e"},
 ]
 flake8 = [
-    {file = "flake8-5.0.4-py2.py3-none-any.whl", hash = "sha256:7a1cf6b73744f5806ab95e526f6f0d8c01c66d7bbe349562d22dfca20610b248"},
-    {file = "flake8-5.0.4.tar.gz", hash = "sha256:6fbe320aad8d6b95cec8b8e47bc933004678dc63095be98528b7bdd2a9f510db"},
+    {file = "flake8-4.0.1-py2.py3-none-any.whl", hash = "sha256:479b1304f72536a55948cb40a32dce8bb0ffe3501e26eaf292c7e60eb5e0428d"},
+    {file = "flake8-4.0.1.tar.gz", hash = "sha256:806e034dda44114815e23c16ef92f95c91e4c71100ff52813adf7132a6ad870d"},
 ]
 flake8-bandit = [
-    {file = "flake8_bandit-4.1.1-py3-none-any.whl", hash = "sha256:4c8a53eb48f23d4ef1e59293657181a3c989d0077c9952717e98a0eace43e06d"},
-    {file = "flake8_bandit-4.1.1.tar.gz", hash = "sha256:068e09287189cbfd7f986e92605adea2067630b75380c6b5733dab7d87f9a84e"},
+    {file = "flake8_bandit-3.0.0-py2.py3-none-any.whl", hash = "sha256:61b617f4f7cdaa0e2b1e6bf7b68afb2b619a227bb3e3ae00dd36c213bd17900a"},
+    {file = "flake8_bandit-3.0.0.tar.gz", hash = "sha256:54d19427e6a8d50322a7b02e1841c0a7c22d856975f3459803320e0e18e2d6a1"},
 ]
 flake8-cognitive-complexity = [
     {file = "flake8_cognitive_complexity-0.1.0.tar.gz", hash = "sha256:f202df054e4f6ff182b659c261922b9c684628a47beb19cb0973c50d6a7831c1"},
@@ -1270,6 +1283,10 @@ flake8-expression-complexity = [
 flake8-pie = [
     {file = "flake8-pie-0.16.0.tar.gz", hash = "sha256:b8dcb7b92706fa33d05d92a4b3e49b7a9fd3f0041849166275b646ba50e515ba"},
     {file = "flake8_pie-0.16.0-py3-none-any.whl", hash = "sha256:24cd7849b0eee22e2328b9e9d2a1dea40013b0a3106864bbadd06a4b05dbb71f"},
+]
+flake8-polyfill = [
+    {file = "flake8-polyfill-1.0.2.tar.gz", hash = "sha256:e44b087597f6da52ec6393a709e7108b2905317d0c0b744cdca6208e670d8eda"},
+    {file = "flake8_polyfill-1.0.2-py2.py3-none-any.whl", hash = "sha256:12be6a34ee3ab795b19ca73505e7b55826d5f6ad7230d31b18e106400169b9e9"},
 ]
 flake8-print = [
     {file = "flake8-print-5.0.0.tar.gz", hash = "sha256:76915a2a389cc1c0879636c219eb909c38501d3a43cc8dae542081c9ba48bdf9"},
@@ -1395,8 +1412,8 @@ markupsafe = [
     {file = "MarkupSafe-2.1.1.tar.gz", hash = "sha256:7f91197cc9e48f989d12e4e6fbc46495c446636dfc81b9ccf50bb0ec74b91d4b"},
 ]
 mccabe = [
-    {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
-    {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
+    {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
+    {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
 mock = [
     {file = "mock-4.0.3-py3-none-any.whl", hash = "sha256:122fcb64ee37cfad5b3f48d7a7d51875d7031aaf3d8be7c42e2bee25044eee62"},
@@ -1468,16 +1485,16 @@ pprintpp = [
     {file = "pprintpp-0.4.0.tar.gz", hash = "sha256:ea826108e2c7f49dc6d66c752973c3fc9749142a798d6b254e1e301cfdbc6403"},
 ]
 pycodestyle = [
-    {file = "pycodestyle-2.9.1-py2.py3-none-any.whl", hash = "sha256:d1735fc58b418fd7c5f658d28d943854f8a849b01a5d0a1e6f3f3fdd0166804b"},
-    {file = "pycodestyle-2.9.1.tar.gz", hash = "sha256:2c9607871d58c76354b697b42f5d57e1ada7d261c261efac224b664affdc5785"},
+    {file = "pycodestyle-2.8.0-py2.py3-none-any.whl", hash = "sha256:720f8b39dde8b293825e7ff02c475f3077124006db4f440dcbc9a20b76548a20"},
+    {file = "pycodestyle-2.8.0.tar.gz", hash = "sha256:eddd5847ef438ea1c7870ca7eb78a9d47ce0cdb4851a5523949f2601d0cbbe7f"},
 ]
 pydoc-markdown = [
     {file = "pydoc-markdown-4.6.3.tar.gz", hash = "sha256:82aa424de7e390e4a34ac200b189bb011e33be18bb089e83b15af5742cf21dc7"},
     {file = "pydoc_markdown-4.6.3-py3-none-any.whl", hash = "sha256:b79da5b972be5c24db41ed5ce65fedd0031aa9cd023467d42cd47882a5e92f98"},
 ]
 pyflakes = [
-    {file = "pyflakes-2.5.0-py2.py3-none-any.whl", hash = "sha256:4579f67d887f804e67edb544428f264b7b24f435b263c4614f384135cea553d2"},
-    {file = "pyflakes-2.5.0.tar.gz", hash = "sha256:491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3"},
+    {file = "pyflakes-2.4.0-py2.py3-none-any.whl", hash = "sha256:3bb3a3f256f4b7968c9c788781e4ff07dce46bdf12339dcda61053375426ee2e"},
+    {file = "pyflakes-2.4.0.tar.gz", hash = "sha256:05a85c2872edf37a4ed30b0cce2f6093e1d0581f8c19d7393122da7e25b2b24c"},
 ]
 pygments = [
     {file = "Pygments-2.13.0-py3-none-any.whl", hash = "sha256:f643f331ab57ba3c9d89212ee4a2dabc6e94f117cf4eefde99a0574720d14c42"},

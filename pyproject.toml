@@ -38,6 +38,7 @@ python = '^3.7.8'
 readchar = '^4.0.0'
 rich = "^12.2.0"
 emoji = "^2.0.0"
+pyproject-flake8 = "0.0.1a4"
 
 
 [tool.mypy]
@@ -89,7 +90,7 @@ source = ["."]
 [tool.poetry.dev-dependencies]
 # Code Scanning and Formatting
 mypy = '*'
-pyproject-flake8 = '*'
+pyproject-flake8 = '0.0.1a4'
 black = "^22.6.0"
 
 ## Bugs
