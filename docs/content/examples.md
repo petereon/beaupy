@@ -132,3 +132,47 @@ For sensitive input, `secure` flag can be utilized, replacing user entered input
 very_secret_info = prompt("Type you API key, hehe",
                           secure=True)
 ```
+
+## Spinners
+
+### Styling
+
+#### Spinner Animation
+
+There are few built in spinner animations, namely: ARC, ARROWS, BARS, CLOCK, DIAMOND, DOT, DOTS, LINE, LOADING and MOON
+
+Each of these can be used in a spinner:
+
+```python
+from beaupy.spinners import Spinner, ARC
+spinner = Spinner(ARC, "Doing some heavy work")
+spinner.start()
+```
+
+All that "animations" are, is but a list of string, so making your own is as trivial as this:
+
+```python
+from beaupy.spinners import Spinner
+spinner = Spinner(['whee', 'whe ', 'wh  ', 'w   ', 'wh  ', 'whe ', 'whee'], "Whee!")
+spinner.start()
+```
+
+#### Rich styling
+
+Every text in spinner does accept and respect rich styles, so the following works:
+
+```python
+from beaupy.spinners import Spinner
+spinner = Spinner(['[red]⬤[/red] ', '[green]⬤[/green] ', '[blue]⬤[/blue] '], '[pink1]Setting[/pink1] colors!')
+spinner.start()
+```
+
+#### Animation speed
+
+Animation speed can be set using `refresh_per_second` parameter:
+
+```python
+from beaupy.spinners import Spinner, LOADING
+spinner = Spinner(LOADING, "something", refresh_per_second=4)
+spinner.start()
+```

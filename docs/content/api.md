@@ -1,3 +1,5 @@
 # API Documentation
 
-@pydoc beaupy.beaupy
+@pydoc beaupy._beaupy
+
+@pydoc beaupy.spinners
