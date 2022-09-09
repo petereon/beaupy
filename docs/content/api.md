@@ -2,4 +2,4 @@
 
 @pydoc beaupy._beaupy
 
-@pydoc beaupy.spinners
+@pydoc beaupy.spinners._spinners

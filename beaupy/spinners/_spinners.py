@@ -25,7 +25,7 @@ class Spinner:
         """Creates a spinner which can be used to provide some user feedback during long processing
 
         Args:
-            spinner_characters (List[str]): List of characters that will be displayed in sequence by a spinner
+            spinner_characters (List[str]): List of strings that will be displayed in sequence by a spinner
             text (str): Static text that will be shown after the spinner. Defaults to `Loading...`
             refresh_per_second (float, optional): Number of refreshes the spinner will do a second, this will affect
                                                   the fluidity of the "animation". Defaults to 10.
