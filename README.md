@@ -178,6 +178,10 @@ After you have made your changes, create a pull request towards a master branch 
 
 Looking forward to your pull requests!
 
+## Awesome projects using `beaupy`
+
+- [therealOri/PassGen](https://github.com/therealOri/PassGen): A strong password generator and built in password manager made with python3!
+
 ## License
 
 The project is licensed under the [MIT License](LICENSE).
