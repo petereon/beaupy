@@ -174,6 +174,24 @@ after installing the dependencies you can simply execute the following:
 poetry run poe test
 ```
 
+Making sure the code follows quality standards and formatting can be ensured by executing
+
+```sh
+poetry run poe lint
+```
+
+You can also have the tests and lints run after every saved change by executing a respective watch command
+
+```sh
+poetry run poe test:watch
+```
+
+or
+
+```sh
+poetry run poe lint:watch
+```
+
 After you have made your changes, create a pull request towards a master branch of this repository
 
 Looking forward to your pull requests!
