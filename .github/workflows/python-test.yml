@@ -34,5 +34,4 @@ jobs:
         poe build
     - name: Test with ward
       run: |
-        export PYTHONPATH=$(pwd)
         poe test
