@@ -196,6 +196,13 @@ After you have made your changes, create a pull request towards a master branch 
 
 Looking forward to your pull requests!
 
+## Compatibility
+
+Internal logic of `beaupy` is supported for all the major platforms (Windows, Linux, macOS).
+
+- For user input from console, `beaupy` relies on [magmax/python-readchar](https://github.com/magmax/python-readchar) which [officially supports](https://github.com/magmax/python-readchar#os-support) Windows and Linux, claiming that it should work on all the Unix platorms (I for one have faced no issues on macOS).
+- For printing to console `beaupy` relies on [Textualize/rich](https://github.com/Textualize/rich), which [claims to support](https://github.com/Textualize/rich#compatibility) all the major platforms.
+
 ## Awesome projects using `beaupy`
 
 - [therealOri/PassGen](https://github.com/therealOri/PassGen): A strong password generator and built in password manager made with python3!
