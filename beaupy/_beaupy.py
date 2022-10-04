@@ -73,6 +73,7 @@ def prompt(
     secure: bool = False,
     raise_validation_fail: bool = True,
     raise_type_conversion_fail: bool = True,
+    initial_value: Optional[str] = None,
 ) -> TargetType:
     """Function that prompts the user for written input
 
@@ -85,6 +86,7 @@ def prompt(
                                                 the error will be reported onto the console. Defaults to True.
         raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ConversionError`, else
                                                      the error will be reported onto the console. Defaults to True.
+        initial_value (str, optional): If present, the value is placed in the prompt as the default value.
 
     Raises:
         ValidationError: Raised if validation with provided validator fails
@@ -96,8 +98,8 @@ def prompt(
     """
     rendered = ''
     with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
-        value: List[str] = []
-        cursor_index = 0
+        value: List[str] = [*initial_value] if initial_value else []
+        cursor_index = len(initial_value) if initial_value else 0
         error: str = ''
         while True:
             rendered = _render_prompt(secure, value, prompt, cursor_index, error)

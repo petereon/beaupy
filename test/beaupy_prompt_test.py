@@ -210,3 +210,57 @@ def _():
 
     with raises(KeyboardInterrupt):
         prompt(prompt="Try test")
+
+
+@test("Prompt with initial value without further input", tags=["v1", "prompt"])
+def _():
+    steps = iter([readchar.key.ENTER])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test", initial_value="Hello, World!")
+    assert res == "Hello, World!"
+
+
+@test("Prompt with initial value and further input", tags=["v1", "prompt"])
+def _():
+    steps = iter([*"World!", readchar.key.ENTER])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test", initial_value="Hello, ")
+    assert res == "Hello, World!"
+
+
+@test("Prompt with initial value and then backspace", tags=["v1", "prompt"])
+def _():
+    steps = iter([readchar.key.BACKSPACE, readchar.key.ENTER])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test", initial_value="Hello,")
+    assert res == "Hello"
+
+
+@test("Prompt with empty initial value", tags=["v1", "prompt"])
+def _():
+    steps = iter([readchar.key.ENTER])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test", initial_value="")
+    assert res == ""
+
+
+@test("Prompt with None initial value", tags=["v1", "prompt"])
+def _():
+    steps = iter([readchar.key.ENTER])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test", initial_value=None)
+    assert res == ""
+
+
+@test("Prompt with None initial value and then backspace", tags=["v1", "prompt"])
+def _():
+    steps = iter([readchar.key.BACKSPACE, readchar.key.ENTER])
+    readchar.readkey = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test", initial_value=None)
+    assert res == ""
