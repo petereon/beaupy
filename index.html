@@ -9,7 +9,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.3">
+      <meta name="generator" content="mkdocs-1.4.0, mkdocs-material-8.5.6">
     
     
       
@@ -17,13 +17,14 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.6b80c2a2.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.20d9efc8.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.cbb835fc.min.css">
         
       
       
+
     
     
     
@@ -40,6 +41,7 @@
     
       
 
+    
     
     
   </head>
@@ -141,7 +143,7 @@
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -329,6 +331,20 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    Compatibility
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#awesome-projects-using-beaupy" class="md-nav__link">
+    Awesome projects using beaupy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#license" class="md-nav__link">
     License
   </a>
@@ -468,6 +484,20 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    Compatibility
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#awesome-projects-using-beaupy" class="md-nav__link">
+    Awesome projects using beaupy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#license" class="md-nav__link">
     License
   </a>
@@ -482,10 +512,11 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
+                  
 
   <a href="https://github.com/petereon/beaupy/blob/None/docs/content/index.md" title="Edit this page" class="md-content__button md-icon">
     
@@ -646,18 +677,39 @@ pip install ./dist/beaupy-<span class="o">{{</span>some-version<span class="o">}
 after installing the dependencies you can simply execute the following:</p>
 <div class="highlight"><pre><span></span><code>poetry run poe <span class="nb">test</span>
 </code></pre></div>
+<p>Making sure the code follows quality standards and formatting can be ensured by executing</p>
+<div class="highlight"><pre><span></span><code>poetry run poe lint
+</code></pre></div>
+<p>You can also have the tests and lints run after every saved change by executing a respective watch command</p>
+<div class="highlight"><pre><span></span><code>poetry run poe test:watch
+</code></pre></div>
+<p>or</p>
+<div class="highlight"><pre><span></span><code>poetry run poe lint:watch
+</code></pre></div>
 <p>After you have made your changes, create a pull request towards a master branch of this repository</p>
 <p>Looking forward to your pull requests!</p>
+<h2 id="compatibility">Compatibility</h2>
+<p>Internal logic of <code>beaupy</code> is supported for all the major platforms (Windows, Linux, macOS).</p>
+<ul>
+<li>For user input from console, <code>beaupy</code> relies on <a href="https://github.com/magmax/python-readchar">magmax/python-readchar</a> which <a href="https://github.com/magmax/python-readchar#os-support">officially supports</a> Windows and Linux, claiming that it should work on all the Unix platorms (I for one have faced no issues on macOS).</li>
+<li>For printing to console <code>beaupy</code> relies on <a href="https://github.com/Textualize/rich">Textualize/rich</a>, which <a href="https://github.com/Textualize/rich#compatibility">claims to support</a> all the major platforms.</li>
+</ul>
+<h2 id="awesome-projects-using-beaupy">Awesome projects using <code>beaupy</code></h2>
+<ul>
+<li><a href="https://github.com/therealOri/PassGen">therealOri/PassGen</a>: A strong password generator and built in password manager made with python3!</li>
+</ul>
 <h2 id="license">License</h2>
 <p>The project is licensed under the <a href="LICENSE">MIT License</a>.</p>
 
 
 
 
-              
-            </article>
-            
-          </div>
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
@@ -706,10 +758,10 @@ after installing the dependencies you can simply execute the following:</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.2ab50757.min.js"></script>
+      <script src="assets/javascripts/bundle.078830c0.min.js"></script>
       
     
   </body>
