@@ -137,7 +137,7 @@ def prompt(
                     cursor_index += 1
             elif keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt
+                    raise KeyboardInterrupt(keypress)
                 return None
             else:
                 value.insert(cursor_index, keypress)
@@ -217,7 +217,7 @@ def select(
                 return options[index]
             elif keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt
+                    raise KeyboardInterrupt(keypress)
                 return None
 
 
@@ -328,7 +328,7 @@ def select_multiple(
                     break
             elif keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt
+                    raise KeyboardInterrupt(keypress)
                 return []
         if return_indices:
             return ticked_indices
@@ -395,7 +395,7 @@ def confirm(
                     current_message = current_message[:-1]
             elif keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt
+                    raise KeyboardInterrupt(keypress)
                 return None
             elif keypress in DefaultKeys.confirm:
                 if is_selected:

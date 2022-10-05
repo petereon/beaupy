@@ -269,8 +269,9 @@ def _():
     Config.raise_on_interrupt = True
     readchar.readkey = lambda: next(steps)
 
-    with raises(KeyboardInterrupt):
+    with raises(KeyboardInterrupt) as ex:
         confirm(question="Test", cursor_style="red")
+    assert ex.raised.args[0] == readchar.key.CTRL_C
 
 
 @test("`confirm` with `Test` as a question, typing `N` and pressing `\\t`", tags=["v1", "confirm"])

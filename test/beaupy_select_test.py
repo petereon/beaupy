@@ -190,13 +190,14 @@ def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = True
     readchar.readkey = lambda: next(steps)
-    with raises(KeyboardInterrupt):
+    with raises(KeyboardInterrupt) as ex:
         select(
             options=["test1", "test2", "test3", "test4"],
             cursor="x",
             cursor_style="green",
             cursor_index=1,
         )
+    assert ex.raised.args[0] == readchar.key.CTRL_C
 
 
 @test("`select` with 2 options and invalid cursor style", tags=["v1", "select"])

@@ -222,8 +222,9 @@ def _():
     Config.raise_on_interrupt = True
     readchar.readkey = lambda: next(steps)
     Live.update = mock.MagicMock()
-    with raises(KeyboardInterrupt):
+    with raises(KeyboardInterrupt) as ex:
         select_multiple(options=["test1", "test2"], tick_character="😋")
+    assert ex.raised.args[0] == readchar.key.CTRL_C
 
 
 @test("`select_multiple` with 2 options and invalid tick style", tags=["v1", "select_multiple"])
