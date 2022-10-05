@@ -201,15 +201,15 @@ def _():
     assert ret is None
 
 
-@test("Prompt with interrupt and raise on keyboard iterrupt as True", tags=["v1", "prompt"])
+@test("Prompt with interrupt and raise on keyboard interrupt as True", tags=["v1", "prompt"])
 def _():
     steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = True
     readchar.readkey = lambda: next(steps)
     Live.update = mock.MagicMock()
-
-    with raises(KeyboardInterrupt):
+    with raises(KeyboardInterrupt) as ex:
         prompt(prompt="Try test")
+    assert ex.raised.args[0] == readchar.key.CTRL_C
 
 
 @test("Prompt with initial value without further input", tags=["v1", "prompt"])
