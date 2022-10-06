@@ -1,21 +1,21 @@
 from unittest import mock
 
-import readchar
+import click
 from ward import raises, test
 
 from beaupy._beaupy import Config, Live, select, warnings
-
+import beaupy
 
 @test("`select` with no options permissive", tags=["v1", "select"])
 def _():
-    readchar.readkey = lambda: readchar.key.ENTER
+    click.getchar = lambda: beaupy.key.ENTER
     res = select(options=[])
     assert res == None
 
 
 @test("`select` with no options strict", tags=["v1", "select"])
 def _():
-    readchar.readkey = lambda: readchar.key.ENTER
+    click.getchar = lambda: beaupy.key.ENTER
     with raises(ValueError) as e:
         select(options=[], strict=True)
 
@@ -24,9 +24,9 @@ def _():
 
 @test("`select` with 1 option", tags=["v1", "select"])
 def _():
-    steps = iter([readchar.key.ENTER])
+    steps = iter([beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     select(options=["test"])
 
@@ -37,9 +37,9 @@ def _():
 
 @test("`select` with 1 option and down step", tags=["v1", "select"])
 def _():
-    steps = iter([readchar.key.DOWN, readchar.key.ENTER])
+    steps = iter([beaupy.key.DOWN, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     select(options=["test"])
 
@@ -54,15 +54,15 @@ def _():
 def _():
     steps = iter(
         [
-            readchar.key.DOWN,
-            readchar.key.DOWN,
+            beaupy.key.DOWN,
+            beaupy.key.DOWN,
             "h",
-            readchar.key.DOWN,
-            readchar.key.ENTER,
+            beaupy.key.DOWN,
+            beaupy.key.ENTER,
         ]
     )
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"])
 
@@ -83,9 +83,9 @@ def _():
     tags=["v1", "select"],
 )
 def _():
-    steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
+    steps = iter([beaupy.key.DOWN, beaupy.key.DOWN, beaupy.key.DOWN, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
@@ -101,9 +101,9 @@ def _():
 
 @test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color", tags=["v1", "select"])
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
@@ -117,9 +117,9 @@ def _():
 
 @test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color", tags=["v1", "select"])
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
 
@@ -136,9 +136,9 @@ def _():
     tags=["v1", "select"],
 )
 def _():
-    steps = iter([readchar.key.CTRL_C])
+    steps = iter([beaupy.key.CTRL_C])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     Config.raise_on_interrupt = False
     res = select(
@@ -160,9 +160,9 @@ def _():
     tags=["v1", "select"],
 )
 def _():
-    steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
+    steps = iter([beaupy.key.DOWN, beaupy.key.DOWN, beaupy.key.DOWN, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(
         options=["test1", "test2", "test3", "test4"],
@@ -187,9 +187,9 @@ def _():
     tags=["v1", "select"],
 )
 def _():
-    steps = iter([readchar.key.CTRL_C])
+    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = True
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     with raises(KeyboardInterrupt) as ex:
         select(
             options=["test1", "test2", "test3", "test4"],
@@ -197,13 +197,13 @@ def _():
             cursor_style="green",
             cursor_index=1,
         )
-    assert ex.raised.args[0] == readchar.key.CTRL_C
+    assert ex.raised.args[0] == beaupy.key.CTRL_C
 
 
 @test("`select` with 2 options and invalid cursor style", tags=["v1", "select"])
 def _():
-    steps = iter([readchar.key.ENTER])
-    readchar.readkey = lambda: next(steps)
+    steps = iter([beaupy.key.ENTER])
+    click.getchar = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     select(options=["test1", "test2"], cursor_style="")
     warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
@@ -214,9 +214,9 @@ def _():
     tags=["select"],
 )
 def _():
-    steps = iter([readchar.key.DOWN, readchar.key.DOWN, readchar.key.DOWN, readchar.key.ENTER])
+    steps = iter([beaupy.key.DOWN, beaupy.key.DOWN, beaupy.key.DOWN, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(
         options=["test1", "test2", "test3", "test4"],
