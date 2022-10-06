@@ -36,7 +36,7 @@ CTRL_X = '\x18'
 CTRL_Y = '\x19'
 CTRL_Z = '\x1a'
 
-if platform.startswith(('linux', 'darwin', 'freebsd')): # pragma: no cover
+if platform.startswith(('linux', 'darwin', 'freebsd')):  # pragma: no cover
     # common
     BACKSPACE = '\x7f'
 
@@ -83,7 +83,7 @@ if platform.startswith(('linux', 'darwin', 'freebsd')): # pragma: no cover
     # aliases
     ENTER = '\r'
     DELETE = SUPR
-elif platform in ('win32', 'cygwin'): # pragma: no cover
+elif platform in ('win32', 'cygwin'):  # pragma: no cover
     # common
     BACKSPACE = '\x08'
 
@@ -123,5 +123,5 @@ elif platform in ('win32', 'cygwin'): # pragma: no cover
     ENTER = '\r'
     DELETE = SUPR
 
-else: # pragma: no cover
+else:  # pragma: no cover
     raise NotImplementedError('This OS is not supported')
