@@ -32,9 +32,7 @@ CTRL_T = '\x14'
 CTRL_U = '\x15'
 CTRL_V = '\x16'
 CTRL_W = '\x17'
-CTRL_X = '\x18'
 CTRL_Y = '\x19'
-CTRL_Z = '\x1a'
 
 if platform.startswith(('linux', 'darwin')):  # pragma: no cover
     # common
@@ -53,24 +51,6 @@ if platform.startswith(('linux', 'darwin')):  # pragma: no cover
     PAGE_UP = '\x1b[5~'
     PAGE_DOWN = '\x1b[6~'
 
-    # funcion keys
-    F1 = '\x1bOP'
-    F2 = '\x1bOQ'
-    F3 = '\x1bOR'
-    F4 = '\x1bOS'
-    F5 = '\x1b[15~'
-    F6 = '\x1b[17~'
-    F7 = '\x1b[18~'
-    F8 = '\x1b[19~'
-    F9 = '\x1b[20~'
-    F10 = '\x1b[21~'
-    F11 = '\x1b[23~'
-    F12 = '\x1b[24~'
-
-    # SHIFT+_
-    SHIFT_TAB = '\x1b[Z'
-
-    # aliases
     ENTER = '\r'
     DELETE = '\x1b[3~'
 
@@ -79,40 +59,20 @@ elif platform in ('win32', 'cygwin'):  # pragma: no cover
     BACKSPACE = '\x08'
 
     # cursors
-    UP = '\x00\x48'
-    DOWN = '\x00\x50'
-    LEFT = '\x00\x4b'
-    RIGHT = '\x00\x4d'
+    UP = 'àH'
+    DOWN = 'àP'
+    LEFT = 'àK'
+    RIGHT = 'àM'
 
     # navigation keys
-    INSERT = '\x00\x52'
-    SUPR = '\x00\x53'
-    HOME = '\x00\x47'
-    END = '\x00\x4f'
-    PAGE_UP = '\x00\x49'
-    PAGE_DOWN = '\x00\x51'
+    INSERT = 'àR'
+    HOME = 'àG'
+    END = 'àO'
+    PAGE_UP = 'àI'
+    PAGE_DOWN = 'àQ'
 
-    # funcion keys
-    F1 = '\x00\x3b'
-    F2 = '\x00\x3c'
-    F3 = '\x00\x3d'
-    F4 = '\x00\x3e'
-    F5 = '\x00\x3f'
-    F6 = '\x00\x40'
-    F7 = '\x00\x41'
-    F8 = '\x00\x42'
-    F9 = '\x00\x43'
-    F10 = '\x00\x44'
-    F11 = '\x00\x85'  # only in second source
-    F12 = '\x00\x86'  # only in second source
-
-    # other
-    ESC_2 = '\x00\x01'
-    ENTER_2 = '\x00\x1c'
-
-    # aliases
     ENTER = '\r'
-    DELETE = SUPR
+    DELETE = 'àS'
 
 else:  # pragma: no cover
     raise NotImplementedError('This OS is not supported')
