@@ -73,7 +73,7 @@ if platform.startswith(('linux', 'darwin')):  # pragma: no cover
     # aliases
     ENTER = '\r'
     DELETE = '\x1b[3~'
-    
+
 elif platform in ('win32', 'cygwin'):  # pragma: no cover
     # common
     BACKSPACE = '\x08'

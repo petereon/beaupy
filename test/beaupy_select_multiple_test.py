@@ -6,6 +6,11 @@ from ward import raises, test
 from beaupy._beaupy import Config, Live, select_multiple, warnings
 import beaupy
 
+
+def raise_keyboard_interrupt():
+    raise KeyboardInterrupt()
+
+
 @test("`select_multiple` with no options permissive", tags=["v1", "select_multiple"])
 def _():
     click.getchar = lambda: beaupy.key.ENTER
@@ -204,11 +209,10 @@ def _():
 
 @test("`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt False", tags=["v1", "select_multiple"])
 def _():
-    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = False
-    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
-    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+    with mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
+        res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])")
     ]
@@ -218,13 +222,10 @@ def _():
 
 @test("`select_multiple` with 2 options and calling `Ctrl+C` with raise on keyboard interrupt True", tags=["v1", "select_multiple"])
 def _():
-    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = True
-    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
-    with raises(KeyboardInterrupt) as ex:
+    with raises(KeyboardInterrupt), mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
         select_multiple(options=["test1", "test2"], tick_character="😋")
-    assert ex.raised.args[0] == beaupy.key.CTRL_C
 
 
 @test("`select_multiple` with 2 options and invalid tick style", tags=["v1", "select_multiple"])

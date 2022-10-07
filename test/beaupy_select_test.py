@@ -6,6 +6,11 @@ from ward import raises, test
 from beaupy._beaupy import Config, Live, select, warnings
 import beaupy
 
+
+def raise_keyboard_interrupt():
+    raise KeyboardInterrupt()
+
+
 @test("`select` with no options permissive", tags=["v1", "select"])
 def _():
     click.getchar = lambda: beaupy.key.ENTER
@@ -136,17 +141,15 @@ def _():
     tags=["v1", "select"],
 )
 def _():
-    steps = iter([beaupy.key.CTRL_C])
-
-    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     Config.raise_on_interrupt = False
-    res = select(
-        options=["test1", "test2", "test3", "test4"],
-        cursor="x",
-        cursor_style="green",
-        cursor_index=1,
-    )
+    with mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
+        res = select(
+            options=["test1", "test2", "test3", "test4"],
+            cursor="x",
+            cursor_style="green",
+            cursor_index=1,
+        )
 
     assert Live.update.call_args_list == [
         mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])")
@@ -187,17 +190,14 @@ def _():
     tags=["v1", "select"],
 )
 def _():
-    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = True
-    click.getchar = lambda: next(steps)
-    with raises(KeyboardInterrupt) as ex:
+    with raises(KeyboardInterrupt), mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
         select(
             options=["test1", "test2", "test3", "test4"],
             cursor="x",
             cursor_style="green",
             cursor_index=1,
         )
-    assert ex.raised.args[0] == beaupy.key.CTRL_C
 
 
 @test("`select` with 2 options and invalid cursor style", tags=["v1", "select"])

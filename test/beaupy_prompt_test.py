@@ -6,6 +6,11 @@ from ward import raises, test
 from beaupy._beaupy import Config, ConversionError, Live, ValidationError, prompt
 import beaupy
 
+
+def raise_keyboard_interrupt():
+    raise KeyboardInterrupt()
+
+
 @test("Empty prompt with immediately pressing confirm", tags=["v1", "prompt"])
 def _():
     steps = iter([beaupy.key.ENTER])
@@ -134,7 +139,7 @@ def _():
 
 @test("Empty prompt typing `12` as secure input with bool as type reporting a ConversionError", tags=["v1", "prompt"])
 def _():
-    steps = iter(["1", "2", beaupy.key.ENTER, beaupy.key.CTRL_C])
+    steps = iter(["1", "2", beaupy.key.ENTER, beaupy.key.ESC])
     click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     Config.raise_on_interrupt = False
@@ -165,7 +170,7 @@ def _():
 
 @test("Empty prompt typing `12` as secure input validating that value is more than 20 and reporting ValidationError", tags=["v1", "prompt"])
 def _():
-    steps = iter(["1", "2", beaupy.key.ENTER, beaupy.key.CTRL_C])
+    steps = iter(["1", "2", beaupy.key.ENTER, beaupy.key.ESC])
     click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     Config.raise_on_interrupt = False
@@ -192,24 +197,20 @@ def _():
 
 @test("Prompt with interrupt and raise on keyboard iterrupt as False", tags=["v1", "prompt"])
 def _():
-    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = False
-    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
-    ret = prompt(prompt="Try test")
+    with mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
+        ret = prompt(prompt="Try test")
 
     assert ret is None
 
 
 @test("Prompt with interrupt and raise on keyboard interrupt as True", tags=["v1", "prompt"])
 def _():
-    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = True
-    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
-    with raises(KeyboardInterrupt) as ex:
+    with raises(KeyboardInterrupt), mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
         prompt(prompt="Try test")
-    assert ex.raised.args[0] == beaupy.key.CTRL_C
 
 
 @test("Prompt with initial value without further input", tags=["v1", "prompt"])

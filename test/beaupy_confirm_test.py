@@ -7,6 +7,10 @@ from beaupy._beaupy import Config, Live, confirm, warnings
 import beaupy
 
 
+def raise_keyboard_interrupt():
+    raise KeyboardInterrupt()
+
+
 @test("`confirm` with `Try test` as a question and defaults otherwise", tags=["v1", "confirm"])
 def _():
     click.getchar = lambda: beaupy.key.ENTER
@@ -256,23 +260,18 @@ def _():
 
 @test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as False", tags=["v1", "confirm"])
 def _():
-    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = False
-    click.getchar = lambda: next(steps)
-    res = confirm(question="Test", cursor_style="red")
+    with mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
+        res = confirm(question="Test", cursor_style="red")
 
     assert res == None
 
 
 @test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as True", tags=["v1", "confirm"])
 def _():
-    steps = iter([beaupy.key.CTRL_C])
     Config.raise_on_interrupt = True
-    click.getchar = lambda: next(steps)
-
-    with raises(KeyboardInterrupt) as ex:
+    with raises(KeyboardInterrupt), mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
         confirm(question="Test", cursor_style="red")
-    assert ex.raised.args[0] == beaupy.key.CTRL_C
 
 
 @test("`confirm` with `Test` as a question, typing `N` and pressing `\\t`", tags=["v1", "confirm"])
