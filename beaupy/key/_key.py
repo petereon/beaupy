@@ -1,18 +1,18 @@
 from sys import platform
 
-# Taken from https://github.com/magmax/python-readchar
+# Taken and adapted from https://github.com/magmax/python-readchar
 
 LF = '\n'
 CR = '\r'
-SPACE = '\x20'
+
+SPACE = ' '
 ESC = '\x1b'
-TAB = '\x09'
+TAB = '\t'
 
 # CTRL
 CTRL_A = '\x01'
 CTRL_B = '\x02'
-CTRL_C = '\x03'
-CTRL_D = '\x04'
+
 CTRL_E = '\x05'
 CTRL_F = '\x06'
 CTRL_G = '\x07'
@@ -36,53 +36,44 @@ CTRL_X = '\x18'
 CTRL_Y = '\x19'
 CTRL_Z = '\x1a'
 
-if platform.startswith(('linux', 'darwin', 'freebsd')):  # pragma: no cover
+if platform.startswith(('linux', 'darwin')):  # pragma: no cover
     # common
     BACKSPACE = '\x7f'
 
     # cursors
-    UP = '\x1b\x5b\x41'
-    DOWN = '\x1b\x5b\x42'
-    LEFT = '\x1b\x5b\x44'
-    RIGHT = '\x1b\x5b\x43'
+    UP = '\x1b[A'
+    DOWN = '\x1b[B'
+    LEFT = '\x1b[D'
+    RIGHT = '\x1b[C'
 
     # navigation keys
-    INSERT = '\x1b\x5b\x32\x7e'
-    SUPR = '\x1b\x5b\x33\x7e'
-    HOME = '\x1b\x5b\x48'
-    END = '\x1b\x5b\x46'
-    PAGE_UP = '\x1b\x5b\x35\x7e'
-    PAGE_DOWN = '\x1b\x5b\x36\x7e'
+    INSERT = '\x1b[2~'
+    HOME = '\x1b[H'
+    END = '\x1b[F'
+    PAGE_UP = '\x1b[5~'
+    PAGE_DOWN = '\x1b[6~'
 
     # funcion keys
-    F1 = '\x1b\x4f\x50'
-    F2 = '\x1b\x4f\x51'
-    F3 = '\x1b\x4f\x52'
-    F4 = '\x1b\x4f\x53'
-    F5 = '\x1b\x5b\x31\x35\x7e'
-    F6 = '\x1b\x5b\x31\x37\x7e'
-    F7 = '\x1b\x5b\x31\x38\x7e'
-    F8 = '\x1b\x5b\x31\x39\x7e'
-    F9 = '\x1b\x5b\x32\x30\x7e'
-    F10 = '\x1b\x5b\x32\x31\x7e'
-    F11 = '\x1b\x5b\x32\x33\x7e'
-    F12 = '\x1b\x5b\x32\x34\x7e'
+    F1 = '\x1bOP'
+    F2 = '\x1bOQ'
+    F3 = '\x1bOR'
+    F4 = '\x1bOS'
+    F5 = '\x1b[15~'
+    F6 = '\x1b[17~'
+    F7 = '\x1b[18~'
+    F8 = '\x1b[19~'
+    F9 = '\x1b[20~'
+    F10 = '\x1b[21~'
+    F11 = '\x1b[23~'
+    F12 = '\x1b[24~'
 
     # SHIFT+_
-    SHIFT_TAB = '\x1b\x5b\x5a'
-
-    # other
-    CTRL_ALT_SUPR = '\x1b\x5b\x33\x5e'
-
-    # ALT+_
-    ALT_A = '\x1b\x61'
-
-    # CTRL+ALT+_
-    CTRL_ALT_A = '\x1b\x01'
+    SHIFT_TAB = '\x1b[Z'
 
     # aliases
     ENTER = '\r'
-    DELETE = SUPR
+    DELETE = '\x1b[3~'
+    
 elif platform in ('win32', 'cygwin'):  # pragma: no cover
     # common
     BACKSPACE = '\x08'
