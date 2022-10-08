@@ -11,7 +11,7 @@ def raise_keyboard_interrupt():
     raise KeyboardInterrupt()
 
 
-@test("Empty prompt with immediately pressing confirm", tags=["v1", "prompt"])
+@test("Empty prompt with immediately pressing confirm")
 def _():
     steps = iter([beaupy.key.ENTER])
 
@@ -23,7 +23,7 @@ def _():
     assert res == ""
 
 
-@test("Empty prompt typing `jozo` without validation and type and pressing confirm", tags=["v1", "prompt"])
+@test("Empty prompt typing `jozo` without validation and type and pressing confirm")
 def _():
     steps = iter(["j", "o", "z", "o", beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -40,7 +40,7 @@ def _():
     assert res == "jozo"
 
 
-@test("Empty prompt typing `jozo` as secure input without validation and type and pressing confirm", tags=["v1", "prompt"])
+@test("Empty prompt typing `jozo` as secure input without validation and type and pressing confirm")
 def _():
     steps = iter(["j", "o", "z", "o", beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -57,7 +57,7 @@ def _():
     assert res == "jozo"
 
 
-@test("Empty prompt typing `True` as secure input with bool as type", tags=["v1", "prompt"])
+@test("Empty prompt typing `True` as secure input with bool as type")
 def _():
     steps = iter(["T", "r", "u", "e", beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -74,7 +74,7 @@ def _():
     assert res is True
 
 
-@test("Empty prompt typing `12` as secure input with float as type", tags=["v1", "prompt"])
+@test("Empty prompt typing `12` as secure input with float as type")
 def _():
     steps = iter(["1", "2", beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -90,7 +90,7 @@ def _():
     assert res == 12.0
 
 
-@test("`Ask an actual question goddammit` as a prompt typing `No` and validating it is `No`", tags=["v1", "prompt"])
+@test("`Ask an actual question goddammit` as a prompt typing `No` and validating it is `No`")
 def _():
     steps = iter(["o", beaupy.key.LEFT, beaupy.key.LEFT, "N", beaupy.key.RIGHT, beaupy.key.RIGHT, beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -122,7 +122,7 @@ def _():
     assert res == "No"
 
 
-@test("Empty prompt typing `12` as secure input with bool as type raising ConversionError", tags=["v1", "prompt"])
+@test("Empty prompt typing `12` as secure input with bool as type raising ConversionError")
 def _():
     steps = iter(["1", "2", beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -137,7 +137,7 @@ def _():
     ]
 
 
-@test("Empty prompt typing `12` as secure input with bool as type reporting a ConversionError", tags=["v1", "prompt"])
+@test("Empty prompt typing `12` as secure input with bool as type reporting a ConversionError")
 def _():
     steps = iter(["1", "2", beaupy.key.ENTER, beaupy.key.ESC])
     click.getchar = lambda: next(steps)
@@ -154,7 +154,7 @@ def _():
     ]
 
 
-@test("Empty prompt typing `12` as secure input validating that value is more than 20 and raising ValidationError", tags=["v1", "prompt"])
+@test("Empty prompt typing `12` as secure input validating that value is more than 20 and raising ValidationError")
 def _():
     steps = iter(["1", "2", beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -168,7 +168,7 @@ def _():
     ]
 
 
-@test("Empty prompt typing `12` as secure input validating that value is more than 20 and reporting ValidationError", tags=["v1", "prompt"])
+@test("Empty prompt typing `12` as secure input validating that value is more than 20 and reporting ValidationError")
 def _():
     steps = iter(["1", "2", beaupy.key.ENTER, beaupy.key.ESC])
     click.getchar = lambda: next(steps)
@@ -185,7 +185,7 @@ def _():
     ]
 
 
-@test("Prompt with typing `J`, then deleting it and typing `No`", tags=["v1", "prompt"])
+@test("Prompt with typing `J`, then deleting it and typing `No`")
 def _():
     steps = iter(["J", beaupy.key.BACKSPACE, beaupy.key.BACKSPACE, "N", "o", beaupy.key.ENTER])
 
@@ -195,7 +195,7 @@ def _():
     assert res == "No"
 
 
-@test("Prompt with interrupt and raise on keyboard iterrupt as False", tags=["v1", "prompt"])
+@test("Prompt with interrupt and raise on keyboard iterrupt as False")
 def _():
     Config.raise_on_interrupt = False
     Live.update = mock.MagicMock()
@@ -205,7 +205,7 @@ def _():
     assert ret is None
 
 
-@test("Prompt with interrupt and raise on keyboard interrupt as True", tags=["v1", "prompt"])
+@test("Prompt with interrupt and raise on keyboard interrupt as True")
 def _():
     Config.raise_on_interrupt = True
     Live.update = mock.MagicMock()
@@ -213,7 +213,7 @@ def _():
         prompt(prompt="Try test")
 
 
-@test("Prompt with initial value without further input", tags=["v1", "prompt"])
+@test("Prompt with initial value without further input")
 def _():
     steps = iter([beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -222,7 +222,7 @@ def _():
     assert res == "Hello, World!"
 
 
-@test("Prompt with initial value and further input", tags=["v1", "prompt"])
+@test("Prompt with initial value and further input")
 def _():
     steps = iter([*"World!", beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -231,7 +231,7 @@ def _():
     assert res == "Hello, World!"
 
 
-@test("Prompt with initial value and then backspace", tags=["v1", "prompt"])
+@test("Prompt with initial value and then backspace")
 def _():
     steps = iter([beaupy.key.BACKSPACE, beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -240,7 +240,7 @@ def _():
     assert res == "Hello"
 
 
-@test("Prompt with empty initial value", tags=["v1", "prompt"])
+@test("Prompt with empty initial value")
 def _():
     steps = iter([beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -249,7 +249,7 @@ def _():
     assert res == ""
 
 
-@test("Prompt with None initial value", tags=["v1", "prompt"])
+@test("Prompt with None initial value")
 def _():
     steps = iter([beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
@@ -258,7 +258,7 @@ def _():
     assert res == ""
 
 
-@test("Prompt with None initial value and then backspace", tags=["v1", "prompt"])
+@test("Prompt with None initial value and then backspace")
 def _():
     steps = iter([beaupy.key.BACKSPACE, beaupy.key.ENTER])
     click.getchar = lambda: next(steps)
