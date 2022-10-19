@@ -1,14 +1,19 @@
 from unittest import mock
 
-import readchar
+import click
 from ward import raises, test
 
 from beaupy._beaupy import Config, Live, confirm, warnings
+import beaupy
 
 
-@test("`confirm` with `Try test` as a question and defaults otherwise", tags=["v1", "confirm"])
+def raise_keyboard_interrupt():
+    raise KeyboardInterrupt()
+
+
+@test("`confirm` with `Try test` as a question and defaults otherwise")
 def _():
-    readchar.readkey = lambda: readchar.key.ENTER
+    click.getchar = lambda: beaupy.key.ENTER
     Live.update = mock.MagicMock()
     res = confirm(question="Try test")
     assert Live.update.call_args_list == [
@@ -18,9 +23,9 @@ def _():
     assert res == False
 
 
-@test("`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise", tags=["v1", "confirm"])
+@test("`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise")
 def _():
-    readchar.readkey = lambda: readchar.key.ENTER
+    click.getchar = lambda: beaupy.key.ENTER
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", yes_text="No", no_text="Yes")
     assert Live.update.call_args_list == [
@@ -32,12 +37,11 @@ def _():
 
 @test(
     "`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise, doing a step up to switch to yes",
-    tags=["v1", "confirm"],
 )
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", yes_text="No", no_text="Yes")
     assert Live.update.call_args_list == [
@@ -48,11 +52,11 @@ def _():
     assert res == True
 
 
-@test("`confirm` with `Try test` as a question and yes as a default", tags=["v1", "confirm"])
+@test("`confirm` with `Try test` as a question and yes as a default")
 def _():
-    steps = iter([readchar.key.ENTER])
+    steps = iter([beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True)
     assert Live.update.call_args_list == [
@@ -62,11 +66,11 @@ def _():
     assert res == True
 
 
-@test("`confirm` with `Try test` as a question and yes as a default, going down to select no", tags=["v1", "confirm"])
+@test("`confirm` with `Try test` as a question and yes as a default, going down to select no")
 def _():
-    steps = iter([readchar.key.DOWN, readchar.key.ENTER])
+    steps = iter([beaupy.key.DOWN, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True)
     assert Live.update.call_args_list == [
@@ -77,11 +81,11 @@ def _():
     assert res == False
 
 
-@test("`confirm` with `Try test` as a question and yes as a default going up to select no", tags=["v1", "confirm"])
+@test("`confirm` with `Try test` as a question and yes as a default going up to select no")
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True)
     assert Live.update.call_args_list == [
@@ -94,12 +98,11 @@ def _():
 
 @test(
     "`confirm` with `Try test` as a question and yes as a default going up to select no with `some long text ` as a cursor",
-    tags=["v1", "confirm"],
 )
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True, cursor="some long text")
     assert Live.update.call_args_list == [
@@ -114,12 +117,11 @@ def _():
 
 @test(
     "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color",
-    tags=["v1", "confirm"],
 )
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
     assert Live.update.call_args_list == [
@@ -132,12 +134,11 @@ def _():
 
 @test(
     "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color",
-    tags=["v1", "confirm"],
 )
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
     assert Live.update.call_args_list == [
@@ -150,12 +151,11 @@ def _():
 
 @test(
     "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color, typing the `no` answer",
-    tags=["v1", "confirm"],
 )
 def _():
-    steps = iter(["n", "o", readchar.key.ENTER])
+    steps = iter(["n", "o", beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", default_is_yes=True, cursor_style="bold orange1")
     assert Live.update.call_args_list == [
@@ -169,23 +169,22 @@ def _():
 
 @test(
     "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color, case sensitive typing the `no` answer",
-    tags=["v1", "confirm"],
 )
 def _():
     steps = iter(
         [
             "n",
             "o",
-            readchar.key.ENTER,
-            readchar.key.BACKSPACE,
-            readchar.key.BACKSPACE,
+            beaupy.key.ENTER,
+            beaupy.key.BACKSPACE,
+            beaupy.key.BACKSPACE,
             "N",
             "o",
-            readchar.key.ENTER,
+            beaupy.key.ENTER,
         ]
     )
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(
         question="Try test",
@@ -209,12 +208,11 @@ def _():
 
 @test(
     "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and no char prompt",
-    tags=["v1", "confirm"],
 )
 def _():
-    steps = iter([readchar.key.UP, readchar.key.ENTER])
+    steps = iter([beaupy.key.UP, beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", char_prompt=False, cursor_style="bold orange1")
     assert Live.update.call_args_list == [
@@ -226,13 +224,11 @@ def _():
 
 
 @test(
-    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and enter empty confirms",
-    tags=["v1", "confirm"],
-)
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and enter empty confirms",)
 def _():
-    steps = iter([readchar.key.ENTER])
+    steps = iter([beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = confirm(question="Try test", cursor_style="bold orange1", default_is_yes=True, enter_empty_confirms=True)
     assert Live.update.call_args_list == [
@@ -242,42 +238,37 @@ def _():
     assert res == True
 
 
-@test("`confirm` with `Test` as a question and empty cursor style", tags=["v1", "confirm"])
+@test("`confirm` with `Test` as a question and empty cursor style")
 def _():
-    steps = iter([readchar.key.ENTER])
+    steps = iter([beaupy.key.ENTER])
 
-    readchar.readkey = lambda: next(steps)
+    click.getchar = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     confirm(question="Test", cursor_style="")
 
     warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
 
-@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as False", tags=["v1", "confirm"])
+@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as False")
 def _():
-    steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = False
-    readchar.readkey = lambda: next(steps)
-    res = confirm(question="Test", cursor_style="red")
+    with mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
+        res = confirm(question="Test", cursor_style="red")
 
     assert res == None
 
 
-@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as True", tags=["v1", "confirm"])
+@test("`confirm` with `Test` as a question with KeyboardInterrupt and raise_on_interrupt as True")
 def _():
-    steps = iter([readchar.key.CTRL_C])
     Config.raise_on_interrupt = True
-    readchar.readkey = lambda: next(steps)
-
-    with raises(KeyboardInterrupt) as ex:
+    with raises(KeyboardInterrupt), mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
         confirm(question="Test", cursor_style="red")
-    assert ex.raised.args[0] == readchar.key.CTRL_C
 
 
-@test("`confirm` with `Test` as a question, typing `N` and pressing `\\t`", tags=["v1", "confirm"])
+@test("`confirm` with `Test` as a question, typing `N` and pressing `\\t`")
 def _():
-    steps = iter(["N", "\t", readchar.key.ENTER])
-    readchar.readkey = lambda: next(steps)
+    steps = iter(["N", "\t", beaupy.key.ENTER])
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     ret = confirm(question="Test", cursor_style="red", default_is_yes=True)
     assert Live.update.call_args_list == [
@@ -288,10 +279,10 @@ def _():
     assert ret is False
 
 
-@test("`confirm` with `Test` as a question, typing `Y`", tags=["v1", "confirm"])
+@test("`confirm` with `Test` as a question, typing `Y`")
 def _():
-    steps = iter(["Y", readchar.key.ENTER])
-    readchar.readkey = lambda: next(steps)
+    steps = iter(["Y", beaupy.key.ENTER])
+    click.getchar = lambda: next(steps)
     Live.update = mock.MagicMock()
     ret = confirm(question="Test", cursor_style="red", default_is_yes=True)
     assert Live.update.call_args_list == [
@@ -300,3 +291,14 @@ def _():
     ]
 
     assert ret is True
+
+@test("`confirm` returns None when ESC is pressed")
+def _():
+    steps = iter([beaupy.key.ESC])
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    ret = confirm(question="Test", cursor_style="red", default_is_yes=True)
+    assert Live.update.call_args_list == [
+        mock.call(renderable="Test (Y/N) \n[red]>[/red] Yes\n  No\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+    assert ret is None

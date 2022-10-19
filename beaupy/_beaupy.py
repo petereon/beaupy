@@ -9,10 +9,11 @@ import warnings
 from ast import literal_eval
 from typing import Any, Callable, List, Optional, Type, Union
 
-import readchar
+import click
 from rich.console import Console
 from rich.live import Live
 
+from beaupy import key
 from beaupy._internals import (
     ConversionError,
     ValidationError,
@@ -24,8 +25,6 @@ from beaupy._internals import (
 )
 
 console = Console()
-
-readchar.config.INTERRUPT_KEYS = []
 
 
 class DefaultKeys:
@@ -40,16 +39,16 @@ class DefaultKeys:
         up(List[str]): Keys that select the element above.
     """
 
-    interrupt: List[str] = [readchar.key.CTRL_C, readchar.key.CTRL_D]
-    select: List[str] = [readchar.key.SPACE]
-    confirm: List[str] = [readchar.key.ENTER]
-    delete: List[str] = [readchar.key.BACKSPACE]
-    down: List[str] = [readchar.key.DOWN]
-    up: List[str] = [readchar.key.UP]
-    left: List[str] = [readchar.key.LEFT]
-    right: List[str] = [readchar.key.RIGHT]
-    home: List[str] = [readchar.key.HOME]
-    end: List[str] = [readchar.key.END]
+    escape: List[str] = [key.ESC]
+    select: List[str] = [key.SPACE]
+    confirm: List[str] = [key.ENTER]
+    delete: List[str] = [key.BACKSPACE]
+    down: List[str] = [key.DOWN]
+    up: List[str] = [key.UP]
+    left: List[str] = [key.LEFT]
+    right: List[str] = [key.RIGHT]
+    home: List[str] = [key.HOME]
+    end: List[str] = [key.END]
 
 
 class Config:
@@ -105,7 +104,12 @@ def prompt(
             rendered = _render_prompt(secure, value, prompt, cursor_index, error)
             error = ''
             _update_rendered(live, rendered)
-            keypress = readchar.readkey()
+            try:
+                keypress = click.getchar()
+            except KeyboardInterrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt()
+                return None
             if keypress in DefaultKeys.confirm:
                 str_value = ''.join(value)
                 try:
@@ -135,9 +139,7 @@ def prompt(
             elif keypress in DefaultKeys.right:
                 if cursor_index < len(value):
                     cursor_index += 1
-            elif keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt(keypress)
+            elif keypress in DefaultKeys.escape:
                 return None
             else:
                 value.insert(cursor_index, keypress)
@@ -203,7 +205,12 @@ def select(
                 + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
             )
             _update_rendered(live, rendered)
-            keypress = readchar.readkey()
+            try:
+                keypress = click.getchar()
+            except KeyboardInterrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt()
+                return None
 
             if keypress in DefaultKeys.up:
                 if index > 0:
@@ -215,9 +222,7 @@ def select(
                 if return_index:
                     return index
                 return options[index]
-            elif keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt(keypress)
+            elif keypress in DefaultKeys.escape:
                 return None
 
 
@@ -303,7 +308,12 @@ def select_multiple(
                 rendered = f'{rendered}\n[red]Error:[/red] {error_message}'
                 error_message = ''
             _update_rendered(live, rendered)
-            keypress = readchar.readkey()
+            try:
+                keypress = click.getchar()
+            except KeyboardInterrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt()
+                return []
 
             if keypress in DefaultKeys.up:
                 if index > 0:
@@ -326,9 +336,7 @@ def select_multiple(
                     error_message = f'Must select at least {minimal_count} options'
                 else:
                     break
-            elif keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt(keypress)
+            elif keypress in DefaultKeys.escape:
                 return []
         if return_indices:
             return ticked_indices
@@ -384,7 +392,13 @@ def confirm(
             no_prefix = selected_prefix if no else deselected_prefix
             rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}\n\n(Confirm with [bold]enter[/bold])'
             _update_rendered(live, rendered)
-            keypress = readchar.readkey()
+
+            try:
+                keypress = click.getchar()
+            except KeyboardInterrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt()
+                return None
 
             if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
                 is_yes = not is_yes
@@ -393,9 +407,7 @@ def confirm(
             elif keypress in DefaultKeys.delete:
                 if current_message:
                     current_message = current_message[:-1]
-            elif keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt(keypress)
+            elif keypress in DefaultKeys.escape:
                 return None
             elif keypress in DefaultKeys.confirm:
                 if is_selected:
