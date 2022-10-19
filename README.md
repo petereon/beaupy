@@ -200,7 +200,7 @@ Looking forward to your pull requests!
 
 Internal logic of `beaupy` is supported for all the major platforms (Windows, Linux, macOS).
 
-- For user input from console, `beaupy` relies on [magmax/python-readchar](https://github.com/magmax/python-readchar) which [officially supports](https://github.com/magmax/python-readchar#os-support) Windows and Linux, claiming that it should work on all the Unix platorms (I for one have faced no issues on macOS).
+- For user input from console, `beaupy` relies on [pallets/click](https://github.com/pallets/click), authors of which claim for it to be to be OS Independent on their [PyPI page](https://pypi.org/project/click/), and [test against all the major platforms and Python versions](https://github.com/pallets/click/actions/runs/326780007)
 - For printing to console `beaupy` relies on [Textualize/rich](https://github.com/Textualize/rich), which [claims to support](https://github.com/Textualize/rich#compatibility) all the major platforms.
 
 ## Awesome projects using `beaupy`
