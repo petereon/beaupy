@@ -80,7 +80,7 @@ def _():
 
 
 @test(
-    "`select_multiple` with 2 options `✓` as tick character and yellow1 as color starting from second selecting and going up",
+    "`select_multiple` with 2 options `x` as tick character and yellow1 as color starting from second selecting and going up",
 )
 def _():
     steps = iter([beaupy.key.SPACE, beaupy.key.UP, beaupy.key.ENTER])
@@ -89,17 +89,17 @@ def _():
     Live.update = mock.MagicMock()
     res = select_multiple(
         options=["test1", "test2"],
-        tick_character="✓",
+        tick_character="x",
         tick_style="yellow1",
         cursor_index=1,
     )
     assert Live.update.call_args_list == [
         mock.call(renderable="\\[ ] test1\n\\[ ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"),
         mock.call(
-            renderable="\\[ ] test1\n\\[[yellow1]✓[/yellow1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[[yellow1]x[/yellow1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
         mock.call(
-            renderable="\\[ ] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [pink1]test1[/pink1]\n\\[[yellow1]x[/yellow1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
     ]
     assert Live.update.call_count == 3
@@ -107,7 +107,7 @@ def _():
 
 
 @test(
-    "`select_multiple` with 2 options `✓` as tick character and yellow1 as color starting from second selecting and going up with 1st option preselected",
+    "`select_multiple` with 2 options `x` as tick character and yellow1 as color starting from second selecting and going up with 1st option preselected",
 )
 def _():
     steps = iter([beaupy.key.SPACE, beaupy.key.UP, beaupy.key.ENTER])
@@ -116,20 +116,20 @@ def _():
     Live.update = mock.MagicMock()
     res = select_multiple(
         options=["test1", "test2"],
-        tick_character="✓",
+        tick_character="x",
         tick_style="yellow1",
         cursor_index=1,
         ticked_indices=[0],
     )
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[[yellow1]✓[/yellow1]] test1\n\\[ ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[yellow1]x[/yellow1]] test1\n\\[ ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
         mock.call(
-            renderable="\\[[yellow1]✓[/yellow1]] test1\n\\[[yellow1]✓[/yellow1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[yellow1]x[/yellow1]] test1\n\\[[yellow1]x[/yellow1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
         mock.call(
-            renderable="\\[[yellow1]✓[/yellow1]] [pink1]test1[/pink1]\n\\[[yellow1]✓[/yellow1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[yellow1]x[/yellow1]] [pink1]test1[/pink1]\n\\[[yellow1]x[/yellow1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
     ]
     assert Live.update.call_count == 3
