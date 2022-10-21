@@ -31,18 +31,24 @@ class DefaultKeys:
     """A map of default keybindings.
 
     Attributes:
-        interrupt(List[str]): Keys that cause a keyboard interrupt.
+        escape(List[str]): Keys that escape the current context.
         select(List[str]): Keys that trigger list element selection.
         confirm(List[str]): Keys that trigger list confirmation.
-        delete(List[str]): Keys that trigger character deletion.
+        backspace(List[str]): Keys that trigger deletion of the previous character.
+        delete(List[str]): Keys that trigger deletion of the next character.
         down(List[str]): Keys that select the element below.
         up(List[str]): Keys that select the element above.
+        left(List[str]): Keys that select the element to the left.
+        right(List[str]): Keys that select the element to the right.
+        home(List[str]): Keys that move to the beginning of the context.
+        end(List[str]): Keys that move to the end of the context.
     """
 
     escape: List[str] = [key.ESC]
     select: List[str] = [key.SPACE]
     confirm: List[str] = [key.ENTER]
-    delete: List[str] = [key.BACKSPACE]
+    backspace: List[str] = [key.BACKSPACE]
+    delete: List[str] = [key.DELETE]
     down: List[str] = [key.DOWN]
     up: List[str] = [key.UP]
     left: List[str] = [key.LEFT]
@@ -129,7 +135,7 @@ def prompt(
                     error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} cannot be converted to type `{target_type}`"
                     if raise_type_conversion_fail:
                         raise ConversionError(error) from None
-            elif keypress in DefaultKeys.delete:
+            elif keypress in DefaultKeys.backspace:
                 if cursor_index > 0:
                     cursor_index -= 1
                     del value[cursor_index]
@@ -141,6 +147,15 @@ def prompt(
                     cursor_index += 1
             elif keypress in DefaultKeys.escape:
                 return None
+            elif keypress in DefaultKeys.up + DefaultKeys.down:
+                pass
+            elif keypress in DefaultKeys.home:
+                cursor_index = 0
+            elif keypress in DefaultKeys.end:
+                cursor_index = len(value)
+            elif keypress in DefaultKeys.delete:
+                if cursor_index < len(value):
+                    del value[cursor_index]
             else:
                 value.insert(cursor_index, keypress)
                 cursor_index += 1
@@ -404,7 +419,7 @@ def confirm(
                 is_yes = not is_yes
                 is_selected = True
                 current_message = yes_text if is_yes else no_text
-            elif keypress in DefaultKeys.delete:
+            elif keypress in DefaultKeys.backspace:
                 if current_message:
                     current_message = current_message[:-1]
             elif keypress in DefaultKeys.escape:
