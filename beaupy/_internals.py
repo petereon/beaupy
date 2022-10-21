@@ -40,7 +40,7 @@ def _update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> N
     live.refresh()
 
 
-def _render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str) -> str:
+def _render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str, multiline: bool = False) -> str:
     render_value = (len(typed_values) * '*' if secure else ''.join(typed_values)) + ' '
     render_value = (
         render_value[:cursor_position]
@@ -49,7 +49,12 @@ def _render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_po
         + '[/black on white]'  # noqa: W503
         + render_value[(cursor_position + 1) :]  # noqa: W503,E203
     )
-    render_value = f'{prompt}\n> {render_value}\n\n(Confirm with [bold]enter[/bold])'
+    render_value = '\n> '.join(render_value.splitlines(keepends=True))
+    if multiline:
+        confirm_msg = '(Use [bold]enter[/bold] to insert a new line. Confirm with [bold]alt-enter[/bold])'
+    else:
+        confirm_msg = '(Confirm with [bold]enter[/bold])'
+    render_value = f'{prompt}\n> {render_value}\n\n{confirm_msg}'
     if error:
         render_value = f'{render_value}\n[red]Error:[/red] {error}'
     return render_value
