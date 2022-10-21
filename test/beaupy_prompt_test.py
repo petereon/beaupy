@@ -195,7 +195,7 @@ def _():
     assert res == "No"
 
 
-@test("Prompt with interrupt and raise on keyboard iterrupt as False")
+@test("Prompt with interrupt and raise on keyboard interrupt as False")
 def _():
     Config.raise_on_interrupt = False
     Live.update = mock.MagicMock()
@@ -265,3 +265,63 @@ def _():
     Live.update = mock.MagicMock()
     res = prompt(prompt="Try test", initial_value=None)
     assert res == ""
+
+
+@test("Prompt with typing `Hello`, pressing home, and then deleting one char")
+def _():
+    steps = iter([*"Hello", beaupy.key.HOME, beaupy.key.DELETE, beaupy.key.ENTER])
+
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test")
+    assert res == "ello"
+
+
+@test("Prompt with typing `Hello`, pressing home, pressing end, and then backspacing one char")
+def _():
+    steps = iter([*"Hello", beaupy.key.HOME, beaupy.key.END, beaupy.key.BACKSPACE, beaupy.key.ENTER])
+
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test")
+    assert res == "Hell"
+
+
+@test("Prompt with typing `Hello`, pressing up and down, and making sure they don't change the result")
+def _():
+    steps = iter([*"Hello", beaupy.key.UP, beaupy.key.DOWN, beaupy.key.ENTER])
+
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test")
+    assert res == "Hello"
+
+
+@test("Verify that pressing delete on empty input doesn't fail")
+def _():
+    steps = iter([beaupy.key.DELETE, beaupy.key.ENTER])
+
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test")
+    assert res == ""
+
+
+@test("Verify that pressing delete at the end of the input doesn't change anything")
+def _():
+    steps = iter([*"Hello", beaupy.key.DELETE, beaupy.key.ENTER])
+
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test")
+    assert res == "Hello"
+
+
+@test("Verify that home and end are working properly")
+def _():
+    steps = iter([*"ell", beaupy.key.HOME, "H", beaupy.key.END, "o", beaupy.key.ENTER])
+
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test")
+    assert res == "Hello"
