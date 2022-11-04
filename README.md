@@ -203,6 +203,10 @@ Internal logic of `beaupy` is supported for all the major platforms (Windows, Li
 - For user input from console, `beaupy` relies on [pallets/click](https://github.com/pallets/click), authors of which claim for it to be to be OS Independent on their [PyPI page](https://pypi.org/project/click/), and [test against all the major platforms and Python versions](https://github.com/pallets/click/actions/runs/326780007)
 - For printing to console `beaupy` relies on [Textualize/rich](https://github.com/Textualize/rich), which [claims to support](https://github.com/Textualize/rich#compatibility) all the major platforms.
 
+## Known Issues
+
+- Version `2.x.x` reportedly does not work on Windows. 
+
 ## Awesome projects using `beaupy`
 
 - [therealOri/PassGen](https://github.com/therealOri/PassGen): A strong password generator and built in password manager made with python3!
