@@ -205,7 +205,7 @@ Internal logic of `beaupy` is supported for all the major platforms (Windows, Li
 
 ## Known Issues
 
-- Version `2.x.x` reportedly does not work on Windows. 
+- Version `2.x.x` reportedly does not always support arrow keys on Windows. 
 
 ## Awesome projects using `beaupy`
 
