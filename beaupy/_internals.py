@@ -51,7 +51,7 @@ def _render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_po
     )
     render_value = '\n> '.join(render_value.splitlines(keepends=True))
     if multiline:
-        confirm_msg = '(Use [bold]enter[/bold] to insert a new line. Confirm with [bold]alt-enter[/bold])'
+        confirm_msg = '(Press [bold]enter[/bold] twice to confirm)'
     else:
         confirm_msg = '(Confirm with [bold]enter[/bold])'
     render_value = f'{prompt}\n> {render_value}\n\n{confirm_msg}'

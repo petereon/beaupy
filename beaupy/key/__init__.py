@@ -1,7 +1,6 @@
 from beaupy.key import _posix_key as posix_keys  # noqa: F401
 from beaupy.key._key import CTRL_Y  # noqa: F403,F401
 from beaupy.key._key import (  # noqa: F401
-    ALT_ENTER,
     BACKSPACE,
     CR,
     CTRL_A,

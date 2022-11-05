@@ -34,8 +34,6 @@ CTRL_V = '\x16'
 CTRL_W = '\x17'
 CTRL_Y = '\x19'
 
-# ALT
-ALT_ENTER = '\x1b\r'
 
 if platform.startswith(('linux', 'darwin')):  # pragma: no cover
     # common

@@ -35,7 +35,6 @@ class DefaultKeys:
         escape(List[str]): Keys that escape the current context.
         select(List[str]): Keys that trigger list element selection.
         confirm(List[str]): Keys that trigger list confirmation.
-        confirm_multiline(List[str]): Keys that trigger confirmation in multi-line input mode
         backspace(List[str]): Keys that trigger deletion of the previous character.
         delete(List[str]): Keys that trigger deletion of the next character.
         down(List[str]): Keys that select the element below.
@@ -49,7 +48,6 @@ class DefaultKeys:
     escape: List[str] = [key.ESC]
     select: List[str] = [key.SPACE]
     confirm: List[str] = [key.ENTER]
-    confirm_multiline: List[str] = [key.ALT_ENTER]
     backspace: List[str] = [key.BACKSPACE]
     delete: List[str] = [key.DELETE]
     down: List[str] = [key.DOWN]
@@ -106,12 +104,14 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
+    if multiline and target_type != str:
+        raise ValueError(f"Multiline prompt can only be used with string inputs. Got target type {target_type}")
+
     rendered = ''
     with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         value: List[str] = [*initial_value] if initial_value else []
         cursor_index = len(initial_value) if initial_value else 0
         error: str = ''
-        confirm_keys = DefaultKeys.confirm_multiline if multiline else DefaultKeys.confirm
         while True:
             rendered = _render_prompt(secure, value, prompt, cursor_index, error, multiline)
             error = ''
@@ -122,10 +122,15 @@ def prompt(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            if keypress in confirm_keys:
+            if keypress in DefaultKeys.confirm and multiline:
+                # If the user hits enter twice - confirm the multi line string
+                if value[-1] == "\r":
+                    return os.linesep.join(''.join(value).splitlines())
+                else:
+                    value.insert(cursor_index, keypress)
+                    cursor_index += 1
+            elif keypress in DefaultKeys.confirm:
                 str_value = ''.join(value)
-                if multiline:
-                    str_value = os.linesep.join(str_value.splitlines())
                 try:
                     if target_type is bool:
                         result: bool = literal_eval(str_value)
