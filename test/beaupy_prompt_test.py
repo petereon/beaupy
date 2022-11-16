@@ -325,3 +325,13 @@ def _():
     Live.update = mock.MagicMock()
     res = prompt(prompt="Try test")
     assert res == "Hello"
+
+
+@test("Test inputting multiline string")
+def _():
+    steps = iter(["A", beaupy.key.ENTER, "B", beaupy.key.ENTER, "C", beaupy.key.ALT_ENTER])
+
+    click.getchar = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = prompt(prompt="Try test", multiline=True)
+    assert res == "A\nB\nC"

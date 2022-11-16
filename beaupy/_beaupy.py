@@ -5,6 +5,7 @@ A Python library of interactive CLI elements you have been looking for
 
 __license__ = 'MIT'
 
+import os
 import warnings
 from ast import literal_eval
 from typing import Any, Callable, List, Optional, Type, Union
@@ -79,6 +80,7 @@ def prompt(
     raise_validation_fail: bool = True,
     raise_type_conversion_fail: bool = True,
     initial_value: Optional[str] = None,
+    multiline: bool = False,
 ) -> TargetType:
     """Function that prompts the user for written input
 
@@ -92,6 +94,7 @@ def prompt(
         raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ConversionError`, else
                                                      the error will be reported onto the console. Defaults to True.
         initial_value (str, optional): If present, the value is placed in the prompt as the default value.
+        multiline (bool): If True, allows the user to input multiline strings. Defaults to False.
 
     Raises:
         ValidationError: Raised if validation with provided validator fails
@@ -101,13 +104,16 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
+    if multiline and target_type != str:
+        raise ValueError(f"Multiline prompt can only be used with string inputs. Got target type {target_type}")
+
     rendered = ''
     with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
         value: List[str] = [*initial_value] if initial_value else []
         cursor_index = len(initial_value) if initial_value else 0
         error: str = ''
         while True:
-            rendered = _render_prompt(secure, value, prompt, cursor_index, error)
+            rendered = _render_prompt(secure, value, prompt, cursor_index, error, multiline)
             error = ''
             _update_rendered(live, rendered)
             try:
@@ -116,7 +122,14 @@ def prompt(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            if keypress in DefaultKeys.confirm:
+            if keypress in DefaultKeys.confirm and multiline:
+                # If the user hits enter twice - confirm the multi line string
+                if value[-1] == "\r":
+                    return os.linesep.join(''.join(value).splitlines())
+                else:
+                    value.insert(cursor_index, keypress)
+                    cursor_index += 1
+            elif keypress in DefaultKeys.confirm:
                 str_value = ''.join(value)
                 try:
                     if target_type is bool:
@@ -142,13 +155,19 @@ def prompt(
             elif keypress in DefaultKeys.left:
                 if cursor_index > 0:
                     cursor_index -= 1
+                if multiline and value[cursor_index] == '\r':
+                    cursor_index -= 1
             elif keypress in DefaultKeys.right:
                 if cursor_index < len(value):
+                    cursor_index += 1
+                if multiline and cursor_index < len(value) and value[cursor_index] == '\r':
                     cursor_index += 1
             elif keypress in DefaultKeys.escape:
                 return None
             elif keypress in DefaultKeys.up + DefaultKeys.down:
-                pass
+                if multiline:
+                    # TODO implement up and down keys while in multiline mode
+                    pass
             elif keypress in DefaultKeys.home:
                 cursor_index = 0
             elif keypress in DefaultKeys.end:

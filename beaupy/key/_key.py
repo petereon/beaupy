@@ -34,6 +34,7 @@ CTRL_V = '\x16'
 CTRL_W = '\x17'
 CTRL_Y = '\x19'
 
+
 if platform.startswith(('linux', 'darwin')):  # pragma: no cover
     # common
     BACKSPACE = '\x7f'
