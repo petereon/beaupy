@@ -69,7 +69,7 @@ def main():
         if 'The One Ring' in items:
             console.print("[green]You throw The One Ring to a lava from an eagle![/green]")
         else:
-            console.print("[red]You forgot the right and brought Middle-Earth to its knees![/red]")
+            console.print("[red]You forgot the ring and brought Middle-Earth to its knees![/red]")
         console.print(f"And you brought {potato_count} taters!")
                     
 

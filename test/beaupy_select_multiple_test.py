@@ -1,6 +1,7 @@
 from unittest import mock
 
-import click
+from beaupy import _beaupy as b
+from yakh.key import Keys
 from ward import raises, test
 
 from beaupy._beaupy import Config, Live, select_multiple, warnings
@@ -13,14 +14,14 @@ def raise_keyboard_interrupt():
 
 @test("`select_multiple` with no options permissive")
 def _():
-    click.getchar = lambda: beaupy.key.ENTER
+    b.get_key = lambda: Keys.ENTER
     res = select_multiple(options=[])
     assert res == []
 
 
 @test("`select_multiple` with no options strict")
 def _():
-    click.getchar = lambda: beaupy.key.ENTER
+    b.get_key = lambda: Keys.ENTER
     with raises(ValueError) as e:
         select_multiple(options=[], strict=True)
 
@@ -29,9 +30,9 @@ def _():
 
 @test("`select_multiple` with 2 options starting from first selecting going down and selecting second also")
 def _():
-    steps = iter([beaupy.key.SPACE, beaupy.key.DOWN, beaupy.key.SPACE, beaupy.key.ENTER])
+    steps = iter([' ', Keys.DOWN_ARROW, ' ', Keys.ENTER])
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
@@ -56,9 +57,9 @@ def _():
     "`select_multiple` with 2 options starting from first selecting going down and selecting second also with return_indices as True",
 )
 def _():
-    steps = iter([beaupy.key.SPACE, beaupy.key.DOWN, beaupy.key.SPACE, beaupy.key.ENTER])
+    steps = iter([' ', Keys.DOWN_ARROW, ' ', Keys.ENTER])
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", return_indices=True)
     assert Live.update.call_args_list == [
@@ -83,9 +84,9 @@ def _():
     "`select_multiple` with 2 options `x` as tick character and yellow1 as color starting from second selecting and going up",
 )
 def _():
-    steps = iter([beaupy.key.SPACE, beaupy.key.UP, beaupy.key.ENTER])
+    steps = iter([' ', Keys.UP_ARROW, Keys.ENTER])
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(
         options=["test1", "test2"],
@@ -110,9 +111,9 @@ def _():
     "`select_multiple` with 2 options `x` as tick character and yellow1 as color starting from second selecting and going up with 1st option preselected",
 )
 def _():
-    steps = iter([beaupy.key.SPACE, beaupy.key.UP, beaupy.key.ENTER])
+    steps = iter([' ', Keys.UP_ARROW, Keys.ENTER])
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(
         options=["test1", "test2"],
@@ -140,9 +141,9 @@ def _():
     "`select_multiple` with 2 options starting from first selecting going down and selecting second also with `maximal_count` of 1",
 )
 def _():
-    steps = iter([beaupy.key.SPACE, beaupy.key.DOWN, beaupy.key.SPACE, beaupy.key.ENTER])
+    steps = iter([' ', Keys.DOWN_ARROW, ' ', Keys.ENTER])
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", maximal_count=1)
 
@@ -170,15 +171,15 @@ def _():
 def _():
     steps = iter(
         [
-            beaupy.key.SPACE,
-            beaupy.key.DOWN,
-            beaupy.key.ENTER,
-            beaupy.key.SPACE,
-            beaupy.key.ENTER,
+            ' ',
+            Keys.DOWN_ARROW,
+            Keys.ENTER,
+            ' ',
+            Keys.ENTER,
         ]
     )
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", minimal_count=2)
     assert Live.update.call_args_list == [
@@ -206,8 +207,8 @@ def _():
 def _():
     Config.raise_on_interrupt = False
     Live.update = mock.MagicMock()
-    with mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
-        res = select_multiple(options=["test1", "test2"], tick_character="😋")
+    b.get_key = lambda: Keys.CTRL_C
+    res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])")
     ]
@@ -219,14 +220,15 @@ def _():
 def _():
     Config.raise_on_interrupt = True
     Live.update = mock.MagicMock()
-    with raises(KeyboardInterrupt), mock.patch("beaupy._beaupy.click.getchar", raise_keyboard_interrupt):
+    b.get_key = lambda: Keys.CTRL_C
+    with raises(KeyboardInterrupt):
         select_multiple(options=["test1", "test2"], tick_character="😋")
 
 
 @test("`select_multiple` with 2 options and invalid tick style")
 def _():
-    steps = iter([beaupy.key.ENTER])
-    click.getchar = lambda: next(steps)
+    steps = iter([Keys.ENTER])
+    b.get_key = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     select_multiple(options=["test1", "test2"], tick_style="")
     warnings.warn.assert_called_once_with("`tick_style` should be a valid style, defaulting to `white`")
@@ -234,8 +236,8 @@ def _():
 
 @test("`select_multiple` with 2 options and invalid cursor style")
 def _():
-    steps = iter([beaupy.key.ENTER])
-    click.getchar = lambda: next(steps)
+    steps = iter([Keys.ENTER])
+    b.get_key = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     select_multiple(options=["test1", "test2"], cursor_style="")
     warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
@@ -245,9 +247,9 @@ def _():
     "`select_multiple` with 2 options starting from first selecting going down and selecting second, then deselecting, with preprocessor",
 )
 def _():
-    steps = iter([beaupy.key.SPACE, beaupy.key.DOWN, beaupy.key.SPACE, beaupy.key.SPACE, beaupy.key.ENTER])
+    steps = iter([' ', Keys.DOWN_ARROW, ' ', ' ', Keys.ENTER])
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", preprocessor=lambda val: val[-1])
     assert Live.update.call_args_list == [
@@ -272,9 +274,9 @@ def _():
     "`select_multiple` return `[]` when ESC is pressed"
 )
 def _():
-    steps = iter([beaupy.key.SPACE, beaupy.key.ESC])
+    steps = iter([' ', Keys.ESC])
 
-    click.getchar = lambda: next(steps)
+    b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", return_indices=True)
     assert Live.update.call_args_list == [
