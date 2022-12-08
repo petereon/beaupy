@@ -14,7 +14,6 @@ from yakh.key import Keys
 from rich.console import Console
 from rich.live import Live
 
-from beaupy import key
 from beaupy._internals import (
     ConversionError,
     ValidationError,
