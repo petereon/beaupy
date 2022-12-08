@@ -9,10 +9,10 @@ import warnings
 from ast import literal_eval
 from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
-from yakh import get_key
-from yakh.key import Keys
 from rich.console import Console
 from rich.live import Live
+from yakh import get_key
+from yakh.key import Keys
 
 from beaupy._internals import (
     ConversionError,
