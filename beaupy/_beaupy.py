@@ -7,13 +7,13 @@ __license__ = 'MIT'
 
 import warnings
 from ast import literal_eval
-from typing import Any, Callable, List, Optional, Type, Union
+from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
-import click
 from rich.console import Console
 from rich.live import Live
+from yakh import get_key
+from yakh.key import Keys
 
-from beaupy import key
 from beaupy._internals import (
     ConversionError,
     ValidationError,
@@ -31,30 +31,32 @@ class DefaultKeys:
     """A map of default keybindings.
 
     Attributes:
-        escape(List[str]): Keys that escape the current context.
-        select(List[str]): Keys that trigger list element selection.
-        confirm(List[str]): Keys that trigger list confirmation.
-        backspace(List[str]): Keys that trigger deletion of the previous character.
-        delete(List[str]): Keys that trigger deletion of the next character.
-        down(List[str]): Keys that select the element below.
-        up(List[str]): Keys that select the element above.
-        left(List[str]): Keys that select the element to the left.
-        right(List[str]): Keys that select the element to the right.
-        home(List[str]): Keys that move to the beginning of the context.
-        end(List[str]): Keys that move to the end of the context.
+        escape(List[Union[Tuple[int, ...], str]]): Keys that escape the current context.
+        select(List[Union[Tuple[int, ...], str]]): Keys that trigger list element selection.
+        confirm(List[Union[Tuple[int, ...], str]]): Keys that trigger list confirmation.
+        backspace(List[Union[Tuple[int, ...], str]]): Keys that trigger deletion of the previous character.
+        delete(List[Union[Tuple[int, ...], str]]): Keys that trigger deletion of the next character.
+        down(List[Union[Tuple[int, ...], str]]): Keys that select the element below.
+        up(List[Union[Tuple[int, ...], str]]): Keys that select the element above.
+        left(List[Union[Tuple[int, ...], str]]): Keys that select the element to the left.
+        right(List[Union[Tuple[int, ...], str]]): Keys that select the element to the right.
+        home(List[Union[Tuple[int, ...], str]]): Keys that move to the beginning of the context.
+        end(List[Union[Tuple[int, ...], str]]): Keys that move to the end of the context.
     """
 
-    escape: List[str] = [key.ESC]
-    select: List[str] = [key.SPACE]
-    confirm: List[str] = [key.ENTER]
-    backspace: List[str] = [key.BACKSPACE]
-    delete: List[str] = [key.DELETE]
-    down: List[str] = [key.DOWN]
-    up: List[str] = [key.UP]
-    left: List[str] = [key.LEFT]
-    right: List[str] = [key.RIGHT]
-    home: List[str] = [key.HOME]
-    end: List[str] = [key.END]
+    escape: List[Union[Tuple[int, ...], str]] = [Keys.ESC]
+    select: List[Union[Tuple[int, ...], str]] = [' ']
+    confirm: List[Union[Tuple[int, ...], str]] = [Keys.ENTER]
+    backspace: List[Union[Tuple[int, ...], str]] = [Keys.BACKSPACE]
+    delete: List[Union[Tuple[int, ...], str]] = [Keys.DELETE]
+    down: List[Union[Tuple[int, ...], str]] = [Keys.DOWN_ARROW]
+    up: List[Union[Tuple[int, ...], str]] = [Keys.UP_ARROW]
+    left: List[Union[Tuple[int, ...], str]] = [Keys.LEFT_ARROW]
+    right: List[Union[Tuple[int, ...], str]] = [Keys.RIGHT_ARROW]
+    tab: List[Union[Tuple[int, ...], str]] = [Keys.TAB]
+    home: List[Union[Tuple[int, ...], str]] = [Keys.HOME]
+    end: List[Union[Tuple[int, ...], str]] = [Keys.END]
+    interrupt: List[Union[Tuple[int, ...], str]] = [Keys.CTRL_C]
 
 
 class Config:
@@ -110,13 +112,12 @@ def prompt(
             rendered = _render_prompt(secure, value, prompt, cursor_index, error)
             error = ''
             _update_rendered(live, rendered)
-            try:
-                keypress = click.getchar()
-            except KeyboardInterrupt:
+            keypress = get_key()
+            if keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            if keypress in DefaultKeys.confirm:
+            elif keypress in DefaultKeys.confirm:
                 str_value = ''.join(value)
                 try:
                     if target_type is bool:
@@ -157,7 +158,7 @@ def prompt(
                 if cursor_index < len(value):
                     del value[cursor_index]
             else:
-                value.insert(cursor_index, keypress)
+                value.insert(cursor_index, str(keypress))
                 cursor_index += 1
 
 
@@ -165,7 +166,7 @@ Selection = Union[int, Any]
 
 
 def select(
-    options: List[Any],
+    options: List[Union[Tuple[int, ...], str]],
     preprocessor: Callable[[Any], Any] = lambda val: val,
     cursor: str = '>',
     cursor_style: str = 'pink1',
@@ -176,7 +177,7 @@ def select(
     """A prompt that allows selecting one option from a list of options
 
     Args:
-        options (List[Any]): A list of options to select from
+        options (List[Union[Tuple[int, ...], str]]): A list of options to select from
         preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
                                              For example, if you passed a `Person` object with `name` attribute, preprocessor
                                              could be `lambda person: person.name` to just show the content of `name` attribute
@@ -220,14 +221,12 @@ def select(
                 + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
             )
             _update_rendered(live, rendered)
-            try:
-                keypress = click.getchar()
-            except KeyboardInterrupt:
+            keypress = get_key()
+            if keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-
-            if keypress in DefaultKeys.up:
+            elif keypress in DefaultKeys.up:
                 if index > 0:
                     index -= 1
             elif keypress in DefaultKeys.down:
@@ -245,7 +244,7 @@ Selections = List[Selection]
 
 
 def select_multiple(
-    options: List[Any],
+    options: List[Union[Tuple[int, ...], str]],
     preprocessor: Callable[[Any], Any] = lambda val: val,
     tick_character: str = '✓',
     tick_style: str = 'pink1',
@@ -260,7 +259,7 @@ def select_multiple(
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
-        options (List[Any]): A list of options to select from
+        options (List[Union[Tuple[int, ...], str]]): A list of options to select from
         preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
                                              For example, if you passed a `Person` object with `name` attribute, preprocessor
                                              could be `lambda person: person.name` to just show the content of `name` attribute
@@ -323,14 +322,12 @@ def select_multiple(
                 rendered = f'{rendered}\n[red]Error:[/red] {error_message}'
                 error_message = ''
             _update_rendered(live, rendered)
-            try:
-                keypress = click.getchar()
-            except KeyboardInterrupt:
+            keypress = get_key()
+            if keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return []
-
-            if keypress in DefaultKeys.up:
+            elif keypress in DefaultKeys.up:
                 if index > 0:
                     index -= 1
             elif keypress in DefaultKeys.down:
@@ -408,14 +405,12 @@ def confirm(
             rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}\n\n(Confirm with [bold]enter[/bold])'
             _update_rendered(live, rendered)
 
-            try:
-                keypress = click.getchar()
-            except KeyboardInterrupt:
+            keypress = get_key()
+            if keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-
-            if keypress in DefaultKeys.down or keypress in DefaultKeys.up:
+            elif keypress in DefaultKeys.down or keypress in DefaultKeys.up:
                 is_yes = not is_yes
                 is_selected = True
                 current_message = yes_text if is_yes else no_text
@@ -427,11 +422,11 @@ def confirm(
             elif keypress in DefaultKeys.confirm:
                 if is_selected:
                     break
-            elif keypress in '\t':
+            elif keypress in DefaultKeys.tab:
                 if is_selected:
                     current_message = yes_text if is_yes else no_text
             else:
-                current_message += keypress
+                current_message += str(keypress)
                 match_yes = yes_text
                 match_no = no_text
                 match_text = current_message
