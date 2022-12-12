@@ -295,6 +295,34 @@ def _():
 
     assert ret is True
 
+@test("`confirm` with `Test` as a question, and pressing Backspace on empty")
+def _():
+    steps = iter([Keys.BACKSPACE, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    ret = confirm(question="Test", cursor_style="red", default_is_yes=True)
+    assert Live.update.call_args_list == [
+        mock.call(renderable="Test (Y/N) \n[red]>[/red] Yes\n  No\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="Test (Y/N) \n[red]>[/red] Yes\n  No\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert ret is True
+
+@test("`confirm` with `Test` as a question, and pressing Tab on empty")
+def _():
+    steps = iter([Keys.TAB, Keys.ENTER, Keys.ESC])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    ret = confirm(question="Test", cursor_style="red", default_is_yes=True, enter_empty_confirms=False)
+    assert Live.update.call_args_list == [
+        mock.call(renderable="Test (Y/N) \n  Yes\n  No\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="Test (Y/N) \n  Yes\n  No\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="Test (Y/N) \n  Yes\n  No\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert ret is None
+
+
 @test("`confirm` returns None when ESC is pressed")
 def _():
     steps = iter([Keys.ESC])

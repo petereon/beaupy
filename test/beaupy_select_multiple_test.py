@@ -53,6 +53,77 @@ def _():
     assert res == ["test1", "test2"]
 
 
+@test("`select_multiple` with 2 options pressing escape")
+def _():
+    steps = iter([Keys.ESC])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+    ]
+    assert Live.update.call_count == 1
+    assert res == []
+
+
+
+@test("`select_multiple` with 2 options starting from first selecting going down, selecting second one and going down again")
+def _():
+    steps = iter([' ', Keys.DOWN_ARROW, ' ', Keys.DOWN_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+    ]
+    assert Live.update.call_count == 5
+    assert res == ["test1", "test2"]
+
+
+
+@test("`select_multiple` with 2 options starting from first selecting going up and selecting again")
+def _():
+    steps = iter([' ', Keys.UP_ARROW, ' ', Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+    ]
+    assert Live.update.call_count == 4
+    assert res == []
+
+
 @test(
     "`select_multiple` with 2 options starting from first selecting going down and selecting second also with return_indices as True",
 )
