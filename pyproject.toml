@@ -37,7 +37,7 @@ lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running 
 python = '^3.7.8'
 rich = "^12.2.0"
 emoji = "^2.0.0"
-python-yakh = "^0.2.1"
+python-yakh = "^0.3.0"
 
 
 [tool.mypy]
