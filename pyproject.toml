@@ -92,7 +92,8 @@ report = {skip_empty = true}
 [tool.poetry.dev-dependencies]
 # Code Scanning and Formatting
 mypy = '*'
-pyproject-flake8 = '0.0.1a4'
+pyproject-flake8 = "*"
+flake8 = "<5"
 black = "^22.6.0"
 
 ## Bugs
