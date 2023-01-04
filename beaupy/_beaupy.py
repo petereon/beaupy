@@ -227,11 +227,11 @@ def select(
                     raise KeyboardInterrupt()
                 return None
             elif keypress in DefaultKeys.up:
-                if index > 0:
-                    index -= 1
+                index -= 1
+                index = index % len(options)
             elif keypress in DefaultKeys.down:
-                if index < len(options) - 1:
-                    index += 1
+                index += 1
+                index = index % len(options)
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
@@ -299,7 +299,6 @@ def select_multiple(
 
         index = cursor_index
 
-        max_index = len(options) - (1 if True else 0)
         error_message = ''
         while True:
             rendered = (
@@ -328,11 +327,11 @@ def select_multiple(
                     raise KeyboardInterrupt()
                 return []
             elif keypress in DefaultKeys.up:
-                if index > 0:
-                    index -= 1
+                index -= 1
+                index = index % len(options)
             elif keypress in DefaultKeys.down:
-                if index + 1 <= max_index:
-                    index += 1
+                index += 1
+                index = index % len(options)
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)
