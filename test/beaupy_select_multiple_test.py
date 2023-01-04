@@ -91,7 +91,7 @@ def _():
             renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[[pink1]😋[/pink1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
     ]
     assert Live.update.call_count == 5
@@ -114,14 +114,14 @@ def _():
             renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
     ]
     assert Live.update.call_count == 4
-    assert res == []
+    assert res == ['test1', 'test2']
 
 
 @test(

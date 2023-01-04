@@ -227,18 +227,11 @@ def select(
                     raise KeyboardInterrupt()
                 return None
             elif keypress in DefaultKeys.up:
-                if index == 0: #Check if index is first option in list.
-                    if keypress in DefaultKeys.up: #If key pressed is up, set index to last item in list.
-                        index = len(options)
-                if index > 0:
-                    index -= 1
+                index -= 1
+                index = index % len(options)
             elif keypress in DefaultKeys.down:
-                if index == len(options)-1: #Chek if index is last option in list.
-                    if keypress in DefaultKeys.down: #If key press is "down", set index to 0.
-                        index = 0
-                        continue # "continue" is added because the if check below is True and "index += 1" is still executed.
-                if index < len(options) - 1:
-                    index += 1
+                index += 1
+                index = index % len(options)
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
@@ -306,7 +299,6 @@ def select_multiple(
 
         index = cursor_index
 
-        max_index = len(options) - (1 if True else 0)
         error_message = ''
         while True:
             rendered = (
@@ -335,18 +327,11 @@ def select_multiple(
                     raise KeyboardInterrupt()
                 return []
             elif keypress in DefaultKeys.up:
-                if index == 0: #Check if index is first option in list.
-                    if keypress in DefaultKeys.up: #If key pressed is up, set index to last item in list.
-                        index = len(options)
-                if index > 0:
-                    index -= 1
+                index -= 1
+                index = index % len(options)
             elif keypress in DefaultKeys.down:
-                if index == len(options)-1: #Chek if index is last option in list.
-                    if keypress in DefaultKeys.down: #If key press is "down", set index to 0.
-                        index = 0
-                        continue # "continue" is added because the if check below is True and "index += 1" is still executed.
-                if index + 1 <= max_index:
-                    index += 1
+                index += 1
+                index = index % len(options)
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)
