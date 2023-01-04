@@ -8,8 +8,12 @@
       
       
       
+      
+      
+        <link rel="next" href="api/">
+      
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.2">
     
     
       
@@ -17,11 +21,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.975780f9.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.f56500e0.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.2505c338.min.css">
-        
       
       
 
@@ -108,8 +111,6 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          
-          
           <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
@@ -117,8 +118,6 @@
             </label>
           
         
-          
-          
           
           <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
           
@@ -534,10 +533,9 @@
                 
                   
 
-  <a href="https://github.com/petereon/beaupy/blob/None/docs/content/index.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
+
 
 
 <h1 id="index">Index</h1>
@@ -594,12 +592,12 @@
 </ul>
 <h3 id="installation">Installation</h3>
 <p>From PyPI:</p>
-<div class="highlight"><pre><span></span><code>pip install beaupy
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>beaupy
 </code></pre></div>
 <p>From source:</p>
-<div class="highlight"><pre><span></span><code>git clone https://github.com/petereon/beaupy.git
-poetry build
-pip install ./dist/beaupy-<span class="o">{{</span>some-version<span class="o">}}</span>-py3-none-any.whl
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/petereon/beaupy.git
+poetry<span class="w"> </span>build
+pip<span class="w"> </span>install<span class="w"> </span>./dist/beaupy-<span class="o">{{</span>some-version<span class="o">}}</span>-py3-none-any.whl
 </code></pre></div>
 <h3 id="example">Example</h3>
 <p><img alt="example" src="https://raw.githubusercontent.com/petereon/beaupy/master/example.gif" /></p>
@@ -609,7 +607,7 @@ pip install ./dist/beaupy-<span class="o">{{</span>some-version<span class="o">}
 <span class="kn">from</span> <span class="nn">beaupy.spinners</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Main.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main.&quot;&quot;&quot;</span>
     <span class="c1"># Confirm a dialog</span>
     <span class="k">if</span> <span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;Will you take the ring to Mordor?&quot;</span><span class="p">):</span>
         <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
@@ -681,26 +679,29 @@ pip install ./dist/beaupy-<span class="o">{{</span>some-version<span class="o">}
 <p>Also <strong>please report any issues and bugs you might find!</strong></p>
 <h3 id="development">Development</h3>
 <p>To start development you can clone the repository:</p>
-<div class="highlight"><pre><span></span><code>git clone https://github.com/petereon/beaupy.git
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/petereon/beaupy.git
 </code></pre></div>
 <p>Change the directory to the project directory:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span> ./beaupy/
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>./beaupy/
 </code></pre></div>
 <p>This project uses <a href="https://python-poetry.org/"><code>poetry</code></a> as a dependency manager. You can install the dependencies using:</p>
-<div class="highlight"><pre><span></span><code>poetry install
+<blockquote>
+<p>:warning: Some of the development tooling depends on a vulnerable dependency <code>GitPython</code>. Affected seem to be namely: <code>bandit</code>, <code>gitdb</code>, <code>pylint</code>. Risk of vulnerability seems to lie in arbitrary code execution due to improper input validation of the strings in <code>clone</code> method.  As far as I could tell none of the above mentioned use <code>clone</code> from <code>GitPython</code> anywhere, but you if you are vary, you might want avoid installing the development dependencies by using <code>poetry install --only main</code></p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>install
 </code></pre></div>
 <p>For testing, this project relies on <a href="https://github.com/darrenburns/ward"><code>ward</code></a>. It is included as a development dependency, so
 after installing the dependencies you can simply execute the following:</p>
-<div class="highlight"><pre><span></span><code>poetry run poe <span class="nb">test</span>
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>poe<span class="w"> </span><span class="nb">test</span>
 </code></pre></div>
 <p>Making sure the code follows quality standards and formatting can be ensured by executing</p>
-<div class="highlight"><pre><span></span><code>poetry run poe lint
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>poe<span class="w"> </span>lint
 </code></pre></div>
 <p>You can also have the tests and lints run after every saved change by executing a respective watch command</p>
-<div class="highlight"><pre><span></span><code>poetry run poe test:watch
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>poe<span class="w"> </span>test:watch
 </code></pre></div>
 <p>or</p>
-<div class="highlight"><pre><span></span><code>poetry run poe lint:watch
+<div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>run<span class="w"> </span>poe<span class="w"> </span>lint:watch
 </code></pre></div>
 <p>After you have made your changes, create a pull request towards a master branch of this repository</p>
 <p>Looking forward to your pull requests!</p>
@@ -737,27 +738,6 @@ after installing the dependencies you can simply execute the following:</p>
       
         <footer class="md-footer">
   
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-      
-        
-        <a href="api/" class="md-footer__link md-footer__link--next" aria-label="Next: API Documentation" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              API Documentation
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
-  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
@@ -779,12 +759,11 @@ after installing the dependencies you can simply execute the following:</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      <script src="assets/javascripts/bundle.5cf534bf.min.js"></script>
       
-    
     
   </body>
 </html>
