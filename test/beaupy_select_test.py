@@ -114,10 +114,10 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n\n(Confirm with [bold]enter[/bold])"),
     ]
     assert Live.update.call_count == 2
-    assert res == "test1"
+    assert res == "test4"
 
 
 @test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color")
