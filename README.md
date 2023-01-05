@@ -163,7 +163,7 @@ cd ./beaupy/
 
 This project uses [`poetry`](https://python-poetry.org/) as a dependency manager. You can install the dependencies using:
 
-> :warning: Some of the development tooling depends on a vulnerable dependency `GitPython`. Affected seem to be namely: `bandit`, `gitdb`, `pylint`. Risk of vulnerability seems to lie in arbitrary code execution due to improper input validation of the strings in `clone` method.  As far as I could tell none of the above mentioned use `clone` from `GitPython` anywhere, but you if you are vary, you might want avoid installing the development dependencies by using `poetry install --only main`
+> :warning: Some of the development tooling depends on a vulnerable dependency `future`. Affected seems to be only `radon`. If you are vary, you might want avoid installing the development dependencies by using `poetry install --only main`
 
 ```sh
 poetry install
