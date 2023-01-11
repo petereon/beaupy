@@ -226,12 +226,16 @@ def select(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            elif keypress in DefaultKeys.up:
+            elif keypress in DefaultKeys.up or str(keypress) == 'k':
                 index -= 1
                 index = index % len(options)
-            elif keypress in DefaultKeys.down:
+            elif keypress in DefaultKeys.down or str(keypress) == 'j':
                 index += 1
                 index = index % len(options)
+            elif str(keypress) == 'g':
+                index = 0
+            elif str(keypress) == 'G':
+                index = len(options) - 1
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
