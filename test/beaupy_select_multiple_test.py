@@ -151,6 +151,55 @@ def _():
     assert res == [0, 1]
 
 
+@test("`select_multiple` with moving down then pressing home and selecting first")
+def _():
+    steps = iter([Keys.DOWN_ARROW, Keys.HOME, ' ', Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+       mock.call(
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+    ]
+
+    assert Live.update.call_count == 4
+    assert res == ["test1"]
+
+
+@test("`select_multiple` with pressing end and selecting last")
+def _():
+    steps = iter([Keys.END, ' ', Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+    ]
+
+    assert Live.update.call_count == 3
+    assert res == ["test2"]
+
+
 @test(
     "`select_multiple` with 2 options `x` as tick character and yellow1 as color starting from second selecting and going up",
 )

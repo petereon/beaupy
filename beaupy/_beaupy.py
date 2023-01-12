@@ -232,6 +232,10 @@ def select(
             elif keypress in DefaultKeys.down:
                 index += 1
                 index = index % len(options)
+            elif keypress in DefaultKeys.home:
+                index = 0
+            elif keypress in DefaultKeys.end:
+                index = len(options) - 1
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
@@ -332,6 +336,10 @@ def select_multiple(
             elif keypress in DefaultKeys.down:
                 index += 1
                 index = index % len(options)
+            elif keypress in DefaultKeys.home:
+                index = 0
+            elif keypress in DefaultKeys.end:
+                index = len(options) - 1
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)
