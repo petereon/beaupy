@@ -226,15 +226,15 @@ def select(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            elif keypress in DefaultKeys.up or str(keypress) == 'k':
+            elif keypress in DefaultKeys.up:
                 index -= 1
                 index = index % len(options)
-            elif keypress in DefaultKeys.down or str(keypress) == 'j':
+            elif keypress in DefaultKeys.down:
                 index += 1
                 index = index % len(options)
-            elif str(keypress) == 'g':
+            elif keypress in DefaultKeys.home:
                 index = 0
-            elif str(keypress) == 'G':
+            elif keypress in DefaultKeys.end:
                 index = len(options) - 1
             elif keypress in DefaultKeys.confirm:
                 if return_index:
@@ -336,6 +336,10 @@ def select_multiple(
             elif keypress in DefaultKeys.down:
                 index += 1
                 index = index % len(options)
+            elif keypress in DefaultKeys.home:
+                index = 0
+            elif keypress in DefaultKeys.end:
+                index = len(options) - 1
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)
