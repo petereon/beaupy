@@ -56,6 +56,40 @@ def _():
     assert Live.update.call_count == 2
 
 
+@test("`select` with pressing end")
+def _():
+    steps = iter([Keys.END, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(options=["test1", "test2", "test3", "test4"])
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert Live.update.call_count == 2
+    assert res == "test4"
+
+
+@test("`select` with pressing down twice and selecting first with home")
+def _():
+    steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.HOME, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(options=["test1", "test2", "test3", "test4"])
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert Live.update.call_count == 4
+    assert res == "test1"
+
+
 @test("`select` with 4 options stepping down through all with random character inbetween and selecting last")
 def _():
     steps = iter(
