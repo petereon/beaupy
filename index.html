@@ -13,7 +13,7 @@
         <link rel="next" href="api/">
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.2">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.4">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.f56500e0.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.9c788c91.min.css">
       
         
         <link rel="stylesheet" href="assets/stylesheets/palette.2505c338.min.css">
@@ -686,7 +686,7 @@ pip<span class="w"> </span>install<span class="w"> </span>./dist/beaupy-<span cl
 </code></pre></div>
 <p>This project uses <a href="https://python-poetry.org/"><code>poetry</code></a> as a dependency manager. You can install the dependencies using:</p>
 <blockquote>
-<p>:warning: Some of the development tooling depends on a vulnerable dependency <code>GitPython</code>. Affected seem to be namely: <code>bandit</code>, <code>gitdb</code>, <code>pylint</code>. Risk of vulnerability seems to lie in arbitrary code execution due to improper input validation of the strings in <code>clone</code> method.  As far as I could tell none of the above mentioned use <code>clone</code> from <code>GitPython</code> anywhere, but you if you are vary, you might want avoid installing the development dependencies by using <code>poetry install --only main</code></p>
+<p>:warning: Some of the development tooling depends on a vulnerable dependency <code>future</code>. Affected seems to be only <code>radon</code>. If you are vary, you might want avoid installing the development dependencies by using <code>poetry install --only main</code></p>
 </blockquote>
 <div class="highlight"><pre><span></span><code>poetry<span class="w"> </span>install
 </code></pre></div>
@@ -759,10 +759,10 @@ after installing the dependencies you can simply execute the following:</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.5cf534bf.min.js"></script>
+      <script src="assets/javascripts/bundle.ba449ae6.min.js"></script>
       
     
   </body>
