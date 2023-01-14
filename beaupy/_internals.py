@@ -1,9 +1,12 @@
+from ast import literal_eval
 from contextlib import contextmanager
-from typing import Iterator, List, Union
+from typing import Any, Callable, Iterator, List, Type, Union
 
 import emoji
 from rich.console import Console, ConsoleRenderable
 from rich.live import Live
+
+TargetType = Any
 
 
 class ValidationError(Exception):
@@ -60,3 +63,27 @@ def _cursor_hidden(console: Console) -> Iterator:
     console.show_cursor(False)
     yield
     console.show_cursor(True)
+
+
+def _validate_prompt_value(
+    value: List[str],
+    target_type: Type[TargetType],
+    validator: Callable[[TargetType], bool],
+    secure: bool,
+) -> TargetType:
+    str_value = ''.join(value)
+    try:
+        if target_type is bool:
+            result: bool = literal_eval(str_value)
+            if not isinstance(result, bool):
+                raise ValueError('Bool conversion failed')
+        else:
+            result: target_type = target_type(str_value)  # type: ignore
+        if validator(result):
+            return result
+        else:
+            error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} is invalid"
+            raise ValidationError(error)
+    except ValueError:
+        error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} cannot be converted to type `{target_type}`"
+        raise ConversionError(error)

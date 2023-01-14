@@ -6,7 +6,6 @@ A Python library of interactive CLI elements you have been looking for
 __license__ = 'MIT'
 
 import warnings
-from ast import literal_eval
 from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
 from rich.console import Console
@@ -16,12 +15,14 @@ from yakh.key import Keys
 
 from beaupy._internals import (
     ConversionError,
+    TargetType,
     ValidationError,
     _cursor_hidden,
     _format_option_select,
     _render_option_select_multiple,
     _render_prompt,
     _update_rendered,
+    _validate_prompt_value,
 )
 
 console = Console()
@@ -70,9 +71,6 @@ class Config:
     raise_on_interrupt: bool = False
 
 
-TargetType = Any
-
-
 def prompt(
     prompt: str,
     target_type: Type[TargetType] = str,
@@ -118,24 +116,21 @@ def prompt(
                     raise KeyboardInterrupt()
                 return None
             elif keypress in DefaultKeys.confirm:
-                str_value = ''.join(value)
                 try:
-                    if target_type is bool:
-                        result: bool = literal_eval(str_value)
-                        if not isinstance(result, bool):
-                            raise ValueError()
-                    else:
-                        result: target_type = target_type(str_value)  # type: ignore
-                    if validator(result):
-                        return result
-                    else:
-                        error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} is invalid"
-                        if raise_validation_fail:
-                            raise ValidationError(error)
-                except ValueError:
-                    error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} cannot be converted to type `{target_type}`"
+                    return _validate_prompt_value(
+                        value=value,
+                        target_type=target_type,
+                        validator=validator,
+                        secure=secure,
+                    )
+                except ValidationError as e:
+                    if raise_validation_fail:
+                        raise e
+                    error = str(e)
+                except ConversionError as e:
                     if raise_type_conversion_fail:
-                        raise ConversionError(error) from None
+                        raise e
+                    error = str(e)
             elif keypress in DefaultKeys.backspace:
                 if cursor_index > 0:
                     cursor_index -= 1

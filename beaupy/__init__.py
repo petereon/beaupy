@@ -1,12 +1,11 @@
 import beaupy.spinners as spinners  # noqa
 from beaupy._beaupy import (  # noqa
     Config,
-    ConversionError,
     DefaultKeys,
-    ValidationError,
     confirm,
     console,
     prompt,
     select,
     select_multiple,
 )
+from beaupy._internals import ConversionError, ValidationError  # noqa
