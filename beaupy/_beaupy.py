@@ -141,10 +141,6 @@ def prompt(
             elif keypress in DefaultKeys.right:
                 if cursor_index < len(value):
                     cursor_index += 1
-            elif keypress in DefaultKeys.home:
-                cursor_index = 0
-            elif keypress in DefaultKeys.end:
-                cursor_index = len(value)
             elif keypress in DefaultKeys.escape:
                 return None
             elif keypress in DefaultKeys.up + DefaultKeys.down:
