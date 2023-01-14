@@ -4,7 +4,8 @@ from beaupy import _beaupy as b
 from yakh.key import Keys
 from ward import raises, test
 
-from beaupy._beaupy import Config, ConversionError, Live, ValidationError, prompt
+from beaupy._beaupy import Config, Live, prompt
+from beaupy._internals import ConversionError, ValidationError
 import beaupy
 
 
