@@ -8,4 +8,4 @@ from beaupy._beaupy import (  # noqa
     select,
     select_multiple,
 )
-from beaupy._internals import ConversionError, ValidationError  # noqa
+from beaupy._internals import Abort, ConversionError, ValidationError  # noqa

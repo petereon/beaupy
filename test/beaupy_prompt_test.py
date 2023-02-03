@@ -1,16 +1,22 @@
 from unittest import mock
 
 from beaupy import _beaupy as b
-from yakh.key import Keys
-from ward import raises, test
+from yakh.key import Keys, Key
+from ward import fixture, raises, test
 
 from beaupy._beaupy import Config, Live, prompt
-from beaupy._internals import ConversionError, ValidationError
+from beaupy._internals import ConversionError, ValidationError, Abort
 import beaupy
 
 
 def raise_keyboard_interrupt():
     raise KeyboardInterrupt()
+
+@fixture
+def set_raise_on_escape():
+    Config.raise_on_escape = True
+    yield
+    Config.raise_on_escape = False
 
 
 @test("Empty prompt with immediately pressing confirm")
@@ -328,3 +334,21 @@ def _():
     Live.update = mock.MagicMock()
     res = prompt(prompt="Try test")
     assert res == "Hello"
+
+@test("Verify that escape returns None")
+def _():
+    steps = iter([Keys.ESC])
+
+    b.get_key = lambda: next(steps)
+    res = prompt(prompt="Try test")
+    assert res is None
+
+
+@test("Verify that escape raises Abort when raise_on_escape is True")
+def _(set_raise_on_escape=set_raise_on_escape):
+    steps = iter([Key('esc', (27, ), is_printable=False)])
+
+    b.get_key = lambda: next(steps)
+    with raises(Abort) as e:
+        prompt(prompt="Try test")
+    assert str(e.raised) == "Aborted by user with key (27,)"
