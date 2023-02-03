@@ -14,6 +14,7 @@ from yakh import get_key
 from yakh.key import Keys
 
 from beaupy._internals import (
+    Abort,
     ConversionError,
     TargetType,
     ValidationError,
@@ -69,6 +70,7 @@ class Config:
     """
 
     raise_on_interrupt: bool = False
+    raise_on_escape: bool = False
 
 
 def prompt(
@@ -141,8 +143,6 @@ def prompt(
             elif keypress in DefaultKeys.right:
                 if cursor_index < len(value):
                     cursor_index += 1
-            elif keypress in DefaultKeys.escape:
-                return None
             elif keypress in DefaultKeys.up + DefaultKeys.down:
                 pass
             elif keypress in DefaultKeys.home:
@@ -152,6 +152,10 @@ def prompt(
             elif keypress in DefaultKeys.delete:
                 if cursor_index < len(value):
                     del value[cursor_index]
+            elif keypress in DefaultKeys.escape:
+                if Config.raise_on_escape:
+                    raise Abort(keypress)
+                return None
             else:
                 value.insert(cursor_index, str(keypress))
                 cursor_index += 1
@@ -236,6 +240,8 @@ def select(
                     return index
                 return options[index]
             elif keypress in DefaultKeys.escape:
+                if Config.raise_on_escape:
+                    raise Abort(keypress)
                 return None
 
 
@@ -351,6 +357,8 @@ def select_multiple(
                 else:
                     break
             elif keypress in DefaultKeys.escape:
+                if Config.raise_on_escape:
+                    raise Abort(keypress)
                 return []
         if return_indices:
             return ticked_indices
@@ -419,14 +427,16 @@ def confirm(
             elif keypress in DefaultKeys.backspace:
                 if current_message:
                     current_message = current_message[:-1]
-            elif keypress in DefaultKeys.escape:
-                return None
             elif keypress in DefaultKeys.confirm:
                 if is_selected:
                     break
             elif keypress in DefaultKeys.tab:
                 if is_selected:
                     current_message = yes_text if is_yes else no_text
+            elif keypress in DefaultKeys.escape:
+                if Config.raise_on_escape:
+                    raise Abort(keypress)
+                return None
             else:
                 current_message += str(keypress)
                 match_yes = yes_text

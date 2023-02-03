@@ -1,9 +1,10 @@
 from unittest import mock
 
 from beaupy import _beaupy as b
-from yakh.key import Keys
-from ward import raises, test
+from yakh.key import Keys, Key
+from ward import fixture, raises, test
 
+from beaupy._internals import Abort
 from beaupy._beaupy import Config, Live, select, warnings
 import beaupy
 
@@ -11,6 +12,11 @@ import beaupy
 def raise_keyboard_interrupt():
     raise KeyboardInterrupt()
 
+@fixture
+def set_raise_on_escape():
+    Config.raise_on_escape = True
+    yield
+    Config.raise_on_escape = False
 
 @test("`select` with no options permissive")
 def _():
@@ -280,3 +286,14 @@ def _():
     ]
     assert Live.update.call_count == 1
     assert res == None
+
+
+@test("`select` raises Abort when ESC is pressed and raise_on_escape is True")
+def _(set_raise_on_escape=set_raise_on_escape):
+    steps = iter([Key('esc', (27, ), is_printable=False)])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    with raises(Abort) as e:
+        select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
+    assert str(e.raised) == "Aborted by user with key (27,)"

@@ -5,6 +5,7 @@ from typing import Any, Callable, Iterator, List, Type, Union
 import emoji
 from rich.console import Console, ConsoleRenderable
 from rich.live import Live
+from yakh.key import Key
 
 TargetType = Any
 
@@ -15,6 +16,14 @@ class ValidationError(Exception):
 
 class ConversionError(Exception):
     pass
+
+
+class Abort(Exception):
+    key: Key
+
+    def __init__(self, key: Key) -> None:
+        super().__init__(f'Aborted by user with key {key.key if key.is_printable else key.key_codes}')
+        self.key = key
 
 
 def _replace_emojis(text: str) -> str:
