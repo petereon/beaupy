@@ -66,7 +66,11 @@ class Config:
 
     Attributes:
         raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input,
-        otherwise, they will return some sane alternative to their usual return (e.g.: None, [] ). Defaults to False.
+        otherwise, they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`,
+        while for `select_multiple` it means an empty list - `[]`. Defaults to False.
+        raise_on_escape(bool): If True, functions will raise Abort whenever the escape key is encountered when waiting for input, otherwise,
+        they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
+        `select_multiple` it means an empty list - `[]`.  Defaults to False.
     """
 
     raise_on_interrupt: bool = False
