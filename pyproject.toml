@@ -6,10 +6,14 @@ authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
 repository = 'https://github.com/petereon/beaupy'
 readme = 'README.md'
-keywords = ["python"]
+keywords = ["cli", "interactive", "console", "terminal", "interface"]
 classifiers = [
-    'License :: OSI Approved :: MIT License',
     'Programming Language :: Python :: 3',
+    'License :: OSI Approved :: MIT License',
+    'Development Status :: 5 - Production/Stable',
+    'Topic :: Terminals',
+    'Environment :: Console',
+    'Intended Audience :: Developers'
 ]
 packages = [{ include = "beaupy" }]
 
