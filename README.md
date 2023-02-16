@@ -161,8 +161,6 @@ cd ./beaupy/
 
 This project uses [`poetry`](https://python-poetry.org/) as a dependency manager. You can install the dependencies using:
 
-> :warning: Some of the development tooling depends on a vulnerable dependency `future`. Affected seems to be only `radon`. If you are vary, you might want avoid installing the development dependencies by using `poetry install --only main`
-
 ```sh
 poetry install
 ```
