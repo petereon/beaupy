@@ -5,6 +5,7 @@ A Python library of interactive CLI elements you have been looking for
 
 __license__ = 'MIT'
 
+import math
 import warnings
 from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
@@ -20,6 +21,8 @@ from beaupy._internals import (
     ValidationError,
     _cursor_hidden,
     _format_option_select,
+    _paginate_back,
+    _paginate_forward,
     _render_option_select_multiple,
     _render_prompt,
     _update_rendered,
@@ -176,6 +179,8 @@ def select(
     cursor_index: int = 0,
     return_index: bool = False,
     strict: bool = False,
+    pagination: bool = False,
+    page_size: int = 5,
 ) -> Union[Selection, None]:
     """A prompt that allows selecting one option from a list of options
 
@@ -210,17 +215,22 @@ def select(
             cursor_style = 'white'
 
         index: int = cursor_index
+        page: int = 1
+        total_pages = math.ceil(len(options) / page_size)
 
         while True:
+            show_from = (page - 1) * page_size
+            show_to = min(show_from + page_size, len(options))
             rendered = (
                 '\n'.join(
                     [
                         _format_option_select(
-                            i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor
+                            i=i, cursor_index=index % page_size, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor
                         )
-                        for i, option in enumerate(options)
+                        for i, option in enumerate(options[show_from:show_to])
                     ]
                 )
+                + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503
                 + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
             )
             _update_rendered(live, rendered)
@@ -230,14 +240,26 @@ def select(
                     raise KeyboardInterrupt()
                 return None
             elif keypress in DefaultKeys.up:
+                if index <= show_from:
+                    page = _paginate_back(page, total_pages)
                 index -= 1
                 index = index % len(options)
             elif keypress in DefaultKeys.down:
+                if index > show_to - 2:
+                    page = _paginate_forward(page, total_pages)
                 index += 1
                 index = index % len(options)
+            elif keypress in DefaultKeys.right:
+                page = _paginate_forward(page, total_pages)
+                index = (page - 1) * page_size
+            elif keypress in DefaultKeys.left:
+                page = _paginate_back(page, total_pages)
+                index = (page - 1) * page_size
             elif keypress in DefaultKeys.home:
+                page = 1
                 index = 0
             elif keypress in DefaultKeys.end:
+                page = total_pages
                 index = len(options) - 1
             elif keypress in DefaultKeys.confirm:
                 if return_index:
@@ -264,6 +286,8 @@ def select_multiple(
     maximal_count: Optional[int] = None,
     return_indices: bool = False,
     strict: bool = False,
+    pagination: bool = False,
+    page_size: int = 5,
 ) -> Selections:
     """A prompt that allows selecting multiple options from a list of options
 
@@ -307,23 +331,28 @@ def select_multiple(
             ticked_indices = []
 
         index = cursor_index
+        page: int = 1
+        total_pages = math.ceil(len(options) / page_size)
 
         error_message = ''
         while True:
+            show_from = (page - 1) * page_size
+            show_to = min(show_from + page_size, len(options))
             rendered = (
                 '\n'.join(
                     [
                         _render_option_select_multiple(
                             option=preprocessor(option),
-                            ticked=i in ticked_indices,
+                            ticked=i + show_from in ticked_indices,
                             tick_character=tick_character,
                             tick_style=tick_style,
-                            selected=i == index,
+                            selected=i == index % page_size,
                             cursor_style=cursor_style,
                         )
-                        for i, option in enumerate(options)
+                        for i, option in enumerate(options[show_from:show_to])
                     ]
                 )
+                + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503
                 + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'  # noqa: W503
             )
             if error_message:
@@ -336,11 +365,21 @@ def select_multiple(
                     raise KeyboardInterrupt()
                 return []
             elif keypress in DefaultKeys.up:
+                if index <= show_from:
+                    page = _paginate_back(page, total_pages)
                 index -= 1
                 index = index % len(options)
             elif keypress in DefaultKeys.down:
+                if index > show_to - 2:
+                    page = _paginate_forward(page, total_pages)
                 index += 1
                 index = index % len(options)
+            elif keypress in DefaultKeys.right:
+                page = _paginate_forward(page, total_pages)
+                index = (page - 1) * page_size
+            elif keypress in DefaultKeys.left:
+                page = _paginate_back(page, total_pages)
+                index = (page - 1) * page_size
             elif keypress in DefaultKeys.home:
                 index = 0
             elif keypress in DefaultKeys.end:
