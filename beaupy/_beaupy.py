@@ -254,7 +254,7 @@ def select(
             cursor_style = 'white'
 
         index: int = cursor_index
-        page: int = 1
+        page: int = index // page_size + 1
         total_pages = math.ceil(len(options) / page_size)
 
         while True:
@@ -349,7 +349,7 @@ def select_multiple(
             ticked_indices = []
 
         index = cursor_index
-        page: int = 1
+        page: int = index // page_size + 1
         total_pages = math.ceil(len(options) / page_size)
 
         error_message = ''
