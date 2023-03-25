@@ -83,7 +83,7 @@ class Config:
 _navigation_keys = [DefaultKeys.up, DefaultKeys.down, DefaultKeys.right, DefaultKeys.left, DefaultKeys.home, DefaultKeys.end]
 
 
-def _navigate(
+def _navigate_select(
     index: int,
     page: int,
     keypress: Key,
@@ -233,6 +233,8 @@ def select(
         return_index (bool, optional): If `True`, `select` will return the index of selected element in options. Defaults to `False`.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
         if it's `True`, `ValueError` will be thrown. Defaults to False.
+        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
+        page_size (int, optional): Number of options to show on a single page if pagination is enabled. Defaults to 5.
 
     Raises:
         ValueError: Thrown if no `options` are povided and strict is `True`
@@ -277,7 +279,7 @@ def select(
                     raise KeyboardInterrupt()
                 return None
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                index, page = _navigate(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
+                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
@@ -322,6 +324,8 @@ def select_multiple(
                                          of ticked elements in options. Defaults to `False`.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
                                  if it's `True`, `ValueError` will be thrown. Defaults to False.
+        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
+        page_size (int, optional): Number of options to show on a single page if pagination is enabled. Defaults to 5.
 
     Raises:
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
@@ -379,7 +383,7 @@ def select_multiple(
                     raise KeyboardInterrupt()
                 return []
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                index, page = _navigate(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
+                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)
