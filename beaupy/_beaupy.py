@@ -12,7 +12,7 @@ from typing import Any, Callable, List, Optional, Tuple, Type, Union
 from rich.console import Console
 from rich.live import Live
 from yakh import get_key
-from yakh.key import Keys
+from yakh.key import Key, Keys
 
 from beaupy._internals import (
     Abort,
@@ -78,6 +78,46 @@ class Config:
 
     raise_on_interrupt: bool = False
     raise_on_escape: bool = False
+
+
+_navigation_keys = [DefaultKeys.up, DefaultKeys.down, DefaultKeys.right, DefaultKeys.left, DefaultKeys.home, DefaultKeys.end]
+
+
+def _navigate(
+    index: int,
+    page: int,
+    keypress: Key,
+    total_options: int,
+    pagination: int,
+    total_pages: int,
+    page_size: int,
+    show_from: int,
+    show_to: int,
+) -> Tuple[int, int]:
+    if keypress in DefaultKeys.up:
+        if index <= show_from and pagination:
+            page = _paginate_back(page, total_pages)
+        index -= 1
+        index = index % total_options
+    elif keypress in DefaultKeys.down:
+        if index > show_to - 2 and pagination:
+            page = _paginate_forward(page, total_pages)
+        index += 1
+        index = index % total_options
+    elif keypress in DefaultKeys.right and pagination:
+        page = _paginate_forward(page, total_pages)
+        index = (page - 1) * page_size
+    elif keypress in DefaultKeys.left and pagination:
+        page = _paginate_back(page, total_pages)
+        index = (page - 1) * page_size
+    elif keypress in DefaultKeys.home:
+        page = 1
+        index = 0
+    elif keypress in DefaultKeys.end:
+        page = total_pages
+        index = total_options - 1
+
+    return index, page
 
 
 def prompt(
@@ -168,9 +208,6 @@ def prompt(
                 cursor_index += 1
 
 
-Selection = Union[int, Any]
-
-
 def select(
     options: List[Union[Tuple[int, ...], str]],
     preprocessor: Callable[[Any], Any] = lambda val: val,
@@ -181,7 +218,7 @@ def select(
     strict: bool = False,
     pagination: bool = False,
     page_size: int = 5,
-) -> Union[Selection, None]:
+) -> Union[int, Any, None]:
     """A prompt that allows selecting one option from a list of options
 
     Args:
@@ -239,28 +276,8 @@ def select(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            elif keypress in DefaultKeys.up:
-                if index <= show_from:
-                    page = _paginate_back(page, total_pages)
-                index -= 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.down:
-                if index > show_to - 2:
-                    page = _paginate_forward(page, total_pages)
-                index += 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.right:
-                page = _paginate_forward(page, total_pages)
-                index = (page - 1) * page_size
-            elif keypress in DefaultKeys.left:
-                page = _paginate_back(page, total_pages)
-                index = (page - 1) * page_size
-            elif keypress in DefaultKeys.home:
-                page = 1
-                index = 0
-            elif keypress in DefaultKeys.end:
-                page = total_pages
-                index = len(options) - 1
+            elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
+                index, page = _navigate(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
@@ -269,9 +286,6 @@ def select(
                 if Config.raise_on_escape:
                     raise Abort(keypress)
                 return None
-
-
-Selections = List[Selection]
 
 
 def select_multiple(
@@ -288,7 +302,7 @@ def select_multiple(
     strict: bool = False,
     pagination: bool = False,
     page_size: int = 5,
-) -> Selections:
+) -> List[Union[int, Any]]:
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
@@ -364,26 +378,8 @@ def select_multiple(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return []
-            elif keypress in DefaultKeys.up:
-                if index <= show_from:
-                    page = _paginate_back(page, total_pages)
-                index -= 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.down:
-                if index > show_to - 2:
-                    page = _paginate_forward(page, total_pages)
-                index += 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.right:
-                page = _paginate_forward(page, total_pages)
-                index = (page - 1) * page_size
-            elif keypress in DefaultKeys.left:
-                page = _paginate_back(page, total_pages)
-                index = (page - 1) * page_size
-            elif keypress in DefaultKeys.home:
-                index = 0
-            elif keypress in DefaultKeys.end:
-                index = len(options) - 1
+            elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
+                index, page = _navigate(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)
