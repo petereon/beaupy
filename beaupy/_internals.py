@@ -96,3 +96,19 @@ def _validate_prompt_value(
     except ValueError:
         error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} cannot be converted to type `{target_type}`"
         raise ConversionError(error)
+
+
+def _paginate_forward(page_num: int, total_pages: int) -> int:
+    if page_num < total_pages:
+        page_num += 1
+    else:
+        page_num = 1
+    return page_num
+
+
+def _paginate_back(page: int, total_pages: int) -> int:
+    if page > 1:
+        page -= 1
+    else:
+        page = total_pages
+    return page

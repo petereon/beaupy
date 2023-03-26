@@ -26,7 +26,7 @@ def _():
 
 
 @test("`confirm` with `Try test` as a question, `No` as a yes_text, `Yes` as a no_text and defaults otherwise")
-@mock.patch('beaupy._beaupy.get_key', side_effect=[Keys.ENTER])
+@mock.patch("beaupy._beaupy.get_key", side_effect=[Keys.ENTER])
 def _():
     b.get_key = lambda: Keys.ENTER
     Live.update = mock.MagicMock()
@@ -227,7 +227,8 @@ def _():
 
 
 @test(
-    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and enter empty confirms",)
+    "`confirm` with `Try test` as a question and yes as a default going up to select no with `bold orange1` as a cursor color and enter empty confirms",
+)
 def _():
     steps = iter([Keys.ENTER])
 
@@ -296,6 +297,7 @@ def _():
 
     assert ret is True
 
+
 @test("`confirm` with `Test` as a question, and pressing Backspace on empty")
 def _():
     steps = iter([Keys.BACKSPACE, Keys.ENTER])
@@ -308,6 +310,7 @@ def _():
     ]
 
     assert ret is True
+
 
 @test("`confirm` with `Test` as a question, and pressing Tab on empty")
 def _():
@@ -335,16 +338,17 @@ def _():
     ]
     assert ret is None
 
+
 @fixture
 def set_raise_on_escape():
     Config.raise_on_escape = True
     yield
     Config.raise_on_escape = False
-    
+
 
 @test("`confirm` raises Abort when ESC is pressed and raise_on_abort is True")
 def _(set_raise_on_escape=set_raise_on_escape):
-    steps = iter([Key('esc', (27, ), is_printable=False)])
+    steps = iter([Key("esc", (27,), is_printable=False)])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     with raises(Abort) as e:

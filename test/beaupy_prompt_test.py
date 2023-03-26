@@ -12,6 +12,7 @@ import beaupy
 def raise_keyboard_interrupt():
     raise KeyboardInterrupt()
 
+
 @fixture
 def set_raise_on_escape():
     Config.raise_on_escape = True
@@ -192,9 +193,10 @@ def _():
         ),
     ]
 
+
 @test("Prompt with typing `J`, then deleting it and typing `No`")
 def _():
-    
+
     steps = iter(["J", Keys.BACKSPACE, Keys.BACKSPACE, "N", "o", Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -335,6 +337,7 @@ def _():
     res = prompt(prompt="Try test")
     assert res == "Hello"
 
+
 @test("Verify that escape returns None")
 def _():
     steps = iter([Keys.ESC])
@@ -346,7 +349,7 @@ def _():
 
 @test("Verify that escape raises Abort when raise_on_escape is True")
 def _(set_raise_on_escape=set_raise_on_escape):
-    steps = iter([Key('esc', (27, ), is_printable=False)])
+    steps = iter([Key("esc", (27,), is_printable=False)])
 
     b.get_key = lambda: next(steps)
     with raises(Abort) as e:

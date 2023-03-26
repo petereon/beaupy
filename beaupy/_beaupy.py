@@ -5,13 +5,14 @@ A Python library of interactive CLI elements you have been looking for
 
 __license__ = 'MIT'
 
+import math
 import warnings
 from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
 from rich.console import Console
 from rich.live import Live
 from yakh import get_key
-from yakh.key import Keys
+from yakh.key import Key, Keys
 
 from beaupy._internals import (
     Abort,
@@ -20,6 +21,8 @@ from beaupy._internals import (
     ValidationError,
     _cursor_hidden,
     _format_option_select,
+    _paginate_back,
+    _paginate_forward,
     _render_option_select_multiple,
     _render_prompt,
     _update_rendered,
@@ -75,6 +78,46 @@ class Config:
 
     raise_on_interrupt: bool = False
     raise_on_escape: bool = False
+
+
+_navigation_keys = [DefaultKeys.up, DefaultKeys.down, DefaultKeys.right, DefaultKeys.left, DefaultKeys.home, DefaultKeys.end]
+
+
+def _navigate_select(
+    index: int,
+    page: int,
+    keypress: Key,
+    total_options: int,
+    pagination: int,
+    total_pages: int,
+    page_size: int,
+    show_from: int,
+    show_to: int,
+) -> Tuple[int, int]:
+    if keypress in DefaultKeys.up:
+        if index <= show_from and pagination:
+            page = _paginate_back(page, total_pages)
+        index -= 1
+        index = index % total_options
+    elif keypress in DefaultKeys.down:
+        if index > show_to - 2 and pagination:
+            page = _paginate_forward(page, total_pages)
+        index += 1
+        index = index % total_options
+    elif keypress in DefaultKeys.right and pagination:
+        page = _paginate_forward(page, total_pages)
+        index = (page - 1) * page_size
+    elif keypress in DefaultKeys.left and pagination:
+        page = _paginate_back(page, total_pages)
+        index = (page - 1) * page_size
+    elif keypress in DefaultKeys.home:
+        page = 1
+        index = 0
+    elif keypress in DefaultKeys.end:
+        page = total_pages
+        index = total_options - 1
+
+    return index, page
 
 
 def prompt(
@@ -165,9 +208,6 @@ def prompt(
                 cursor_index += 1
 
 
-Selection = Union[int, Any]
-
-
 def select(
     options: List[Union[Tuple[int, ...], str]],
     preprocessor: Callable[[Any], Any] = lambda val: val,
@@ -176,7 +216,9 @@ def select(
     cursor_index: int = 0,
     return_index: bool = False,
     strict: bool = False,
-) -> Union[Selection, None]:
+    pagination: bool = False,
+    page_size: int = 5,
+) -> Union[int, Any, None]:
     """A prompt that allows selecting one option from a list of options
 
     Args:
@@ -191,6 +233,8 @@ def select(
         return_index (bool, optional): If `True`, `select` will return the index of selected element in options. Defaults to `False`.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
         if it's `True`, `ValueError` will be thrown. Defaults to False.
+        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
+        page_size (int, optional): Number of options to show on a single page if pagination is enabled. Defaults to 5.
 
     Raises:
         ValueError: Thrown if no `options` are povided and strict is `True`
@@ -210,17 +254,22 @@ def select(
             cursor_style = 'white'
 
         index: int = cursor_index
+        page: int = index // page_size + 1
+        total_pages = math.ceil(len(options) / page_size)
 
         while True:
+            show_from = (page - 1) * page_size
+            show_to = min(show_from + page_size, len(options))
             rendered = (
                 '\n'.join(
                     [
                         _format_option_select(
-                            i=i, cursor_index=index, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor
+                            i=i, cursor_index=index % page_size, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor
                         )
-                        for i, option in enumerate(options)
+                        for i, option in enumerate(options[show_from:show_to])
                     ]
                 )
+                + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503
                 + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
             )
             _update_rendered(live, rendered)
@@ -229,16 +278,8 @@ def select(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            elif keypress in DefaultKeys.up:
-                index -= 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.down:
-                index += 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.home:
-                index = 0
-            elif keypress in DefaultKeys.end:
-                index = len(options) - 1
+            elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
+                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
@@ -247,9 +288,6 @@ def select(
                 if Config.raise_on_escape:
                     raise Abort(keypress)
                 return None
-
-
-Selections = List[Selection]
 
 
 def select_multiple(
@@ -264,7 +302,9 @@ def select_multiple(
     maximal_count: Optional[int] = None,
     return_indices: bool = False,
     strict: bool = False,
-) -> Selections:
+    pagination: bool = False,
+    page_size: int = 5,
+) -> List[Union[int, Any]]:
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
@@ -284,6 +324,8 @@ def select_multiple(
                                          of ticked elements in options. Defaults to `False`.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
                                  if it's `True`, `ValueError` will be thrown. Defaults to False.
+        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
+        page_size (int, optional): Number of options to show on a single page if pagination is enabled. Defaults to 5.
 
     Raises:
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
@@ -307,23 +349,28 @@ def select_multiple(
             ticked_indices = []
 
         index = cursor_index
+        page: int = index // page_size + 1
+        total_pages = math.ceil(len(options) / page_size)
 
         error_message = ''
         while True:
+            show_from = (page - 1) * page_size
+            show_to = min(show_from + page_size, len(options))
             rendered = (
                 '\n'.join(
                     [
                         _render_option_select_multiple(
                             option=preprocessor(option),
-                            ticked=i in ticked_indices,
+                            ticked=i + show_from in ticked_indices,
                             tick_character=tick_character,
                             tick_style=tick_style,
-                            selected=i == index,
+                            selected=i == index % page_size,
                             cursor_style=cursor_style,
                         )
-                        for i, option in enumerate(options)
+                        for i, option in enumerate(options[show_from:show_to])
                     ]
                 )
+                + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503
                 + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'  # noqa: W503
             )
             if error_message:
@@ -335,16 +382,8 @@ def select_multiple(
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return []
-            elif keypress in DefaultKeys.up:
-                index -= 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.down:
-                index += 1
-                index = index % len(options)
-            elif keypress in DefaultKeys.home:
-                index = 0
-            elif keypress in DefaultKeys.end:
-                index = len(options) - 1
+            elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
+                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)

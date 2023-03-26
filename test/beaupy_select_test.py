@@ -12,11 +12,13 @@ import beaupy
 def raise_keyboard_interrupt():
     raise KeyboardInterrupt()
 
+
 @fixture
 def set_raise_on_escape():
     Config.raise_on_escape = True
     yield
     Config.raise_on_escape = False
+
 
 @test("`select` with no options permissive")
 def _():
@@ -273,6 +275,7 @@ def _():
     assert Live.update.call_count == 4
     assert res == 3
 
+
 @test("`select` returns none when ESC is pressed")
 def _():
     steps = iter([Keys.ESC])
@@ -290,10 +293,238 @@ def _():
 
 @test("`select` raises Abort when ESC is pressed and raise_on_escape is True")
 def _(set_raise_on_escape=set_raise_on_escape):
-    steps = iter([Key('esc', (27, ), is_printable=False)])
+    steps = iter([Key("esc", (27,), is_printable=False)])
 
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     with raises(Abort) as e:
         select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
     assert str(e.raised) == "Aborted by user with key (27,)"
+
+
+@test("`select` shows only the first 5 options and number of pages if pagination is enabled")
+def _():
+    steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n[green]x[/green] test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+        ),
+    ]
+
+    assert Live.update.call_count == 4
+    assert res == "test4"
+
+
+@test("`select` shows only the first 3 options and number of pages if pagination is enabled and page_size is 3")
+def _():
+    steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+        page_size=3,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/3[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3[grey58]\n\nPage 1/3[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert Live.update.call_count == 3
+    assert res == "test3"
+
+
+@test("`select` paginates forward when cursor is on the last option and `DOWN_ARROW` is pressed")
+def _():
+    steps = iter([Keys.DOWN_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5"],
+        cursor_index=2,
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+        page_size=3,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert Live.update.call_count == 2
+    assert res == "test4"
+
+
+@test("`select` paginates backward when cursor is on the first_option and second page and `UP_ARROW` is pressed")
+def _():
+    steps = iter([Keys.UP_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5"],
+        cursor_index=3,
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+        page_size=3,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert Live.update.call_count == 2
+    assert res == "test3"
+
+
+@test("`select` paginates forward when `RIGHT_ARROW` is pressed")
+def _():
+    steps = iter([Keys.RIGHT_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert Live.update.call_count == 2
+    assert res == "test4"
+
+
+@test("`select` paginates backwards when it's on second page `LEFT_ARROW` is pressed")
+def _():
+    steps = iter([Keys.LEFT_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5"],
+        cursor_index=3,
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+        page_size=3,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+    assert Live.update.call_count == 2
+    assert res == "test1"
+
+
+@test("`select` paginates to the first page when it's the last page and `RIGHT_ARROW` is pressed")
+def _():
+    steps = iter([Keys.RIGHT_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5"],
+        cursor_index=3,
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+        page_size=3,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+    assert Live.update.call_count == 2
+    assert res == "test1"
+
+
+@test("`select` paginates to the last page when it's the first page and `LEFT_ARROW` is pressed")
+def _():
+    steps = iter([Keys.LEFT_ARROW, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+    assert Live.update.call_count == 2
+    assert res == "test4"
+
+
+@test("`select` paginates to the first page when it's the last page and `HOME` is pressed")
+def _():
+    steps = iter([Keys.HOME, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5"],
+        cursor_index=3,
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+        page_size=3,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+    assert Live.update.call_count == 2
+    assert res == "test1"
+
+
+@test("`select` paginates to the last page when it's the first page and `END` is pressed")
+def _():
+    steps = iter([Keys.END, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(
+        options=["test1", "test2", "test3", "test4", "test5"],
+        cursor="x",
+        cursor_style="green",
+        pagination=True,
+        page_size=3,
+    )
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test4\n[green]x[/green] test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+    assert Live.update.call_count == 2
+    assert res == "test5"
