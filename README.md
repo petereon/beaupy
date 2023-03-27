@@ -13,6 +13,8 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=petereon_beaupy)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/beaupy?color=g&label=%F0%9F%93%A5%20Downloads)
 
+![example](https://raw.githubusercontent.com/petereon/beaupy/master/example.gif)
+
 For documentation but more and prettier see [**here**](https://petereon.github.io/beaupy/)
 
 ## Acknowledgment
@@ -20,8 +22,6 @@ For documentation but more and prettier see [**here**](https://petereon.github.i
 BeauPy stands on the shoulders of giants. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
 
 ## Overview
-
-![example](https://raw.githubusercontent.com/petereon/beaupy/master/example.gif)
 
 **BeauPy** implements a number of common interactive elements:
 
