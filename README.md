@@ -21,6 +21,8 @@ BeauPy stands on the shoulders of giants. It is based on another library with wh
 
 ## Overview
 
+![example](https://raw.githubusercontent.com/petereon/beaupy/master/example.gif)
+
 **BeauPy** implements a number of common interactive elements:
 
 | Function                                                                                                  | Functionality                                                                              |
@@ -30,42 +32,11 @@ BeauPy stands on the shoulders of giants. It is based on another library with wh
 | [`confirm`](https://petereon.github.io/beaupy/api/#confirm)                      | Prompt with a question and yes/no options                                                  |
 | [`prompt`](https://petereon.github.io/beaupy/api/#prompt)                        | Prompt that takes free input with optional validation, type conversion and input hiding |
 
-## Getting Started
-
-**BeauPy** is a library of interactive TUI elements for CLI applications.
-
-**BeauPy** is
-
-- [rich](https://rich.readthedocs.io/en/stable/) friendly
-- stylable
-- opinionated
-- configurable
-
-### Installation
-
-From PyPI:
-
-```sh
-pip install beaupy
-```
-
-From source:
-
-```sh
-git clone https://github.com/petereon/beaupy.git
-poetry build
-pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
-```
-
-### Example
-
-![example](https://raw.githubusercontent.com/petereon/beaupy/master/example.gif)
-
 TUI elements shown in the above gif are the result of the follwing code:
 
 ```python
 import time
-from beaupy import *
+from beaupy import confirm, prompt, select, select_multiple
 from beaupy.spinners import *
 
 
@@ -133,15 +104,31 @@ if confirm("Will you take the ring to Mordor?"):
     console.print(f"And you brought {potato_count} taters!")      
 ```
 
-For more information refer to [more_examples](https://petereon.github.io/beaupy/examples/) or definitive, but much less exciting [api documentation](https://petereon.github.io/beaupy/api/)
+For more information refer to [more examples](https://petereon.github.io/beaupy/examples/) or definitive, but much less exciting [API documentation](https://petereon.github.io/beaupy/api/)
+
+## Installation
+
+From PyPI:
+
+```sh
+pip install beaupy
+```
+
+From source:
+
+```sh
+git clone https://github.com/petereon/beaupy.git
+poetry build
+pip install ./dist/beaupy-{{some-version}}-py3-none-any.whl
+```
 
 ## Roadmap
 
-This repository has a [associated GitHub project](https://github.com/users/petereon/projects/3/views/1) where work that is currently done can be seen
+This repository has a [associated GitHub project](https://github.com/users/petereon/projects/3/views/1) where work that is currently done can be seen.
 
 ## Contributing
 
-If you want to contribute, please feel free to suggest features or implement them yourself.
+If you would like to contribute, please feel free to suggest features or implement them yourself.
 
 Also **please report any issues and bugs you might find!**
 
