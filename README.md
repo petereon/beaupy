@@ -190,7 +190,8 @@ Internal logic of `beaupy` is supported for all the major platforms (Windows, Li
 
 ## Known Issues
 
-- Version `2.x.x` reportedly does not always support arrow keys on Windows. 
+- Version `2.x.x`: arrow keys reportedly don't always work on Windows. Resolved in `3.x.x`
+- Version `3.5.0`: only first 5 options are displayed for `select` and `select_multiple`. Resolved in `3.5.1`
 
 ## Awesome projects using `beaupy`
 
