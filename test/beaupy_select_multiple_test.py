@@ -78,6 +78,22 @@ def _():
     assert res == []
 
 
+@test("`select_multiple` with 10 options pressing escape")
+def _():
+    steps = iter([Keys.ESC])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"], tick_character="😋")
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+    ]
+    assert Live.update.call_count == 1
+    assert res == []
+
+
 @test("`select_multiple` with 2 options starting from first selecting going down, selecting second one and going down again")
 def _():
     steps = iter([" ", Keys.DOWN_ARROW, " ", Keys.DOWN_ARROW, Keys.ENTER])
