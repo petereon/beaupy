@@ -260,7 +260,7 @@ def select(
         while True:
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
-            rendered = (
+            rendered = (  # noqa: ECE001
                 '\n'.join(
                     [
                         _format_option_select(
@@ -356,7 +356,7 @@ def select_multiple(
         while True:
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
-            rendered = (
+            rendered = (  # noqa: ECE001
                 '\n'.join(
                     [
                         _render_option_select_multiple(
