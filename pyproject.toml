@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'beaupy'
-version = '3.5.0'
+version = '3.5.1'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
@@ -93,7 +93,14 @@ branch = true
 relative_files = true
 report = {skip_empty = true}
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.test.dependencies]
+expycted = '*'
+mock = '*'
+poethepoet = '*'
+ward = '*'
+ward-coverage = "^0.3.0"
+
+[tool.poetry.group.dev.dependencies]
 # Code Scanning and Formatting
 mypy = '*'
 pyproject-flake8 = "*"

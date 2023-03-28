@@ -260,13 +260,13 @@ def select(
         while True:
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
-            rendered = (
+            rendered = (  # noqa: ECE001
                 '\n'.join(
                     [
                         _format_option_select(
                             i=i, cursor_index=index % page_size, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor
                         )
-                        for i, option in enumerate(options[show_from:show_to])
+                        for i, option in enumerate(options[show_from:show_to] if pagination else options)
                     ]
                 )
                 + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503
@@ -356,7 +356,7 @@ def select_multiple(
         while True:
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
-            rendered = (
+            rendered = (  # noqa: ECE001
                 '\n'.join(
                     [
                         _render_option_select_multiple(
@@ -367,7 +367,7 @@ def select_multiple(
                             selected=i == index % page_size,
                             cursor_style=cursor_style,
                         )
-                        for i, option in enumerate(options[show_from:show_to])
+                        for i, option in enumerate(options[show_from:show_to] if pagination else options)
                     ]
                 )
                 + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503

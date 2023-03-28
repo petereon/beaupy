@@ -28,7 +28,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install poetry poethepoet
-        poetry install
+        poetry install --without dev
     - name: Build and install the library
       run: |
         poe build

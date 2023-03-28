@@ -80,6 +80,22 @@ def _():
     assert res == "test4"
 
 
+@test("`select` with 10 options")
+def _():
+    steps = iter([Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select(options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"])
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+    ]
+
+    assert Live.update.call_count == 1
+    assert res == "test1"
+
+
+
 @test("`select` with pressing down twice and selecting first with home")
 def _():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.HOME, Keys.ENTER])
