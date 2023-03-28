@@ -280,29 +280,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    Getting Started
-  </a>
-  
-    <nav class="md-nav" aria-label="Getting Started">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     Installation
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -440,29 +420,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    Getting Started
-  </a>
-  
-    <nav class="md-nav" aria-label="Getting Started">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     Installation
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -551,6 +511,7 @@
 <a href="https://sonarcloud.io/summary/new_code?id=petereon_beaupy"><img alt="Maintainability Rating" src="https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&amp;metric=sqale_rating" /></a>
 <a href="https://sonarcloud.io/summary/new_code?id=petereon_beaupy"><img alt="Security Rating" src="https://sonarcloud.io/api/project_badges/measure?project=petereon_beaupy&amp;metric=security_rating" /></a>
 <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/beaupy?color=g&amp;label=%F0%9F%93%A5%20Downloads" /></p>
+<p><img alt="example" src="https://raw.githubusercontent.com/petereon/beaupy/master/example.gif" /></p>
 <p>For documentation but more and prettier see <a href="https://petereon.github.io/beaupy/"><strong>here</strong></a></p>
 <h2 id="acknowledgment">Acknowledgment</h2>
 <p>BeauPy stands on the shoulders of giants. It is based on another library with which it shares some of the source code, <a href="https://github.com/kamik423/cutie"><code>cutie</code></a>, developed by <a href="https://github.com/Kamik423">Kamik423</a>. It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.</p>
@@ -582,29 +543,9 @@
 </tr>
 </tbody>
 </table>
-<h2 id="getting-started">Getting Started</h2>
-<p><strong>BeauPy</strong> is a library of interactive TUI elements for CLI applications.</p>
-<p><strong>BeauPy</strong> is</p>
-<ul>
-<li><a href="https://rich.readthedocs.io/en/stable/">rich</a> friendly</li>
-<li>stylable</li>
-<li>opinionated</li>
-<li>configurable</li>
-</ul>
-<h3 id="installation">Installation</h3>
-<p>From PyPI:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>beaupy
-</code></pre></div>
-<p>From source:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/petereon/beaupy.git
-poetry<span class="w"> </span>build
-pip<span class="w"> </span>install<span class="w"> </span>./dist/beaupy-<span class="o">{{</span>some-version<span class="o">}}</span>-py3-none-any.whl
-</code></pre></div>
-<h3 id="example">Example</h3>
-<p><img alt="example" src="https://raw.githubusercontent.com/petereon/beaupy/master/example.gif" /></p>
 <p>TUI elements shown in the above gif are the result of the follwing code:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">beaupy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">beaupy</span> <span class="kn">import</span> <span class="n">confirm</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">select_multiple</span>
 <span class="kn">from</span> <span class="nn">beaupy.spinners</span> <span class="kn">import</span> <span class="o">*</span>
 
 
@@ -671,11 +612,20 @@ pip<span class="w"> </span>install<span class="w"> </span>./dist/beaupy-<span cl
         <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[red]You forgot the ring and brought Middle-Earth to its knees![/red]&quot;</span><span class="p">)</span>
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;And you brought </span><span class="si">{</span><span class="n">potato_count</span><span class="si">}</span><span class="s2"> taters!&quot;</span><span class="p">)</span>      
 </code></pre></div>
-<p>For more information refer to <a href="https://petereon.github.io/beaupy/examples/">more_examples</a> or definitive, but much less exciting <a href="https://petereon.github.io/beaupy/api/">api documentation</a></p>
+<p>For more information refer to <a href="https://petereon.github.io/beaupy/examples/">more examples</a> or definitive, but much less exciting <a href="https://petereon.github.io/beaupy/api/">API documentation</a></p>
+<h2 id="installation">Installation</h2>
+<p>From PyPI:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>beaupy
+</code></pre></div>
+<p>From source:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/petereon/beaupy.git
+poetry<span class="w"> </span>build
+pip<span class="w"> </span>install<span class="w"> </span>./dist/beaupy-<span class="o">{{</span>some-version<span class="o">}}</span>-py3-none-any.whl
+</code></pre></div>
 <h2 id="roadmap">Roadmap</h2>
-<p>This repository has a <a href="https://github.com/users/petereon/projects/3/views/1">associated GitHub project</a> where work that is currently done can be seen</p>
+<p>This repository has a <a href="https://github.com/users/petereon/projects/3/views/1">associated GitHub project</a> where work that is currently done can be seen.</p>
 <h2 id="contributing">Contributing</h2>
-<p>If you want to contribute, please feel free to suggest features or implement them yourself.</p>
+<p>If you would like to contribute, please feel free to suggest features or implement them yourself.</p>
 <p>Also <strong>please report any issues and bugs you might find!</strong></p>
 <h3 id="development">Development</h3>
 <p>To start development you can clone the repository:</p>
