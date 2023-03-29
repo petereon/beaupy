@@ -80,19 +80,28 @@ def _():
     assert res == "test4"
 
 
-@test("`select` with 10 options")
+@test("`select` with 10 options, stepping through them")
 def _():
-    steps = iter([Keys.ENTER])
+    steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW ,Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"])
 
     assert Live.update.call_args_list == [
         mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n[pink1]>[/pink1] test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n[pink1]>[/pink1] test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n[pink1]>[/pink1] test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n[pink1]>[/pink1] test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n[pink1]>[/pink1] test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n[pink1]>[/pink1] test10\n\n(Confirm with [bold]enter[/bold])"),
     ]
 
-    assert Live.update.call_count == 1
-    assert res == "test1"
+    assert Live.update.call_count == 10
+    assert res == "test10"
 
 
 

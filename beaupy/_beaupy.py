@@ -264,7 +264,11 @@ def select(
                 '\n'.join(
                     [
                         _format_option_select(
-                            i=i, cursor_index=index % page_size, option=preprocessor(option), cursor_style=cursor_style, cursor=cursor
+                            i=i,
+                            cursor_index=index % page_size if pagination else index,
+                            option=preprocessor(option),
+                            cursor_style=cursor_style,
+                            cursor=cursor,
                         )
                         for i, option in enumerate(options[show_from:show_to] if pagination else options)
                     ]
@@ -364,7 +368,7 @@ def select_multiple(
                             ticked=i + show_from in ticked_indices,
                             tick_character=tick_character,
                             tick_style=tick_style,
-                            selected=i == index % page_size,
+                            selected=i == (index % page_size if pagination else index),
                             cursor_style=cursor_style,
                         )
                         for i, option in enumerate(options[show_from:show_to] if pagination else options)
