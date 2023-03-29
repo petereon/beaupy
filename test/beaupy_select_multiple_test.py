@@ -78,9 +78,9 @@ def _():
     assert res == []
 
 
-@test("`select_multiple` with 10 options pressing escape")
+@test("`select_multiple` with 10 options stepping through them")
 def _():
-    steps = iter([Keys.ESC])
+    steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW ,Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ESC])
 
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -89,8 +89,35 @@ def _():
         mock.call(
             renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
         ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] [pink1]test3[/pink1]\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] [pink1]test4[/pink1]\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] [pink1]test5[/pink1]\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] [pink1]test6[/pink1]\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] [pink1]test7[/pink1]\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] [pink1]test8[/pink1]\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] [pink1]test9[/pink1]\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+        mock.call(
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] [pink1]test10[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
     ]
-    assert Live.update.call_count == 1
+    assert Live.update.call_count == 10
     assert res == []
 
 
