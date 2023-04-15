@@ -1,3 +1,4 @@
+import re
 from ast import literal_eval
 from contextlib import contextmanager
 from typing import Any, Callable, Iterator, List, Type, Union
@@ -5,6 +6,7 @@ from typing import Any, Callable, Iterator, List, Type, Union
 import emoji
 from rich.console import Console, ConsoleRenderable
 from rich.live import Live
+from rich.style import Style
 from yakh.key import Key
 
 TargetType = Any
@@ -36,6 +38,18 @@ def _format_option_select(i: int, cursor_index: int, option: str, cursor_style: 
     )
 
 
+def _wrap_style(string_w_styles: str, global_style_str: str) -> str:
+    RE_STYLE_PATTERN = r'\[(.*?)\]'
+
+    global_style = Style.parse(global_style_str)
+    style_strings = list(set([i.replace('/', '') for i in re.findall(RE_STYLE_PATTERN, string_w_styles)]))
+    for style_string in style_strings:
+        style = Style.combine([Style.parse(style_string), global_style])
+        string_w_styles = string_w_styles.replace(f'{style_string}', f'{style}')
+
+    return f'[{global_style_str}]{string_w_styles}[/{global_style_str}]'
+
+
 def _render_option_select_multiple(
     option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
 ) -> str:
@@ -43,7 +57,7 @@ def _render_option_select_multiple(
     if ticked:
         prefix = f'\[[{tick_style}]{tick_character}[/{tick_style}]]'  # noqa: W605
     if selected:
-        option = f'[{cursor_style}]{option}[/{cursor_style}]'
+        option = _wrap_style(option, cursor_style)
     return f'{prefix} {option}'
 
 
