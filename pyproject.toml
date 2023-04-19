@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'beaupy'
-version = '3.5.3b0'
+version = '3.5.3'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
