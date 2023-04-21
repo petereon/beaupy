@@ -223,7 +223,7 @@ def prompt(
                     raise Abort(keypress)
                 return None
             else:
-                if not (keypress in DefaultKeys.tab and completion_context):   
+                if not (keypress in DefaultKeys.tab and completion_context):
                     value.insert(cursor_index, str(keypress))
                     cursor_index += 1
 
