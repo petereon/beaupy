@@ -5,7 +5,8 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
+env:
+  POETRY_VERSION: "1.4.2"
 jobs:
   build:
     if: |
@@ -25,9 +26,19 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Cache Poetry cache
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pypoetry
+        key: poetry-cache-${{ runner.os }}-${{ matrix.python-version }}-${{ env.POETRY_VERSION }}
+    - name: Cache Packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.local
+        key: poetry-local-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
     - name: Install dependencies
       run: |
-        python -m pip install poetry poethepoet
+        python -m pip install "poetry==${{ env.POETRY_VERSION }}" poethepoet
         poetry install --without dev
     - name: Build and install the library
       run: |
