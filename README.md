@@ -38,7 +38,9 @@ TUI elements shown in the above gif are the result of the follwing code:
 import time
 from beaupy import confirm, prompt, select, select_multiple
 from beaupy.spinners import *
+from rich.console import Console
 
+console = Console()
 
 # Confirm a dialog
 if confirm("Will you take the ring to Mordor?"):
