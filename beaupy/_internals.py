@@ -33,6 +33,8 @@ def _replace_emojis(text: str) -> str:
 
 
 def _format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
+    if (option.startswith(":SEPARATOR:")):
+        option = option[len(":SEPARATOR:"):]
     return '{}{}'.format(
         f'[{cursor_style}]{cursor}[/{cursor_style}] ' if i == cursor_index else ' ' * (len(_replace_emojis(cursor)) + 1), option
     )
@@ -54,6 +56,9 @@ def _render_option_select_multiple(
     option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
 ) -> str:
     prefix = '\[{}]'.format(' ' * len(_replace_emojis(tick_character)))  # noqa: W605
+    if (option.startswith(":SEPARATOR:")):
+        option = option[len(":SEPARATOR:"):]
+        prefix = " " * len(prefix)
     if ticked:
         prefix = f'\[[{tick_style}]{tick_character}[/{tick_style}]]'  # noqa: W605
     if selected:
