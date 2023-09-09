@@ -93,17 +93,24 @@ def _navigate_select(
     page_size: int,
     show_from: int,
     show_to: int,
+    options: list
 ) -> Tuple[int, int]:
     if keypress in DefaultKeys.up:
         if index <= show_from and pagination:
             page = _paginate_back(page, total_pages)
         index -= 1
         index = index % total_options
+        if (options[index].startswith(":SEPARATOR:")):
+            index -= 1
+            index = index % total_options
     elif keypress in DefaultKeys.down:
         if index > show_to - 2 and pagination:
             page = _paginate_forward(page, total_pages)
         index += 1
         index = index % total_options
+        if (options[index].startswith(":SEPARATOR:")):
+            index += 1
+            index = index % total_options
     elif keypress in DefaultKeys.right and pagination:
         page = _paginate_forward(page, total_pages)
         index = (page - 1) * page_size
@@ -283,7 +290,7 @@ def select(
                     raise KeyboardInterrupt()
                 return None
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
+                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to, options)
             elif keypress in DefaultKeys.confirm:
                 if return_index:
                     return index
@@ -387,7 +394,7 @@ def select_multiple(
                     raise KeyboardInterrupt()
                 return []
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
+                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to, options)
             elif keypress in DefaultKeys.select:
                 if index in ticked_indices:
                     ticked_indices.remove(index)
