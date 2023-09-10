@@ -7,5 +7,6 @@ from beaupy._beaupy import (  # noqa
     prompt,
     select,
     select_multiple,
+    pause
 )
 from beaupy._internals import Abort, ConversionError, ValidationError  # noqa
