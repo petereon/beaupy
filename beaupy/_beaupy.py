@@ -509,20 +509,3 @@ def confirm(
                 else:
                     is_selected = False
         return is_selected and is_yes
-
-
-def pause(
-        prompt: Optional[str] = None
-) -> bool:
-    """Similar to Batch pause function, holds the script until any key is pressed
-
-    Args:
-        prompt (str): Text prompt to show on screen
-
-    Returns:
-        bool: true, after key pressed
-    """
-    if prompt is not None:
-        console.print(prompt, end="", highlight=False)
-    if (get_key()):
-        return True
