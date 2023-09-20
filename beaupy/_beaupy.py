@@ -29,7 +29,7 @@ from beaupy._internals import (
     _validate_prompt_value,
 )
 
-console = Console()
+console = Console(highlight=False)
 
 
 class DefaultKeys:
