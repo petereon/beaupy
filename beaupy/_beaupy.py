@@ -363,7 +363,7 @@ def select_multiple(
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
                 prompt
-                + '\n'.join(
+                + '\n\n'.join(
                     [
                         _render_option_select_multiple(
                             option=preprocessor(option),
