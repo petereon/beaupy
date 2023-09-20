@@ -288,6 +288,7 @@ def select(
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
                 index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.confirm:
+                _update_rendered(live, '')
                 if return_index:
                     return index
                 return options[index]
