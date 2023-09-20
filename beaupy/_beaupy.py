@@ -295,8 +295,8 @@ def select(
 
 
 def select_multiple(
-    prompt: str,
     options: List[Union[Tuple[int, ...], str]],
+    prompt: str = None,
     preprocessor: Callable[[Any], Any] = lambda val: val,
     tick_character: str = '✓',
     tick_style: str = 'pink1',
