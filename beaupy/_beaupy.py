@@ -295,6 +295,7 @@ def select(
 
 
 def select_multiple(
+    prompt: str,
     options: List[Union[Tuple[int, ...], str]],
     preprocessor: Callable[[Any], Any] = lambda val: val,
     tick_character: str = '✓',
@@ -361,7 +362,8 @@ def select_multiple(
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
-                '\n'.join(
+                prompt
+                + '\n'.join(
                     [
                         _render_option_select_multiple(
                             option=preprocessor(option),
