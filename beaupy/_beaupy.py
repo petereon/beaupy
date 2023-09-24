@@ -143,6 +143,8 @@ def prompt(
         raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ConversionError`, else
                                                      the error will be reported onto the console. Defaults to True.
         initial_value (str, optional): If present, the value is placed in the prompt as the default value.
+        completion (Optional[Callable[[str], List[str]]], optional): When tab is pressed, this function will be called with the current
+                                                                     value as an argument and should return a list of possible completions.
 
     Raises:
         ValidationError: Raised if validation with provided validator fails
