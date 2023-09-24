@@ -66,18 +66,26 @@ def _update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> N
     live.refresh()
 
 
-def _render_prompt(secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str) -> str:
-    render_value = (len(typed_values) * '*' if secure else ''.join(typed_values)) + ' '
+def _render_prompt(
+    secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str, completion_options: List[str] = []
+) -> str:
+    input_value = len(typed_values) * '*' if secure else ''.join(typed_values)
     render_value = (
-        render_value[:cursor_position]
+        (input_value + ' ')[:cursor_position]
         + '[black on white]'  # noqa: W503
-        + render_value[cursor_position]  # noqa: W503
+        + (input_value + ' ')[cursor_position]  # noqa: W503
         + '[/black on white]'  # noqa: W503
-        + render_value[(cursor_position + 1) :]  # noqa: W503,E203
+        + (input_value + ' ')[(cursor_position + 1) :]  # noqa: W503,E203
     )
+
+    if completion_options and not secure:
+        rendered_completion_options = ' '.join(completion_options).replace(input_value, f'[black on white]{input_value}[/black on white]')
+        render_value = f'{render_value}\n{rendered_completion_options}'
+
     render_value = f'{prompt}\n> {render_value}\n\n(Confirm with [bold]enter[/bold])'
     if error:
         render_value = f'{render_value}\n[red]Error:[/red] {error}'
+
     return render_value
 
 

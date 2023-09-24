@@ -7,6 +7,7 @@ __license__ = 'MIT'
 
 import math
 import warnings
+from itertools import cycle
 from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
 from rich.console import Console
@@ -128,6 +129,7 @@ def prompt(
     raise_validation_fail: bool = True,
     raise_type_conversion_fail: bool = True,
     initial_value: Optional[str] = None,
+    completion: Optional[Callable[[str], List[str]]] = None,
 ) -> TargetType:
     """Function that prompts the user for written input
 
@@ -155,11 +157,29 @@ def prompt(
         value: List[str] = [*initial_value] if initial_value else []
         cursor_index = len(initial_value) if initial_value else 0
         error: str = ''
+        completion_context = False
+        completion_options: List[str] = []
         while True:
-            rendered = _render_prompt(secure, value, prompt, cursor_index, error)
+            rendered = _render_prompt(secure, value, prompt, cursor_index, error, completion_options)
             error = ''
             _update_rendered(live, rendered)
             keypress = get_key()
+            if keypress in DefaultKeys.tab:
+                if completion:
+                    if not completion_context:
+                        completion_options = completion(''.join(value))
+                        completion_options_iter = cycle(completion_options)
+                        if completion_options:
+                            completion_context = True
+
+                    if completion_context:
+                        value = [*next(completion_options_iter)]
+                        cursor_index = len(value)
+                else:
+                    completion_context = False
+            else:
+                completion_context = False
+
             if keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
@@ -204,8 +224,9 @@ def prompt(
                     raise Abort(keypress)
                 return None
             else:
-                value.insert(cursor_index, str(keypress))
-                cursor_index += 1
+                if not (keypress in DefaultKeys.tab and completion_context):
+                    value.insert(cursor_index, str(keypress))
+                    cursor_index += 1
 
 
 def select(

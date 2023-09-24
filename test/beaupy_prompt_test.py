@@ -355,3 +355,29 @@ def _(set_raise_on_escape=set_raise_on_escape):
     with raises(Abort) as e:
         prompt(prompt="Try test")
     assert str(e.raised) == "Aborted by user with key (27,)"
+
+@test("Verify that completion works")
+def _():
+    steps = iter([Keys.TAB, Keys.TAB, Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    res = prompt(prompt="Try test", completion=lambda _: ["Hello", "World"])
+    assert res == "World"
+
+@test("Verify that completion renders properly")
+def _():
+    steps = iter([Keys.TAB, Keys.TAB, Keys.TAB, Keys.ENTER])
+
+    Live.update = mock.MagicMock()
+    b.get_key = lambda: next(steps)
+    res = prompt(prompt="Try test", completion=lambda _: ["Hello", "World"])
+
+    assert Live.update.call_args_list == [
+        mock.call(renderable='Try test\n> [black on white] [/black on white]\n\n(Confirm with [bold]enter[/bold])'),
+        mock.call(renderable='Try test\n> Hello[black on white] [/black on white]\n[black on white]Hello[/black on white] World\n\n(Confirm with [bold]enter[/bold])'),
+        mock.call(renderable='Try test\n> World[black on white] [/black on white]\nHello [black on white]World[/black on white]\n\n(Confirm with [bold]enter[/bold])'),
+        mock.call(renderable='Try test\n> Hello[black on white] [/black on white]\n[black on white]Hello[/black on white] World\n\n(Confirm with [bold]enter[/bold])'),
+    ]
+
+
+    assert res == "Hello"
