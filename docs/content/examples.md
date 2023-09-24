@@ -133,6 +133,45 @@ very_secret_info = prompt("Type you API key, hehe",
                           secure=True)
 ```
 
+#### Completion
+
+You can provide a python callable such as `Callable[[str], List[str]]` to provide completion options. String passed to the callable is the current user input.
+
+```python
+favorite_color = prompt("What is your favorite color?",
+                        completion=lambda _: ["pink", "PINK", "P1NK"])
+```
+
+A more complex example with path completion:
+
+```python
+from os import listdir
+from pathlib import Path
+
+# ugly hacky path completion callable:
+def path_completion(str_path: str = ""): 
+    if not str_path:
+        return []
+    try:
+        path = Path(str_path)
+        rest = ''
+        if not path.exists():
+            str_path, rest = str_path.rsplit('/', 1)
+            path = Path(str_path or '/')
+
+        filtered_list_dir = [i for i in listdir(path) if i.startswith(rest)]
+
+        if not path.is_absolute():
+            return ['./'+str(Path(path)/i) for i in filtered_list_dir]
+        else:
+            return [str(Path(path)/i) for i in filtered_list_dir]
+    except Exception as e:
+        return []
+
+prompt(">", completion=path_completion)
+```
+
+
 ## Spinners
 
 ### Styling

@@ -158,21 +158,22 @@ def prompt(
         cursor_index = len(initial_value) if initial_value else 0
         error: str = ''
         completion_context = False
+        completion_options: List[str] = []
         while True:
-            rendered = _render_prompt(secure, value, prompt, cursor_index, error)
+            rendered = _render_prompt(secure, value, prompt, cursor_index, error, completion_options)
             error = ''
             _update_rendered(live, rendered)
             keypress = get_key()
             if keypress in DefaultKeys.tab:
                 if completion:
                     if not completion_context:
-                        options = completion(''.join(value))
-                        options_iter = cycle(options)
-                        if options:
+                        completion_options = completion(''.join(value))
+                        completion_options_iter = cycle(completion_options)
+                        if completion_options:
                             completion_context = True
 
                     if completion_context:
-                        value = [*next(options_iter)]
+                        value = [*next(completion_options_iter)]
                         cursor_index = len(value)
                 else:
                     completion_context = False
