@@ -385,7 +385,7 @@ def select_multiple(
                     [
                         _render_option_select_multiple(
                             option=preprocessor(option),
-                            ticked=i + show_from in ticked_indices,
+                            ticked=(i + show_from in ticked_indices) if pagination else (i in ticked_indices),
                             tick_character=tick_character,
                             tick_style=tick_style,
                             selected=i == (index % page_size if pagination else index),

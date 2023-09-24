@@ -38,7 +38,9 @@ TUI elements shown in the above gif are the result of the follwing code:
 import time
 from beaupy import confirm, prompt, select, select_multiple
 from beaupy.spinners import *
+from rich.console import Console
 
+console = Console()
 
 # Confirm a dialog
 if confirm("Will you take the ring to Mordor?"):
@@ -191,7 +193,7 @@ Internal logic of `beaupy` is supported for all the major platforms (Windows, Li
 ## Known Issues
 
 - Version `2.x.x`: arrow keys reportedly don't always work on Windows. Resolved in `3.x.x`
-- Version `3.5.0`: only first 5 options are displayed for `select` and `select_multiple`. Resolved in `3.5.2`
+- Version `3.5.0`: various option display bugs in `select` and `select_multiple`. Resolved in `3.5.4`
 
 ## Awesome projects using `beaupy`
 

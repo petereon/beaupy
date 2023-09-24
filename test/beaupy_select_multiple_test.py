@@ -738,3 +738,19 @@ def _():
     ]
     assert Live.update.call_count == 4
     assert res == ["test1", "[yellow1]test2[/yellow1]"]
+
+
+@test("`select_multiple` ticks a correct option")
+def _():
+    steps = iter([Keys.ENTER])
+
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    res = select_multiple(options=["test1", "test2", "test3", "test4", "test5", "test6"], ticked_indices=[5], cursor_index=5)
+    assert Live.update.call_args_list == [
+        mock.call(
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] test3\n\\[ ] test4\n\\[ ] test5\n\\[[pink1]✓[/pink1]] [pink1]test6[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+        ),
+    ]
+    assert Live.update.call_count == 1
+    assert res == ["test6"]
