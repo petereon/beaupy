@@ -30,7 +30,7 @@ from beaupy._internals import (
     _validate_prompt_value,
 )
 
-console = Console()
+console = Console(highlight=False)
 
 
 class DefaultKeys:
@@ -231,6 +231,7 @@ def prompt(
 
 def select(
     options: List[Union[Tuple[int, ...], str]],
+    title: str = None,
     preprocessor: Callable[[Any], Any] = lambda val: val,
     cursor: str = '>',
     cursor_style: str = 'pink1',
@@ -244,6 +245,7 @@ def select(
 
     Args:
         options (List[Union[Tuple[int, ...], str]]): A list of options to select from
+        title (str): The title that will be displayed above the options list
         preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
                                              For example, if you passed a `Person` object with `name` attribute, preprocessor
                                              could be `lambda person: person.name` to just show the content of `name` attribute
@@ -282,7 +284,8 @@ def select(
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
-                '\n'.join(
+                f'{title}\n'
+                + '\n'.join(
                     [
                         _format_option_select(
                             i=i,
@@ -306,6 +309,7 @@ def select(
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
                 index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.confirm:
+                _update_rendered(live, '')
                 if return_index:
                     return index
                 return options[index]
@@ -317,6 +321,7 @@ def select(
 
 def select_multiple(
     options: List[Union[Tuple[int, ...], str]],
+    title: str = None,
     preprocessor: Callable[[Any], Any] = lambda val: val,
     tick_character: str = '✓',
     tick_style: str = 'pink1',
@@ -334,6 +339,7 @@ def select_multiple(
 
     Args:
         options (List[Union[Tuple[int, ...], str]]): A list of options to select from
+        title (str): The title that will be displayed above the options list
         preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
                                              For example, if you passed a `Person` object with `name` attribute, preprocessor
                                              could be `lambda person: person.name` to just show the content of `name` attribute
@@ -382,7 +388,8 @@ def select_multiple(
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
-                '\n'.join(
+                f'{title}\n'
+                + '\n'.join(
                     [
                         _render_option_select_multiple(
                             option=preprocessor(option),
