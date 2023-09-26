@@ -284,7 +284,7 @@ def select(
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
-                f'{title}\n'
+                f'{title}\n' if title is not None else ''
                 + '\n'.join(
                     [
                         _format_option_select(
@@ -388,7 +388,7 @@ def select_multiple(
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
-                f'{title}\n'
+                f'{title}\n' if title is not None else ''
                 + '\n'.join(
                     [
                         _render_option_select_multiple(
