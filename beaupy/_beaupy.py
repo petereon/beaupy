@@ -231,7 +231,7 @@ def prompt(
 
 def select(
     options: List[Union[Tuple[int, ...], str]],
-    title: Union[str, None] = None,
+    title: Optional[str] = None,
     preprocessor: Callable[[Any], Any] = lambda val: val,
     cursor: str = '>',
     cursor_style: str = 'pink1',
@@ -320,7 +320,7 @@ def select(
 
 def select_multiple(
     options: List[Union[Tuple[int, ...], str]],
-    title: Union[str, None] = None,
+    title: Optional[str] = None,
     preprocessor: Callable[[Any], Any] = lambda val: val,
     tick_character: str = '✓',
     tick_style: str = 'pink1',
