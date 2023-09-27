@@ -231,7 +231,7 @@ def prompt(
 
 def select(
     options: List[Union[Tuple[int, ...], str]],
-    title: str = None,
+    title: Union[str, None] = None,
     preprocessor: Callable[[Any], Any] = lambda val: val,
     cursor: str = '>',
     cursor_style: str = 'pink1',
@@ -284,8 +284,8 @@ def select(
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
-                f'{title}\n' if title is not None else ''
-                + '\n'.join(
+                (f'{title}\n' if title is not None else '')
+                + '\n'.join(  # noqa: W503
                     [
                         _format_option_select(
                             i=i,
@@ -309,7 +309,6 @@ def select(
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
                 index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
             elif keypress in DefaultKeys.confirm:
-                _update_rendered(live, '')
                 if return_index:
                     return index
                 return options[index]
@@ -321,7 +320,7 @@ def select(
 
 def select_multiple(
     options: List[Union[Tuple[int, ...], str]],
-    title: str = None,
+    title: Union[str, None] = None,
     preprocessor: Callable[[Any], Any] = lambda val: val,
     tick_character: str = '✓',
     tick_style: str = 'pink1',
@@ -388,8 +387,8 @@ def select_multiple(
             show_from = (page - 1) * page_size
             show_to = min(show_from + page_size, len(options))
             rendered = (  # noqa: ECE001
-                f'{title}\n' if title is not None else ''
-                + '\n'.join(
+                (f'{title}\n' if title is not None else '')
+                + '\n'.join(  # noqa: W503
                     [
                         _render_option_select_multiple(
                             option=preprocessor(option),
