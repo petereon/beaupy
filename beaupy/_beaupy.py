@@ -245,7 +245,7 @@ def select(
 
     Args:
         options (List[Union[Tuple[int, ...], str]]): A list of options to select from
-        title (str): The title that will be displayed above the options list
+        title (str, optional): The title that will be displayed above the options list
         preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
                                              For example, if you passed a `Person` object with `name` attribute, preprocessor
                                              could be `lambda person: person.name` to just show the content of `name` attribute
@@ -338,7 +338,7 @@ def select_multiple(
 
     Args:
         options (List[Union[Tuple[int, ...], str]]): A list of options to select from
-        title (str): The title that will be displayed above the options list
+        title (str, optional): The title that will be displayed above the options list
         preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
                                              For example, if you passed a `Person` object with `name` attribute, preprocessor
                                              could be `lambda person: person.name` to just show the content of `name` attribute
