@@ -53,9 +53,8 @@ if confirm("Will you take the ring to Mordor?"):
         "Aragorn",
         "[red]Sauron[/red]",
     ]
-    console.print("Who are you?")
     # Choose one item from a list
-    name = select(names, cursor="🢧", cursor_style="cyan")
+    name = select(names, title="Who are you?", cursor="🢧", cursor_style="cyan")
     console.print(f"Alámenë, {name}")
     
     
@@ -65,9 +64,8 @@ if confirm("Will you take the ring to Mordor?"):
         "Po-tae-toes",
         "Lightsaber (Wrong franchise! Nevermind, roll with it!)",
     ]
-    console.print("What do you bring with you?")
     # Choose multiple options from a list
-    items = select_multiple(item_options, tick_character='🎒', ticked_indices=[0], maximal_count=3)
+    items = select_multiple(item_options, title="What do you bring with you?", tick_character='🎒', ticked_indices=[0], maximal_count=3)
     
     potato_count = 0
     if "Po-tae-toes" in items:
