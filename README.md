@@ -1,5 +1,7 @@
 # BeauPy
 
+## :warning: __Beaupy is not accepting pull-requests at the moment as the code-base is getting migrated towards [`questo`](https://github.com/petereon/questo) shortly__.
+
 ![beaupy](https://user-images.githubusercontent.com/47027005/185082011-cb588f57-d38f-42d8-8312-3981ae1bc479.png)
 
 > A Python library of interactive CLI elements you have been looking for
@@ -16,9 +18,6 @@
 ![example](https://raw.githubusercontent.com/petereon/beaupy/master/example.gif)
 
 For documentation but more and prettier see [**here**](https://petereon.github.io/beaupy/)
-
-> :warning: Beaupy is not accepting pull requests at the moment as entirety of a code-base is getting migrated shortly.
-
 
 ## Acknowledgment
 
