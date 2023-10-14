@@ -17,6 +17,9 @@
 
 For documentation but more and prettier see [**here**](https://petereon.github.io/beaupy/)
 
+> :warning: Beaupy is not accepting pull requests at the moment as entirety of a code-base is getting migrated shortly.
+
+
 ## Acknowledgment
 
 BeauPy stands on the shoulders of giants. It is based on another library with which it shares some of the source code, [`cutie`](https://github.com/kamik423/cutie), developed by [Kamik423](https://github.com/Kamik423). It has begun as a fork but has since diverged into it's own thing and as such, detached from the original repository.
