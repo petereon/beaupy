@@ -175,6 +175,10 @@ def prompt(
             new_state.completion.options = completion(new_state.value) if completion else []
             new_state = _prompt_key_handler(new_state, key)
             if new_state.exit:
+                if key == Keys.ESC:
+                    if Config.raise_on_escape:
+                        raise Abort(key)
+                    return None
                 try:
                     res = _validate_prompt_value(
                         value=[*(new_state.value or '')],
@@ -192,11 +196,6 @@ def prompt(
                     if raise_type_conversion_fail:
                         raise e
                     new_state.error = str(e)
-                finally:
-                    if key == Keys.ESC:
-                        if Config.raise_on_escape:
-                            raise Abort(key)
-                        return None
             elif new_state.abort:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()

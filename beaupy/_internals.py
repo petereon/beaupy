@@ -183,9 +183,7 @@ def _prompt_key_handler(prompt_state: qprompt.PromptState, keypress: Key) -> qpr
             s.value = ''.join(value_chars)
     elif keypress == Keys.ESC:
         s.exit = True
-    elif keypress == Keys.UP_ARROW:
-        pass
-    elif keypress == Keys.DOWN_ARROW:
+    elif keypress == Keys.UP_ARROW or keypress == Keys.DOWN_ARROW:
         pass
     elif keypress:
         if not (keypress == Keys.TAB and s.completion.in_completion_ctx):
