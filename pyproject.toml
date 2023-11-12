@@ -42,6 +42,7 @@ python = '^3.7.8'
 rich = "^12.2.0"
 emoji = "^2.0.0"
 python-yakh = "0.3.2"
+questo = "^0.1.2"
 
 
 [tool.mypy]

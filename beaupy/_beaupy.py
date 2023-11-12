@@ -7,9 +7,10 @@ __license__ = 'MIT'
 
 import math
 import warnings
-from itertools import cycle
+from functools import partial
 from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
+from questo import prompt as qprompt
 from rich.console import Console
 from rich.live import Live
 from yakh import get_key
@@ -24,6 +25,7 @@ from beaupy._internals import (
     _format_option_select,
     _paginate_back,
     _paginate_forward,
+    _prompt_key_handler,
     _render_option_select_multiple,
     _render_prompt,
     _update_rendered,
@@ -152,81 +154,54 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
-    rendered = ''
-    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
-        value: List[str] = [*initial_value] if initial_value else []
-        cursor_index = len(initial_value) if initial_value else 0
-        error: str = ''
-        completion_context = False
-        completion_options: List[str] = []
+
+    print(secure)
+
+    renderer = partial(_render_prompt, secure)
+
+    element = qprompt.Prompt(
+        state=qprompt.PromptState(
+            title=prompt,
+            value=(initial_value or ''),
+            cursor_position=len(initial_value or ''),
+        ),
+        renderer=renderer,
+    )
+
+    with element.diplayed():
         while True:
-            rendered = _render_prompt(secure, value, prompt, cursor_index, error, completion_options)
-            error = ''
-            _update_rendered(live, rendered)
-            keypress = get_key()
-            if keypress in DefaultKeys.tab:
-                if completion:
-                    if not completion_context:
-                        completion_options = completion(''.join(value))
-                        completion_options_iter = cycle(completion_options)
-                        if completion_options:
-                            completion_context = True
-
-                    if completion_context:
-                        value = [*next(completion_options_iter)]
-                        cursor_index = len(value)
-                else:
-                    completion_context = False
-            else:
-                completion_context = False
-
-            if keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt()
-                return None
-            elif keypress in DefaultKeys.confirm:
+            key = get_key()
+            new_state = element.state
+            new_state.completion.options = completion(new_state.value) if completion else []
+            new_state = _prompt_key_handler(new_state, key)
+            if new_state.exit:
                 try:
-                    return _validate_prompt_value(
-                        value=value,
+                    res = _validate_prompt_value(
+                        value=[*(new_state.value or '')],
                         target_type=target_type,
                         validator=validator,
                         secure=secure,
                     )
+                    return res
                 except ValidationError as e:
                     if raise_validation_fail:
                         raise e
-                    error = str(e)
+
+                    new_state.error = str(e)
                 except ConversionError as e:
                     if raise_type_conversion_fail:
                         raise e
-                    error = str(e)
-            elif keypress in DefaultKeys.backspace:
-                if cursor_index > 0:
-                    cursor_index -= 1
-                    del value[cursor_index]
-            elif keypress in DefaultKeys.left:
-                if cursor_index > 0:
-                    cursor_index -= 1
-            elif keypress in DefaultKeys.right:
-                if cursor_index < len(value):
-                    cursor_index += 1
-            elif keypress in DefaultKeys.up + DefaultKeys.down:
-                pass
-            elif keypress in DefaultKeys.home:
-                cursor_index = 0
-            elif keypress in DefaultKeys.end:
-                cursor_index = len(value)
-            elif keypress in DefaultKeys.delete:
-                if cursor_index < len(value):
-                    del value[cursor_index]
-            elif keypress in DefaultKeys.escape:
-                if Config.raise_on_escape:
-                    raise Abort(keypress)
+                    new_state.error = str(e)
+                finally:
+                    if key == Keys.ESC:
+                        if Config.raise_on_escape:
+                            raise Abort(key)
+                        return None
+            elif new_state.abort:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt()
                 return None
-            else:
-                if not (keypress in DefaultKeys.tab and completion_context):
-                    value.insert(cursor_index, str(keypress))
-                    cursor_index += 1
+            element.state = new_state
 
 
 def select(
