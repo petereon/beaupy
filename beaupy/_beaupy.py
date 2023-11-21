@@ -11,6 +11,7 @@ from functools import partial
 from typing import Any, Callable, List, Optional, Tuple, Type, Union
 
 from questo import prompt as qprompt
+from questo import select as qselect
 from rich.console import Console
 from rich.live import Live
 from yakh import get_key
@@ -22,12 +23,12 @@ from beaupy._internals import (
     TargetType,
     ValidationError,
     _cursor_hidden,
-    _format_option_select,
     _paginate_back,
     _paginate_forward,
     _prompt_key_handler,
     _render_option_select_multiple,
     _render_prompt,
+    _render_select,
     _update_rendered,
     _validate_prompt_value,
 )
@@ -87,32 +88,36 @@ _navigation_keys = [DefaultKeys.up, DefaultKeys.down, DefaultKeys.right, Default
 
 
 def _navigate_select(
-    index: int,
-    page: int,
+    state: qselect.SelectState,
     keypress: Key,
-    total_options: int,
-    pagination: int,
-    total_pages: int,
-    page_size: int,
-    show_from: int,
-    show_to: int,
-) -> Tuple[int, int]:
+) -> qselect.SelectState:
+
+    total_options = len(state.options)
+
+    page: int = state.index // state.page_size + 1
+    total_pages = math.ceil(len(state.options) / state.page_size)
+
+    show_from = (page - 1) * state.page_size
+    show_to = min(show_from + state.page_size, len(state.options))
+
+    index = state.index
+
     if keypress in DefaultKeys.up:
-        if index <= show_from and pagination:
+        if index <= show_from and state.pagination:
             page = _paginate_back(page, total_pages)
         index -= 1
         index = index % total_options
     elif keypress in DefaultKeys.down:
-        if index > show_to - 2 and pagination:
+        if index > show_to - 2 and state.pagination:
             page = _paginate_forward(page, total_pages)
         index += 1
         index = index % total_options
-    elif keypress in DefaultKeys.right and pagination:
+    elif keypress in DefaultKeys.right and state.pagination:
         page = _paginate_forward(page, total_pages)
-        index = (page - 1) * page_size
-    elif keypress in DefaultKeys.left and pagination:
+        index = (page - 1) * state.page_size
+    elif keypress in DefaultKeys.left and state.pagination:
         page = _paginate_back(page, total_pages)
-        index = (page - 1) * page_size
+        index = (page - 1) * state.page_size
     elif keypress in DefaultKeys.home:
         page = 1
         index = 0
@@ -120,7 +125,8 @@ def _navigate_select(
         page = total_pages
         index = total_options - 1
 
-    return index, page
+    state.index = index
+    return state
 
 
 def prompt(
@@ -154,8 +160,6 @@ def prompt(
     Returns:
         Union[T, str]: Returns a value formatted as provided type or string if no type is provided
     """
-
-    print(secure)
 
     renderer = partial(_render_prompt, secure)
 
@@ -238,54 +242,46 @@ def select(
     Returns:
         Union[int, str, None]: Selected value or the index of a selected option or `None`
     """
-    rendered = ''
-    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
-        if not options:
-            if strict:
-                raise ValueError('`options` cannot be empty')
-            return None
-        if cursor_style in ['', None]:
-            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
-            cursor_style = 'white'
 
-        index: int = cursor_index
-        page: int = index // page_size + 1
-        total_pages = math.ceil(len(options) / page_size)
+    if not options:
+        if strict:
+            raise ValueError('`options` cannot be empty')
+        return None
+    if cursor_style in ['', None]:
+        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+        cursor_style = 'white'
+
+    renderer = partial(_render_select, preprocessor, cursor_style, cursor)
+
+    element = qselect.Select(
+        qselect.SelectState(
+            options=options,
+            title='',
+            index=cursor_index,
+            pagination=pagination,
+            page_size=page_size,
+        ),
+        renderer=renderer,
+    )
+
+    with element.diplayed():
 
         while True:
-            show_from = (page - 1) * page_size
-            show_to = min(show_from + page_size, len(options))
-            rendered = (  # noqa: ECE001
-                '\n'.join(
-                    [
-                        _format_option_select(
-                            i=i,
-                            cursor_index=index % page_size if pagination else index,
-                            option=preprocessor(option),
-                            cursor_style=cursor_style,
-                            cursor=cursor,
-                        )
-                        for i, option in enumerate(options[show_from:show_to] if pagination else options)
-                    ]
-                )
-                + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503
-                + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
-            )
-            _update_rendered(live, rendered)
             keypress = get_key()
-            if keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt()
-                return None
-            elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
+
+            if any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
+                element.state = _navigate_select(element.state, keypress=keypress)
             elif keypress in DefaultKeys.confirm:
                 if return_index:
-                    return index
-                return options[index]
+                    return element.state.index
+                return options[element.state.index]
             elif keypress in DefaultKeys.escape:
                 if Config.raise_on_escape:
                     raise Abort(keypress)
+                return None
+            elif keypress in DefaultKeys.interrupt:
+                if Config.raise_on_interrupt:
+                    raise KeyboardInterrupt()
                 return None
 
 

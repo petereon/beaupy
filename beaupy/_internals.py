@@ -1,4 +1,5 @@
 import copy
+import math
 import re
 from ast import literal_eval
 from contextlib import contextmanager
@@ -6,6 +7,7 @@ from typing import Any, Callable, Iterator, List, Tuple, Type, Union
 
 import emoji
 from questo import prompt as qprompt
+from questo import select as qselect
 from rich.console import Console, ConsoleRenderable
 from rich.live import Live
 from rich.style import Style
@@ -34,7 +36,7 @@ def _replace_emojis(text: str) -> str:
     return str(emoji.replace_emoji(text, '  '))
 
 
-def _format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
+def _render_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
     return '{}{}'.format(
         f'[{cursor_style}]{cursor}[/{cursor_style}] ' if i == cursor_index else ' ' * (len(_replace_emojis(cursor)) + 1), option
     )
@@ -90,6 +92,31 @@ def _render_prompt(secure: bool, state: qprompt.PromptState) -> str:
         render_value = f'{render_value}\n[red]Error:[/red] {state.error}'
 
     return render_value
+
+
+def _render_select(preprocessor: Callable[[Any], str], cursor_style: str, cursor: str, state: qselect.SelectState) -> str:
+    page: int = state.index // state.page_size + 1
+    total_pages = math.ceil(len(state.options) / state.page_size)
+
+    show_from = (page - 1) * state.page_size
+    show_to = min(show_from + state.page_size, len(state.options))
+
+    return (  # noqa: ECE001
+        '\n'.join(
+            [
+                _render_option_select(
+                    i=i,
+                    cursor_index=state.index % state.page_size if state.pagination else state.index,
+                    option=preprocessor(option),
+                    cursor_style=cursor_style,
+                    cursor=cursor,
+                )
+                for i, option in enumerate(state.options[show_from:show_to] if state.pagination else state.options)
+            ]
+        )
+        + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')  # noqa: W503
+        + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
+    )
 
 
 @contextmanager
