@@ -26,9 +26,9 @@ from beaupy._internals import (
     _paginate_back,
     _paginate_forward,
     _prompt_key_handler,
-    _render_option_select_multiple,
     _render_prompt,
     _render_select,
+    _render_select_multiple,
     _update_rendered,
     _validate_prompt_value,
 )
@@ -328,79 +328,69 @@ def select_multiple(
     Returns:
         Union[List[str], List[int]]: A list of selected values or indices of selected options
     """
-    rendered = ''
-    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
-        if not options:
-            if strict:
-                raise ValueError('`options` cannot be empty')
-            return []
-        if cursor_style in ['', None]:
-            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
-            cursor_style = 'white'
-        if tick_style in ['', None]:
-            warnings.warn('`tick_style` should be a valid style, defaulting to `white`')
-            tick_style = 'white'
-        if ticked_indices is None:
-            ticked_indices = []
 
-        index = cursor_index
-        page: int = index // page_size + 1
-        total_pages = math.ceil(len(options) / page_size)
+    if not options:
+        if strict:
+            raise ValueError('`options` cannot be empty')
+        return []
+    if cursor_style in ['', None]:
+        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+        cursor_style = 'white'
+    if tick_style in ['', None]:
+        warnings.warn('`tick_style` should be a valid style, defaulting to `white`')
+        tick_style = 'white'
+    if ticked_indices is None:
+        ticked_indices = []
 
-        error_message = ''
+    renderer = partial(_render_select_multiple, preprocessor, tick_character, tick_style, cursor_style)
+
+    element = qselect.Select(
+        qselect.SelectState(
+            options=options,
+            title='',
+            select_multiple=True,
+            index=cursor_index,
+            selected_indexes=ticked_indices,
+            pagination=pagination,
+            page_size=page_size,
+        ),
+        renderer=renderer,
+    )
+
+    with element.diplayed():
         while True:
-            show_from = (page - 1) * page_size
-            show_to = min(show_from + page_size, len(options))
-            rendered = (  # noqa: ECE001
-                '\n'.join(
-                    [
-                        _render_option_select_multiple(
-                            option=preprocessor(option),
-                            ticked=(i + show_from in ticked_indices) if pagination else (i in ticked_indices),
-                            tick_character=tick_character,
-                            tick_style=tick_style,
-                            selected=i == (index % page_size if pagination else index),
-                            cursor_style=cursor_style,
-                        )
-                        for i, option in enumerate(options[show_from:show_to] if pagination else options)
-                    ]
-                )
-                + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if pagination and total_pages > 1 else '')  # noqa: W503
-                + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'  # noqa: W503
-            )
-            if error_message:
-                rendered = f'{rendered}\n[red]Error:[/red] {error_message}'
-                error_message = ''
-            _update_rendered(live, rendered)
             keypress = get_key()
+            new_state = element.state
+            new_state.error = ''
             if keypress in DefaultKeys.interrupt:
                 if Config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return []
             elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                index, page = _navigate_select(index, page, keypress, len(options), pagination, total_pages, page_size, show_from, show_to)
+                new_state = _navigate_select(element.state, keypress=keypress)
             elif keypress in DefaultKeys.select:
-                if index in ticked_indices:
-                    ticked_indices.remove(index)
+                if new_state.index in new_state.selected_indexes:
+                    new_state.selected_indexes.remove(new_state.index)
                 elif maximal_count is not None:
-                    if len(ticked_indices) + 1 <= maximal_count:
-                        ticked_indices.append(index)
+                    if len(new_state.selected_indexes) + 1 <= maximal_count:
+                        new_state.selected_indexes.append(new_state.index)
                     else:
-                        error_message = f'Must select at most {maximal_count} options'
+                        new_state.error = f'Must select at most {maximal_count} options'
                 else:
-                    ticked_indices.append(index)
+                    new_state.selected_indexes.append(new_state.index)
             elif keypress in DefaultKeys.confirm:
-                if minimal_count > len(ticked_indices):
-                    error_message = f'Must select at least {minimal_count} options'
+                if minimal_count > len(new_state.selected_indexes):
+                    new_state.error = f'Must select at least {minimal_count} options'
                 else:
                     break
             elif keypress in DefaultKeys.escape:
                 if Config.raise_on_escape:
                     raise Abort(keypress)
                 return []
+            element.state = new_state
         if return_indices:
-            return ticked_indices
-        return [options[i] for i in ticked_indices]
+            return element.state.selected_indexes  # type: ignore
+        return [options[i] for i in element.state.selected_indexes]
 
 
 def confirm(

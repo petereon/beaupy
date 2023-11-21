@@ -119,6 +119,37 @@ def _render_select(preprocessor: Callable[[Any], str], cursor_style: str, cursor
     )
 
 
+def _render_select_multiple(
+    preprocessor: Callable[[Any], str], tick_character: str, tick_style: str, cursor_style: str, state: qselect.SelectState
+) -> str:
+    page: int = state.index // state.page_size + 1
+    total_pages = math.ceil(len(state.options) / state.page_size)
+
+    show_from = (page - 1) * state.page_size
+    show_to = min(show_from + state.page_size, len(state.options))
+
+    rendered = (  # noqa: ECE001
+        '\n'.join(
+            [
+                _render_option_select_multiple(
+                    option=preprocessor(option),
+                    ticked=(i + show_from in state.selected_indexes) if state.pagination else (i in state.selected_indexes),
+                    tick_character=tick_character,
+                    tick_style=tick_style,
+                    selected=i == (state.index % state.page_size if state.pagination else state.index),
+                    cursor_style=cursor_style,
+                )
+                for i, option in enumerate(state.options[show_from:show_to] if state.pagination else state.options)
+            ]
+        )
+        + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')  # noqa: W503
+        + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'  # noqa: W503
+    )
+    if state.error:
+        rendered = f'{rendered}\n[red]Error:[/red] {state.error}'
+    return rendered
+
+
 @contextmanager
 def _cursor_hidden(console: Console) -> Iterator:
     console.show_cursor(False)
