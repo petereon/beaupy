@@ -129,6 +129,40 @@ def _navigate_select(
     return state
 
 
+def _naviagte_select_multiple(
+    state: qselect.SelectState, keypress: Key, minimal_count: int, maximal_count: Union[int, None]
+) -> qselect.SelectState:
+    if keypress in DefaultKeys.interrupt:
+        state.selected_indexes = []
+        if Config.raise_on_interrupt:
+            raise KeyboardInterrupt()
+        state.abort = True
+
+    elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
+        state = _navigate_select(state, keypress=keypress)
+    elif keypress in DefaultKeys.select:
+        if state.index in state.selected_indexes:
+            state.selected_indexes.remove(state.index)
+        elif maximal_count is not None:
+            if len(state.selected_indexes) + 1 <= maximal_count:
+                state.selected_indexes.append(state.index)
+            else:
+                state.error = f'Must select at most {maximal_count} options'
+        else:
+            state.selected_indexes.append(state.index)
+    elif keypress in DefaultKeys.confirm:
+        if minimal_count > len(state.selected_indexes):
+            state.error = f'Must select at least {minimal_count} options'
+        else:
+            state.exit = True
+    elif keypress in DefaultKeys.escape:
+        state.selected_indexes = []
+        if Config.raise_on_escape:
+            raise Abort(keypress)
+        state.exit = True
+    return state
+
+
 def prompt(
     prompt: str,
     target_type: Type[TargetType] = str,
@@ -362,35 +396,14 @@ def select_multiple(
             keypress = get_key()
             new_state = element.state
             new_state.error = ''
-            if keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
-                    raise KeyboardInterrupt()
-                return []
-            elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                new_state = _navigate_select(element.state, keypress=keypress)
-            elif keypress in DefaultKeys.select:
-                if new_state.index in new_state.selected_indexes:
-                    new_state.selected_indexes.remove(new_state.index)
-                elif maximal_count is not None:
-                    if len(new_state.selected_indexes) + 1 <= maximal_count:
-                        new_state.selected_indexes.append(new_state.index)
-                    else:
-                        new_state.error = f'Must select at most {maximal_count} options'
-                else:
-                    new_state.selected_indexes.append(new_state.index)
-            elif keypress in DefaultKeys.confirm:
-                if minimal_count > len(new_state.selected_indexes):
-                    new_state.error = f'Must select at least {minimal_count} options'
-                else:
-                    break
-            elif keypress in DefaultKeys.escape:
-                if Config.raise_on_escape:
-                    raise Abort(keypress)
-                return []
+
+            new_state = _naviagte_select_multiple(new_state, keypress, minimal_count, maximal_count)
+            if new_state.exit or new_state.abort:
+                break
             element.state = new_state
         if return_indices:
-            return element.state.selected_indexes  # type: ignore
-        return [options[i] for i in element.state.selected_indexes]
+            return new_state.selected_indexes  # type: ignore
+        return [options[i] for i in new_state.selected_indexes]
 
 
 def confirm(
