@@ -143,11 +143,10 @@ def _():
         mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
         mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
         mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
         mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n\n(Confirm with [bold]enter[/bold])"),
     ]
 
-    assert Live.update.call_count == 5
+    assert Live.update.call_count == 4
     assert res == "test4"
 
 

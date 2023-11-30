@@ -2,17 +2,19 @@ from ward import test
 
 from beaupy._internals import _render_prompt, Abort
 from yakh.key import Key
+from questo import prompt as qprompt
 
 
 @test("Test that prompt is rendered properly")
 def _():
-    result = _render_prompt(False, ["a", "b"], "Test prompt", 1, None)
+    result = _render_prompt(False, qprompt.PromptState(value='ab', title='Test prompt', cursor_position=1))
     assert result == "Test prompt\n> a[black on white]b[/black on white] \n\n(Confirm with [bold]enter[/bold])"
 
 
 @test("Test that prompt is rendered with error")
 def _():
-    result = _render_prompt(False, ["a", "b"], "Test prompt", 1, "Test Error")
+    
+    result = _render_prompt(False, qprompt.PromptState(value='ab', title='Test prompt', error='Test Error', cursor_position=1))
     assert (
         result == "Test prompt\n> a[black on white]b[/black on white] \n\n(Confirm with [bold]enter[/bold])\n[red]Error:[/red] Test Error"
     )

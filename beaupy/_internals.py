@@ -1,13 +1,17 @@
+import copy
+import math
 import re
 from ast import literal_eval
 from contextlib import contextmanager
-from typing import Any, Callable, Iterator, List, Type, Union
+from typing import Any, Callable, Iterator, List, Tuple, Type, Union
 
 import emoji
+from questo import prompt as qprompt
+from questo import select as qselect
 from rich.console import Console, ConsoleRenderable
 from rich.live import Live
 from rich.style import Style
-from yakh.key import Key
+from yakh.key import Key, Keys
 
 TargetType = Any
 
@@ -32,7 +36,7 @@ def _replace_emojis(text: str) -> str:
     return str(emoji.replace_emoji(text, '  '))
 
 
-def _format_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
+def _render_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
     return '{}{}'.format(
         f'[{cursor_style}]{cursor}[/{cursor_style}] ' if i == cursor_index else ' ' * (len(_replace_emojis(cursor)) + 1), option
     )
@@ -66,27 +70,84 @@ def _update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> N
     live.refresh()
 
 
-def _render_prompt(
-    secure: bool, typed_values: List[str], prompt: str, cursor_position: int, error: str, completion_options: List[str] = []
-) -> str:
+def _render_prompt(secure: bool, state: qprompt.PromptState) -> str:
+    typed_values = [*(state.value or '')]
     input_value = len(typed_values) * '*' if secure else ''.join(typed_values)
-    render_value = (
-        (input_value + ' ')[:cursor_position]
+    render_value = (  # noqa: ECE001
+        (input_value + ' ')[: state.cursor_position]
         + '[black on white]'  # noqa: W503
-        + (input_value + ' ')[cursor_position]  # noqa: W503
+        + (input_value + ' ')[state.cursor_position]  # noqa: W503
         + '[/black on white]'  # noqa: W503
-        + (input_value + ' ')[(cursor_position + 1) :]  # noqa: W503,E203
+        + (input_value + ' ')[(state.cursor_position + 1) :]  # noqa: W503,E203
     )
 
-    if completion_options and not secure:
-        rendered_completion_options = ' '.join(completion_options).replace(input_value, f'[black on white]{input_value}[/black on white]')
+    if state.completion.options and not secure:
+        rendered_completion_options = ' '.join(state.completion.options).replace(
+            input_value, f'[black on white]{input_value}[/black on white]'
+        )
         render_value = f'{render_value}\n{rendered_completion_options}'
 
-    render_value = f'{prompt}\n> {render_value}\n\n(Confirm with [bold]enter[/bold])'
-    if error:
-        render_value = f'{render_value}\n[red]Error:[/red] {error}'
+    render_value = f'{state.title}\n> {render_value}\n\n(Confirm with [bold]enter[/bold])'
+    if state.error:
+        render_value = f'{render_value}\n[red]Error:[/red] {state.error}'
 
     return render_value
+
+
+def _render_select(preprocessor: Callable[[Any], str], cursor_style: str, cursor: str, state: qselect.SelectState) -> str:
+    page: int = state.index // state.page_size + 1
+    total_pages = math.ceil(len(state.options) / state.page_size)
+
+    show_from = (page - 1) * state.page_size
+    show_to = min(show_from + state.page_size, len(state.options))
+
+    return (  # noqa: ECE001
+        '\n'.join(
+            [
+                _render_option_select(
+                    i=i,
+                    cursor_index=state.index % state.page_size if state.pagination else state.index,
+                    option=preprocessor(option),
+                    cursor_style=cursor_style,
+                    cursor=cursor,
+                )
+                for i, option in enumerate(state.options[show_from:show_to] if state.pagination else state.options)
+            ]
+        )
+        + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')  # noqa: W503
+        + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
+    )
+
+
+def _render_select_multiple(
+    preprocessor: Callable[[Any], str], tick_character: str, tick_style: str, cursor_style: str, state: qselect.SelectState
+) -> str:
+    page: int = state.index // state.page_size + 1
+    total_pages = math.ceil(len(state.options) / state.page_size)
+
+    show_from = (page - 1) * state.page_size
+    show_to = min(show_from + state.page_size, len(state.options))
+
+    rendered = (  # noqa: ECE001
+        '\n'.join(
+            [
+                _render_option_select_multiple(
+                    option=preprocessor(option),
+                    ticked=(i + show_from in state.selected_indexes) if state.pagination else (i in state.selected_indexes),
+                    tick_character=tick_character,
+                    tick_style=tick_style,
+                    selected=i == (state.index % state.page_size if state.pagination else state.index),
+                    cursor_style=cursor_style,
+                )
+                for i, option in enumerate(state.options[show_from:show_to] if state.pagination else state.options)
+            ]
+        )
+        + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')  # noqa: W503
+        + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'  # noqa: W503
+    )
+    if state.error:
+        rendered = f'{rendered}\n[red]Error:[/red] {state.error}'
+    return rendered
 
 
 @contextmanager
@@ -134,3 +195,66 @@ def _paginate_back(page: int, total_pages: int) -> int:
     else:
         page = total_pages
     return page
+
+
+def _prompt_key_handler(prompt_state: qprompt.PromptState, keypress: Key) -> qprompt.PromptState:
+    s = copy.deepcopy(prompt_state)
+
+    if keypress == Keys.TAB:
+        if s.completion.in_completion_ctx and s.completion.options:
+            s.completion.index, s.cursor_position, s.value = _completions_options_step(s)
+        else:
+            s.completion.in_completion_ctx = True
+            s.completion.index = 0
+            s.value = s.completion.options[0] if s.completion.options else s.value
+            s.cursor_position = len(s.value)
+    else:
+        s.completion.in_completion_ctx = False
+        s.completion.options = []
+        s.completion.index = None
+
+    if keypress == Keys.CTRL_C:
+        s.value = None
+        s.abort = True
+    elif keypress == Keys.ENTER:
+        s.exit = True
+    elif keypress == Keys.LEFT_ARROW:
+        if s.cursor_position > 0:
+            s.cursor_position -= 1
+    elif keypress == Keys.RIGHT_ARROW:
+        if s.cursor_position < len(s.value):
+            s.cursor_position += 1
+    elif keypress == Keys.HOME:
+        s.cursor_position = 0
+    elif keypress == Keys.END:
+        s.cursor_position = len(s.value)
+    elif keypress == Keys.DELETE:
+        if s.cursor_position < len(s.value):
+            value_chars = [*s.value]
+            del value_chars[s.cursor_position]
+            s.value = ''.join(value_chars)
+    elif keypress == Keys.BACKSPACE:
+        if s.cursor_position > 0:
+            s.cursor_position -= 1
+            value_chars = [*s.value]
+            del value_chars[s.cursor_position]
+            s.value = ''.join(value_chars)
+    elif keypress == Keys.ESC:
+        s.exit = True
+    elif keypress == Keys.UP_ARROW or keypress == Keys.DOWN_ARROW:
+        pass
+    elif keypress:
+        if not (keypress == Keys.TAB and s.completion.in_completion_ctx):
+            value_chars = [*s.value]
+            value_chars.insert(s.cursor_position, str(keypress))
+            s.cursor_position += 1
+            s.value = ''.join(value_chars)
+
+    return s
+
+
+def _completions_options_step(state: qprompt.PromptState) -> Tuple[int, int, str]:
+    index = (state.completion.index + 1) % len(state.completion.options)
+    value = state.completion.options[index]
+    cursor_positon = len(value)
+    return index, cursor_positon, value
