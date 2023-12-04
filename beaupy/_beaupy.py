@@ -206,7 +206,7 @@ def prompt(
         renderer=renderer,
     )
 
-    with element.diplayed():
+    with element.displayed():
         while True:
             key = get_key()
             new_state = element.state
@@ -270,7 +270,7 @@ def select(
         page_size (int, optional): Number of options to show on a single page if pagination is enabled. Defaults to 5.
 
     Raises:
-        ValueError: Thrown if no `options` are povided and strict is `True`
+        ValueError: Thrown if no `options` are provided and strict is `True`
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
 
     Returns:
@@ -298,7 +298,7 @@ def select(
         renderer=renderer,
     )
 
-    with element.diplayed():
+    with element.displayed():
 
         while True:
             keypress = get_key()
@@ -391,7 +391,7 @@ def select_multiple(
         renderer=renderer,
     )
 
-    with element.diplayed():
+    with element.displayed():
         while True:
             keypress = get_key()
             new_state = element.state

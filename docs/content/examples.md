@@ -9,7 +9,7 @@
 Selective elements default to return the selected item (in case of `select`) or list of items (in case of `select_multiple`). This behavior can be modified by `return_index` parameter (or `return_indices` in case of the latter), see example,
 
 ```python
-result_index = select(options=['I\'ll be returned as 0', 'I\'ll be returned as 1'], 
+result_index = select(options=['I\'ll be returned as 0', 'I\'ll be returned as 1'],
                       return_index=True)
 ```
 
@@ -49,15 +49,15 @@ pizza_toppings = select_multiple(['pineapple', 'olives', 'anchovies', 'mozzarell
 #### Style as text
 
 ```python
-stylish = select(options = ["red", "on", "white"], 
-                 cursor = "x", 
+stylish = select(options = ["red", "on", "white"],
+                 cursor = "x",
                  cursor_style= "red on white")
 ```
 
 #### Style as hex
 
 ```python
-selections = select_multiple(options = ["s", "h", "e", "", "b", "e", "l", "i", "e", "v", "e", "d"], 
+selections = select_multiple(options = ["s", "h", "e", "", "b", "e", "l", "i", "e", "v", "e", "d"],
                              tick_style="#af00ff",
                              ticked_indices=[1,2,6,7,8,11])
 ```
@@ -70,14 +70,14 @@ selections = select_multiple(options = ["s", "h", "e", "", "b", "e", "l", "i", "
     Some emojis can appear as one character instead of two!
 
 ```python
-result = select(options = ["here", "comes", "the", "sun"], 
+result = select(options = ["here", "comes", "the", "sun"],
                 cursor = "🌞")
 ```
 
 #### Non-ascii as a cursor
 
 ```python
-result = select(options = ["hardcore", "unicode"], 
+result = select(options = ["hardcore", "unicode"],
                 cursor = "⇉")
 ```
 
@@ -87,7 +87,7 @@ result = select(options = ["hardcore", "unicode"],
     You can use multiple characters as a cursor
 
 ```python
-correct_abba_lyric = select_multiple(options = ["queen", "bean"], 
+correct_abba_lyric = select_multiple(options = ["queen", "bean"],
                                      tick_character = "dancing")
 ```
 
@@ -149,7 +149,7 @@ from os import listdir
 from pathlib import Path
 
 # ugly hacky path completion callable:
-def path_completion(str_path: str = ""): 
+def path_completion(str_path: str = ""):
     if not str_path:
         return []
     try:

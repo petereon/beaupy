@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'beaupy'
-version = '3.7.0'
+version = '3.7.1'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
@@ -42,7 +42,7 @@ python = '^3.7.8'
 rich = "^12.2.0"
 emoji = "^2.0.0"
 python-yakh = "0.3.2"
-questo = "^0.1.2"
+questo = "^0.2.0"
 
 
 [tool.mypy]
