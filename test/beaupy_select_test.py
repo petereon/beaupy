@@ -6,7 +6,6 @@ from ward import fixture, raises, test
 
 from beaupy._internals import Abort
 from beaupy._beaupy import Config, Live, select, warnings
-import beaupy
 
 
 def raise_keyboard_interrupt():
@@ -24,7 +23,7 @@ def set_raise_on_escape():
 def _():
     b.get_key = lambda: Keys.ENTER
     res = select(options=[])
-    assert res == None
+    assert res is None
 
 
 @test("`select` with no options strict")
@@ -143,11 +142,10 @@ def _():
         mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
         mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
         mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
         mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n\n(Confirm with [bold]enter[/bold])"),
     ]
 
-    assert Live.update.call_count == 5
+    assert Live.update.call_count == 4
     assert res == "test4"
 
 
@@ -221,7 +219,7 @@ def _():
         mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])")
     ]
     assert Live.update.call_count == 1
-    assert res == None
+    assert res is None
 
 
 @test(
@@ -313,7 +311,7 @@ def _():
         mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
     ]
     assert Live.update.call_count == 1
-    assert res == None
+    assert res is None
 
 
 @test("`select` raises Abort when ESC is pressed and raise_on_escape is True")

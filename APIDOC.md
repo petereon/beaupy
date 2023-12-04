@@ -51,7 +51,7 @@ Creates a spinner which can be used to provide some user feedback during long pr
 - `refresh_per_second` _float, optional_ - Number of refreshes the spinner will do a second, this will affect
   the fluidity of the "animation". Defaults to 10.
 - `transient` _bool, optional_ - If the spinner will disappear after it's done, otherwise not. Defaults to True.
-  
+
 
 **Raises**:
 
@@ -146,14 +146,14 @@ Function that prompts the user for written input
   the error will be reported onto the console. Defaults to True.
 - `raise_type_conversion_fail` _bool, optional_ - If True, invalid inputs will raise `rich.internals.ConversionError`, else
   the error will be reported onto the console. Defaults to True.
-  
+
 
 **Raises**:
 
 - `ValidationError` - Raised if validation with provided validator fails
 - `ConversionError` - Raised if the value cannot be converted to provided type
 - `KeyboardInterrupt` - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
-  
+
 
 **Returns**:
 
@@ -188,13 +188,13 @@ A prompt that allows selecting one option from a list of options
 - `return_index` _bool, optional_ - If `True`, `select` will return the index of selected element in options. Defaults to `False`.
 - `strict` _bool, optional_ - If empty `options` is provided and strict is `False`, None will be returned,
   if it's `True`, `ValueError` will be thrown. Defaults to False.
-  
+
 
 **Raises**:
 
-- `ValueError` - Thrown if no `options` are povided and strict is `True`
+- `ValueError` - Thrown if no `options` are provided and strict is `True`
 - `KeyboardInterrupt` - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
-  
+
 
 **Returns**:
 
@@ -238,12 +238,12 @@ A prompt that allows selecting multiple options from a list of options
   of ticked elements in options. Defaults to `False`.
 - `strict` _bool, optional_ - If empty `options` is provided and strict is `False`, None will be returned,
   if it's `True`, `ValueError` will be thrown. Defaults to False.
-  
+
 
 **Raises**:
 
 - `KeyboardInterrupt` - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
-  
+
 
 **Returns**:
 
@@ -278,14 +278,13 @@ A prompt that asks a question and offers two responses
 - `cursor` _str, optional_ - What character(s) to use as a cursor. Defaults to '> '.
 - `cursor_style` _str, optional_ - Rich friendly style for the cursor. Defaults to 'pink1'.
 - `char_prompt` _bool, optional_ - Print [Y/n] after the question. Defaults to True.
-  
+
 
 **Raises**:
 
 - `KeyboardInterrupt` - Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
-  
+
 
 **Returns**:
 
   Optional[bool]
-

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'beaupy'
-version = '3.6.1'
+version = '3.7.1'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
@@ -26,10 +26,10 @@ install = { shell = 'poetry install' }
 build = { shell = 'poetry build' }
 clean = { shell = 'rm -R ./dist .pytest_cache .mypy_cache &> /dev/null' }
 
-isort = { shell = 'poetry run isort ./beaupy' }
-black = { shell = 'poetry run black ./beaupy --skip-string-normalization' }
+isort = { shell = 'poetry run isort ./beaupy && poetry run isort ./test' }
+black = { shell = 'poetry run black ./beaupy --skip-string-normalization && poetry run black ./test --skip-string-normalization' }
 mypy = { shell = 'poetry run mypy ./beaupy/' }
-flake8 = { shell = 'poetry run pflake8 ./beaupy/' }
+flake8 = { shell = 'poetry run pflake8 ./beaupy/ && poetry run pflake8 ./test/' }
 perflint = { shell = "poetry run perflint ./beaupy/" }
 lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running black..." ; poetry run poe black ; echo "Running unify..." ; poetry run unify ./beaupy -r -i ; echo "Running flake8..." ; poetry run poe flake8 ; echo "Running mypy..." ; poetry run poe mypy ; echo Done!' }
 "lint:watch" = { shell = "poetry run poe lint ; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe lint'" }
@@ -42,6 +42,7 @@ python = '^3.7.8'
 rich = "^12.2.0"
 emoji = "^2.0.0"
 python-yakh = "0.3.2"
+questo = "^0.2.0"
 
 
 [tool.mypy]

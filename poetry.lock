@@ -1349,6 +1349,21 @@ files = [
 ]
 
 [[package]]
+name = "questo"
+version = "0.2.0"
+description = "A library of extensible and modular CLI prompt elements"
+optional = false
+python-versions = ">=3.7.8,<4.0.0"
+files = [
+    {file = "questo-0.2.0-py3-none-any.whl", hash = "sha256:f453ca311e546fba508f57275ca9d6ed5d0908e21e9d7b5cfe1ee95c4809c298"},
+    {file = "questo-0.2.0.tar.gz", hash = "sha256:1d47272559c6de73852628ed96efc991ec55f06d9948721e3f15b2c94214e4d2"},
+]
+
+[package.dependencies]
+python-yakh = ">=0.3.2,<0.4.0"
+rich = ">=12.2.0,<13.0.0"
+
+[[package]]
 name = "radon"
 version = "6.0.1"
 description = "Code Metrics in Python"
@@ -1829,4 +1844,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7.8"
-content-hash = "fe6cb4a7d2dcd7b3b42d4ef434d8a40eb4a80735691f2a58c5b774c11d0b9089"
+content-hash = "10c6b551610b1793e4cdf4be98ed089428256cbccd7575aaa770d2a265538eb6"

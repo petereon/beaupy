@@ -1,7 +1,5 @@
 # BeauPy
 
-## :warning: __Beaupy is not accepting pull-requests at the moment as the code-base is getting migrated towards [`questo`](https://github.com/petereon/questo) shortly__.
-
 ![beaupy](https://user-images.githubusercontent.com/47027005/185082011-cb588f57-d38f-42d8-8312-3981ae1bc479.png)
 
 > A Python library of interactive CLI elements you have been looking for
@@ -34,7 +32,7 @@ BeauPy stands on the shoulders of giants. It is based on another library with wh
 | [`confirm`](https://petereon.github.io/beaupy/api/#confirm)                      | Prompt with a question and yes/no options                                                  |
 | [`prompt`](https://petereon.github.io/beaupy/api/#prompt)                        | Prompt that takes free input with optional validation, type conversion and input hiding |
 
-TUI elements shown in the above gif are the result of the follwing code:
+TUI elements shown in the above gif are the result of the following code:
 
 ```python
 import time
@@ -57,8 +55,8 @@ if confirm("Will you take the ring to Mordor?"):
     # Choose one item from a list
     name = select(names, cursor="🢧", cursor_style="cyan")
     console.print(f"Alámenë, {name}")
-    
-    
+
+
     item_options = [
         "The One Ring",
         "Dagger",
@@ -68,44 +66,44 @@ if confirm("Will you take the ring to Mordor?"):
     console.print("What do you bring with you?")
     # Choose multiple options from a list
     items = select_multiple(item_options, tick_character='🎒', ticked_indices=[0], maximal_count=3)
-    
+
     potato_count = 0
     if "Po-tae-toes" in items:
         # Prompt with type conversion and validation
         potato_count = prompt('How many potatoes?', target_type=int, validator=lambda count: count > 0)
-    
+
     # Spinner to show while doing some work
     spinner = Spinner(DOTS, "Packing things...")
     spinner.start()
-    
+
     time.sleep(2)
-    
+
     spinner.stop()
     # Get input without showing it being typed
     if "friend" == prompt("Speak, [blue bold underline]friend[/blue bold underline], and enter", secure=True).lower():
-        
+
         # Custom spinner animation
         spinner_animation = ['▉▉', '▌▐', '  ', '▌▐', '▉▉']
         spinner = Spinner(spinner_animation, "Opening the Door of Durin...")
         spinner.start()
-        
+
         time.sleep(2)
-        
+
         spinner.stop()
     else:
         spinner_animation = ['🐙🌊    ⚔️ ', '🐙 🌊   ⚔️ ', '🐙  🌊  ⚔️ ', '🐙   🌊 ⚔️ ', '🐙    🌊⚔️ ']
         spinner = Spinner(spinner_animation, "Getting attacked by an octopus...")
         spinner.start()
-        
+
         time.sleep(2)
-        
+
         spinner.stop()
 
     if 'The One Ring' in items:
         console.print("[green]You throw The One Ring to a lava from an eagle![/green]")
     else:
         console.print("[red]You forgot the ring and brought Middle-Earth to its knees![/red]")
-    console.print(f"And you brought {potato_count} taters!")      
+    console.print(f"And you brought {potato_count} taters!")
 ```
 
 For more information refer to [more examples](https://petereon.github.io/beaupy/examples/) or definitive, but much less exciting [API documentation](https://petereon.github.io/beaupy/api/)
