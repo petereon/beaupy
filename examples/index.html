@@ -917,7 +917,7 @@
 <h3 id="functionality">Functionality</h3>
 <h4 id="return-index">Return index</h4>
 <p>Selective elements default to return the selected item (in case of <code>select</code>) or list of items (in case of <code>select_multiple</code>). This behavior can be modified by <code>return_index</code> parameter (or <code>return_indices</code> in case of the latter), see example,</p>
-<div class="highlight"><pre><span></span><code><span class="n">result_index</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 0&#39;</span><span class="p">,</span> <span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 1&#39;</span><span class="p">],</span> 
+<div class="highlight"><pre><span></span><code><span class="n">result_index</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 0&#39;</span><span class="p">,</span> <span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 1&#39;</span><span class="p">],</span>
                       <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="starting-cursor-index">Starting cursor index</h4>
@@ -932,7 +932,7 @@
 </code></pre></div>
 <h4 id="maximal-and-minimal-count-for-select_multiple">Maximal and minimal count for <code>select_multiple</code></h4>
 <p>With <code>select_multiple</code> you can restrict maximum and minimum count of elements using <code>maximal_count</code> and <code>minimal_count</code> respectively,</p>
-<div class="highlight"><pre><span></span><code><span class="n">pizza_toppings</span> <span class="o">=</span> <span class="n">select_mutliple</span><span class="p">([</span><span class="s1">&#39;pineapple&#39;</span><span class="p">,</span> <span class="s1">&#39;olives&#39;</span><span class="p">,</span> <span class="s1">&#39;anchovies&#39;</span><span class="p">,</span> <span class="s1">&#39;mozzarella&#39;</span><span class="p">,</span> <span class="s1">&#39;parma ham&#39;</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">pizza_toppings</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">([</span><span class="s1">&#39;pineapple&#39;</span><span class="p">,</span> <span class="s1">&#39;olives&#39;</span><span class="p">,</span> <span class="s1">&#39;anchovies&#39;</span><span class="p">,</span> <span class="s1">&#39;mozzarella&#39;</span><span class="p">,</span> <span class="s1">&#39;parma ham&#39;</span><span class="p">]</span>
                                  <span class="n">maximal_count</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                                  <span class="n">minimal_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
@@ -942,12 +942,12 @@
 <p>For styling you can leverage <a href="https://rich.readthedocs.io/en/stable/style.html">numerous styling options</a> provided by rich</p>
 </div>
 <h4 id="style-as-text">Style as text</h4>
-<div class="highlight"><pre><span></span><code><span class="n">stylish</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">],</span> 
-                 <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> 
+<div class="highlight"><pre><span></span><code><span class="n">stylish</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">],</span>
+                 <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span>
                  <span class="n">cursor_style</span><span class="o">=</span> <span class="s2">&quot;red on white&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="style-as-hex">Style as hex</h4>
-<div class="highlight"><pre><span></span><code><span class="n">selections</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span> 
+<div class="highlight"><pre><span></span><code><span class="n">selections</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span>
                              <span class="n">tick_style</span><span class="o">=</span><span class="s2">&quot;#af00ff&quot;</span><span class="p">,</span>
                              <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">11</span><span class="p">])</span>
 </code></pre></div>
@@ -957,11 +957,11 @@
 <p class="admonition-title">Bug</p>
 <p>Some emojis can appear as one character instead of two!</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;here&quot;</span><span class="p">,</span> <span class="s2">&quot;comes&quot;</span><span class="p">,</span> <span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;sun&quot;</span><span class="p">],</span> 
+<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;here&quot;</span><span class="p">,</span> <span class="s2">&quot;comes&quot;</span><span class="p">,</span> <span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;sun&quot;</span><span class="p">],</span>
                 <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;🌞&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="non-ascii-as-a-cursor">Non-ascii as a cursor</h4>
-<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hardcore&quot;</span><span class="p">,</span> <span class="s2">&quot;unicode&quot;</span><span class="p">],</span> 
+<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hardcore&quot;</span><span class="p">,</span> <span class="s2">&quot;unicode&quot;</span><span class="p">],</span>
                 <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;⇉&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="multi-character-cursorsticks">Multi-character cursors/ticks</h4>
@@ -969,7 +969,7 @@
 <p class="admonition-title">Tip</p>
 <p>You can use multiple characters as a cursor</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="n">correct_abba_lyric</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;queen&quot;</span><span class="p">,</span> <span class="s2">&quot;bean&quot;</span><span class="p">],</span> 
+<div class="highlight"><pre><span></span><code><span class="n">correct_abba_lyric</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;queen&quot;</span><span class="p">,</span> <span class="s2">&quot;bean&quot;</span><span class="p">],</span>
                                      <span class="n">tick_character</span> <span class="o">=</span> <span class="s2">&quot;dancing&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="prompt"><code>prompt</code></h2>
@@ -1007,7 +1007,7 @@
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># ugly hacky path completion callable:</span>
-<span class="k">def</span> <span class="nf">path_completion</span><span class="p">(</span><span class="n">str_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span> 
+<span class="k">def</span> <span class="nf">path_completion</span><span class="p">(</span><span class="n">str_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">str_path</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
     <span class="k">try</span><span class="p">:</span>
