@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'beaupy'
-version = '3.7.1'
+version = '3.7.2'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
@@ -38,11 +38,11 @@ lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running 
 "test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
 
 [tool.poetry.dependencies]
-python = '^3.7.8'
-rich = "^12.2.0"
+python = ">=3.7.8,<3.12"
+rich = ">=12.2.0"
 emoji = "^2.0.0"
 python-yakh = "0.3.2"
-questo = "^0.2.0"
+questo = "^0.2.2"
 
 
 [tool.mypy]
@@ -94,13 +94,6 @@ branch = true
 relative_files = true
 report = {skip_empty = true}
 
-[tool.poetry.group.test.dependencies]
-expycted = '*'
-mock = '*'
-poethepoet = '*'
-ward = '*'
-ward-coverage = "^0.3.0"
-
 [tool.poetry.group.dev.dependencies]
 # Code Scanning and Formatting
 mypy = '*'
@@ -135,7 +128,7 @@ perflint = '*'
 expycted = '*'
 
 # Unit Testing
-ward = '*'
+ward = "^0.67.1b0"
 mock = '*'
 watchdog = '*'
 
