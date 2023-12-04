@@ -32,7 +32,7 @@ BeauPy stands on the shoulders of giants. It is based on another library with wh
 | [`confirm`](https://petereon.github.io/beaupy/api/#confirm)                      | Prompt with a question and yes/no options                                                  |
 | [`prompt`](https://petereon.github.io/beaupy/api/#prompt)                        | Prompt that takes free input with optional validation, type conversion and input hiding |
 
-TUI elements shown in the above gif are the result of the follwing code:
+TUI elements shown in the above gif are the result of the following code:
 
 ```python
 import time

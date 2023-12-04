@@ -36,7 +36,7 @@ loved_children = select_multiple(['Oldest child', 'Middle child', 'Youngest Chil
 With `select_multiple` you can restrict maximum and minimum count of elements using `maximal_count` and `minimal_count` respectively,
 
 ```python
-pizza_toppings = select_mutliple(['pineapple', 'olives', 'anchovies', 'mozzarella', 'parma ham']
+pizza_toppings = select_multiple(['pineapple', 'olives', 'anchovies', 'mozzarella', 'parma ham']
                                  maximal_count=3,
                                  minimal_count=1)
 ```

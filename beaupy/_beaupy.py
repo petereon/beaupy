@@ -129,7 +129,7 @@ def _navigate_select(
     return state
 
 
-def _naviagte_select_multiple(
+def _navigate_select_multiple(
     state: qselect.SelectState, keypress: Key, minimal_count: int, maximal_count: Union[int, None]
 ) -> qselect.SelectState:
     if keypress in DefaultKeys.interrupt:
@@ -397,7 +397,7 @@ def select_multiple(
             new_state = element.state
             new_state.error = ''
 
-            new_state = _naviagte_select_multiple(new_state, keypress, minimal_count, maximal_count)
+            new_state = _navigate_select_multiple(new_state, keypress, minimal_count, maximal_count)
             if new_state.exit or new_state.abort:
                 break
             element.state = new_state
