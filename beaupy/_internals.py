@@ -256,5 +256,5 @@ def _prompt_key_handler(prompt_state: qprompt.PromptState, keypress: Key) -> qpr
 def _completions_options_step(state: qprompt.PromptState) -> Tuple[int, int, str]:
     index = (state.completion.index + 1) % len(state.completion.options)
     value = state.completion.options[index]
-    cursor_positon = len(value)
-    return index, cursor_positon, value
+    cursor_position = len(value)
+    return index, cursor_position, value
