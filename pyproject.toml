@@ -94,6 +94,13 @@ branch = true
 relative_files = true
 report = {skip_empty = true}
 
+[tool.poetry.group.test.dependencies]
+expycted = '*'
+mock = '*'
+poethepoet = '*'
+ward = "^0.67.1b0"
+ward-coverage = "^0.3.0"
+
 [tool.poetry.group.dev.dependencies]
 # Code Scanning and Formatting
 mypy = '*'
