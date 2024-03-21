@@ -42,11 +42,11 @@ jobs:
         export PYTHONPATH=$(pwd)
         poe test
     
-    - name: Install dependencies
+    - name: Install documentation dependencies
       run: pip install -r docs/requirements.txt
     - name: Build documentation
       run: cd docs && novella
-    - name: Publish docs
+    - name: Publish documentation
       uses: JamesIves/github-pages-deploy-action@4.1.4
       with:
         branch: gh-pages
