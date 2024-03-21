@@ -43,7 +43,7 @@ def _():
     Live.update = mock.MagicMock()
     select(options=["test"])
 
-    assert Live.update.call_args_list == [mock.call(renderable="[pink1]>[/pink1] test\n\n(Confirm with [bold]enter[/bold])")]
+    assert Live.update.call_args_list == [mock.call(renderable="[pink1]>[/pink1] test\n\n([bold]enter[/bold] to confirm)")]
 
     assert Live.update.call_count == 1
 
@@ -57,8 +57,8 @@ def _():
     select(options=["test"])
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[pink1]>[/pink1] test\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[pink1]>[/pink1] test\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[pink1]>[/pink1] test\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[pink1]>[/pink1] test\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
 
@@ -71,8 +71,8 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4"])
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 2
@@ -87,16 +87,16 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"])
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n[pink1]>[/pink1] test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n[pink1]>[/pink1] test6\n  test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n[pink1]>[/pink1] test7\n  test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n[pink1]>[/pink1] test8\n  test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n[pink1]>[/pink1] test9\n  test10\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n[pink1]>[/pink1] test10\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n[pink1]>[/pink1] test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n[pink1]>[/pink1] test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n[pink1]>[/pink1] test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n[pink1]>[/pink1] test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n[pink1]>[/pink1] test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n[pink1]>[/pink1] test10\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 10
@@ -112,10 +112,10 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4"])
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 4
@@ -139,10 +139,10 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4"])
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 4
@@ -160,10 +160,10 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 4
     assert res == "test4"
@@ -178,8 +178,8 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green")
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
     assert res == "test4"
@@ -194,8 +194,8 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
     assert res == "test1"
@@ -216,7 +216,7 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])")
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)")
     ]
     assert Live.update.call_count == 1
     assert res is None
@@ -238,10 +238,10 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 4
@@ -289,10 +289,10 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] 1\n  2\n  3\n  4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  1\n[green]x[/green] 2\n  3\n  4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  1\n  2\n[green]x[/green] 3\n  4\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  1\n  2\n  3\n[green]x[/green] 4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] 1\n  2\n  3\n  4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  1\n[green]x[/green] 2\n  3\n  4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  1\n  2\n[green]x[/green] 3\n  4\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  1\n  2\n  3\n[green]x[/green] 4\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 4
@@ -308,7 +308,7 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 1
     assert res is None
@@ -340,16 +340,16 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+            renderable="[green]x[/green] test1\n  test2\n  test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+            renderable="  test1\n[green]x[/green] test2\n  test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="  test1\n  test2\n[green]x[/green] test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+            renderable="  test1\n  test2\n[green]x[/green] test3\n  test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"
+            renderable="  test1\n  test2\n  test3\n[green]x[/green] test4\n  test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -372,9 +372,9 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/3[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3[grey58]\n\nPage 1/3[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n[green]x[/green] test2\n  test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 3
@@ -397,8 +397,8 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 2
@@ -421,8 +421,8 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test1\n  test2\n[green]x[/green] test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 2
@@ -438,8 +438,8 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
 
     assert Live.update.call_count == 2
@@ -462,8 +462,8 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
     assert res == "test1"
@@ -485,8 +485,8 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
     assert res == "test1"
@@ -501,8 +501,8 @@ def _():
     res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
     assert res == "test4"
@@ -524,8 +524,8 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test4\n  test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
     assert res == "test1"
@@ -546,8 +546,8 @@ def _():
     )
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
-        mock.call(renderable="  test4\n[green]x[/green] test5[grey58]\n\nPage 2/2[/grey58]\n\n(Confirm with [bold]enter[/bold])"),
+        mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="  test4\n[green]x[/green] test5[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert Live.update.call_count == 2
     assert res == "test5"

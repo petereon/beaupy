@@ -87,7 +87,7 @@ def _render_prompt(secure: bool, state: qprompt.PromptState) -> str:
         )
         render_value = f'{render_value}\n{rendered_completion_options}'
 
-    render_value = f'{state.title}\n> {render_value}\n\n(Confirm with [bold]enter[/bold])'
+    render_value = f'{state.title}\n> {render_value}\n\n([bold]enter[/bold] to confirm)'
     if state.error:
         render_value = f'{render_value}\n[red]Error:[/red] {state.error}'
 
@@ -115,7 +115,7 @@ def _render_select(preprocessor: Callable[[Any], str], cursor_style: str, cursor
             ]
         )
         + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')  # noqa: W503
-        + '\n\n(Confirm with [bold]enter[/bold])'  # noqa: W503
+        + '\n\n([bold]enter[/bold] to confirm)'  # noqa: W503
     )
 
 
@@ -143,7 +143,7 @@ def _render_select_multiple(
             ]
         )
         + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')  # noqa: W503
-        + '\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])'  # noqa: W503
+        + '\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)'  # noqa: W503
     )
     if state.error:
         rendered = f'{rendered}\n[red]Error:[/red] {state.error}'
