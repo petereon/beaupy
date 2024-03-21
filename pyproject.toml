@@ -38,11 +38,11 @@ lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running 
 "test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
 
 [tool.poetry.dependencies]
-python = ">=3.7.8"
+python = ">=3.7.8,<4.0.0"
 rich = ">=12.2.0"
 emoji = "^2.0.0"
 python-yakh = "0.3.2"
-questo = "^0.2.2"
+questo = "^0.2.3"
 
 
 [tool.mypy]
