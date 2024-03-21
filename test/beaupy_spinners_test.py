@@ -14,7 +14,7 @@ def _():
     _spinners.Live.assert_called_once()
 
     assert _spinners.Live.call_args[0] == ("",)
-    assert _spinners.Live.call_args[1]["transient"] == False
+    assert _spinners.Live.call_args[1]["transient"] is False
     assert _spinners.Live.call_args[1]["refresh_per_second"] == 10
 
     assert isinstance(_spinners.Live.call_args[1]["get_renderable"], Callable)

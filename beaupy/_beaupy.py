@@ -66,6 +66,7 @@ class DefaultKeys:
     home: List[Union[Tuple[int, ...], str]] = [Keys.HOME]
     end: List[Union[Tuple[int, ...], str]] = [Keys.END]
     interrupt: List[Union[Tuple[int, ...], str]] = [Keys.CTRL_C]
+    select_all: List[Union[Tuple[int, ...], str]] = ['a']
 
 
 class Config:
@@ -140,16 +141,23 @@ def _navigate_select_multiple(
 
     elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
         state = _navigate_select(state, keypress=keypress)
+    elif keypress in DefaultKeys.select_all:
+        if len(state.selected_indexes) == maximal_count if maximal_count is not None else len(state.options):
+            state.selected_indexes = []
+        else:
+            if maximal_count is not None:
+                state.selected_indexes = list(range(maximal_count))
+                state.error = f'Must select at most {maximal_count} options'
+            else:
+                state.selected_indexes = list(range(len(state.options)))
     elif keypress in DefaultKeys.select:
         if state.index in state.selected_indexes:
             state.selected_indexes.remove(state.index)
-        elif maximal_count is not None:
-            if len(state.selected_indexes) + 1 <= maximal_count:
-                state.selected_indexes.append(state.index)
-            else:
-                state.error = f'Must select at most {maximal_count} options'
         else:
-            state.selected_indexes.append(state.index)
+            if maximal_count is not None and len(state.selected_indexes) + 1 > maximal_count:
+                state.error = f'Must select at most {maximal_count} options'
+            else:
+                state.selected_indexes.append(state.index)
     elif keypress in DefaultKeys.confirm:
         if minimal_count > len(state.selected_indexes):
             state.error = f'Must select at least {minimal_count} options'
@@ -453,7 +461,7 @@ def confirm(
             question_line = f'{question}{yn_prompt}{current_message}'
             yes_prefix = selected_prefix if yes else deselected_prefix
             no_prefix = selected_prefix if no else deselected_prefix
-            rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}\n\n(Confirm with [bold]enter[/bold])'
+            rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}\n\n([bold]enter[/bold] to confirm)'
             _update_rendered(live, rendered)
 
             keypress = get_key()

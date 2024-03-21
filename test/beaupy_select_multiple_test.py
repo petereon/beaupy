@@ -7,7 +7,6 @@ from ward import fixture, raises, test
 from beaupy._internals import Abort
 
 from beaupy._beaupy import Config, Live, select_multiple, warnings
-import beaupy
 
 
 def raise_keyboard_interrupt():
@@ -46,16 +45,16 @@ def _():
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 4
@@ -71,7 +70,7 @@ def _():
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 1
@@ -87,34 +86,34 @@ def _():
     res = select_multiple(options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] [pink1]test3[/pink1]\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] [pink1]test3[/pink1]\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] [pink1]test4[/pink1]\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] [pink1]test4[/pink1]\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] [pink1]test5[/pink1]\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] [pink1]test5[/pink1]\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] [pink1]test6[/pink1]\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] [pink1]test6[/pink1]\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] [pink1]test7[/pink1]\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] [pink1]test7[/pink1]\n\\[  ] test8\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] [pink1]test8[/pink1]\n\\[  ] test9\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] [pink1]test8[/pink1]\n\\[  ] test9\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] [pink1]test9[/pink1]\n\\[  ] test10\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] [pink1]test9[/pink1]\n\\[  ] test10\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] [pink1]test10[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] test2\n\\[  ] test3\n\\[  ] test4\n\\[  ] test5\n\\[  ] test6\n\\[  ] test7\n\\[  ] test8\n\\[  ] test9\n\\[  ] [pink1]test10[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 10
@@ -130,19 +129,19 @@ def _():
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[[pink1]😋[/pink1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[[pink1]😋[/pink1]] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 5
@@ -158,16 +157,16 @@ def _():
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 4
@@ -185,16 +184,16 @@ def _():
     res = select_multiple(options=["test1", "test2"], tick_character="😋", return_indices=True)
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 4
@@ -210,16 +209,16 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -236,13 +235,13 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[  ] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -265,12 +264,12 @@ def _():
         cursor_index=1,
     )
     assert Live.update.call_args_list == [
-        mock.call(renderable="\\[ ] test1\n\\[ ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\\[ ] test1\n\\[ ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"),
         mock.call(
-            renderable="\\[ ] test1\n\\[[yellow1]x[/yellow1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[[yellow1]x[/yellow1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] [pink1]test1[/pink1]\n\\[[yellow1]x[/yellow1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [pink1]test1[/pink1]\n\\[[yellow1]x[/yellow1]] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 3
@@ -294,13 +293,13 @@ def _():
     )
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[[yellow1]x[/yellow1]] test1\n\\[ ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[yellow1]x[/yellow1]] test1\n\\[ ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[yellow1]x[/yellow1]] test1\n\\[[yellow1]x[/yellow1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[yellow1]x[/yellow1]] test1\n\\[[yellow1]x[/yellow1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[yellow1]x[/yellow1]] [pink1]test1[/pink1]\n\\[[yellow1]x[/yellow1]] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[yellow1]x[/yellow1]] [pink1]test1[/pink1]\n\\[[yellow1]x[/yellow1]] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 3
@@ -319,16 +318,16 @@ def _():
 
     assert Live.update.call_args_list[:4] == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])\n[red]Error:[/red] Must select at most 1 options"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)\n[red]Error:[/red] Must select at most 1 options"
         ),
     ]
     assert Live.update.call_count == 4
@@ -354,19 +353,19 @@ def _():
     res = select_multiple(options=["test1", "test2"], tick_character="😋", minimal_count=2)
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])\n[red]Error:[/red] Must select at least 2 options"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)\n[red]Error:[/red] Must select at least 2 options"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1]test2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 5
@@ -380,7 +379,7 @@ def _():
     b.get_key = lambda: Keys.CTRL_C
     res = select_multiple(options=["test1", "test2"], tick_character="😋")
     assert Live.update.call_args_list == [
-        mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])")
+        mock.call(renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)")
     ]
     assert Live.update.call_count == 1
     assert res == []
@@ -423,18 +422,18 @@ def _():
     Live.update = mock.MagicMock()
     res = select_multiple(options=["test1", "test2"], tick_character="😋", preprocessor=lambda val: val[-1])
     assert Live.update.call_args_list == [
-        mock.call(renderable="\\[  ] [pink1]1[/pink1]\n\\[  ] 2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"),
+        mock.call(renderable="\\[  ] [pink1]1[/pink1]\n\\[  ] 2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]1[/pink1]\n\\[  ] 2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]1[/pink1]\n\\[  ] 2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] 1\n\\[[pink1]😋[/pink1]] [pink1]2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] 1\n\\[[pink1]😋[/pink1]] [pink1]2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] 1\n\\[  ] [pink1]2[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 5
@@ -450,10 +449,10 @@ def _():
     res = select_multiple(options=["test1", "test2"], tick_character="😋", return_indices=True)
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 2
@@ -485,19 +484,19 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3\n\\[ ] test4\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3\n\\[ ] test4\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] [green]test2[/green]\n\\[ ] test3\n\\[ ] test4\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] [green]test2[/green]\n\\[ ] test3\n\\[ ] test4\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green]\n\\[ ] test4\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green]\n\\[ ] test4\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] test3\n\\[ ] [green]test4[/green]\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] test3\n\\[ ] [green]test4[/green]\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] test3\n\\[[pink1]✓[/pink1]] [green]test4[/green]\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] test3\n\\[[pink1]✓[/pink1]] [green]test4[/green]\n\\[ ] test5[grey58]\n\nPage 1/2[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -520,16 +519,16 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] [green]test2[/green]\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] [green]test2[/green]\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[[pink1]✓[/pink1]] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[[pink1]✓[/pink1]] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -553,13 +552,13 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]✓[/pink1]] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]✓[/pink1]] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -583,13 +582,13 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[[pink1]✓[/pink1]] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[[pink1]✓[/pink1]] [green]test3[/green][grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -613,13 +612,13 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]✓[/pink1]] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]✓[/pink1]] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -642,13 +641,13 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]✓[/pink1]] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]✓[/pink1]] [green]test4[/green]\n\\[ ] test5\n\\[ ] test6[grey58]\n\nPage 2/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -671,13 +670,13 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] [green]test7[/green]\n\\[ ] test8[grey58]\n\nPage 3/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test7[/green]\n\\[ ] test8[grey58]\n\nPage 3/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]✓[/pink1]] [green]test7[/green]\n\\[ ] test8[grey58]\n\nPage 3/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]✓[/pink1]] [green]test7[/green]\n\\[ ] test8[grey58]\n\nPage 3/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -701,13 +700,13 @@ def _():
 
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] [green]test7[/green]\n\\[ ] test8[grey58]\n\nPage 3/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test7[/green]\n\\[ ] test8[grey58]\n\nPage 3/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]✓[/pink1]] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]✓[/pink1]] [green]test1[/green]\n\\[ ] test2\n\\[ ] test3[grey58]\n\nPage 1/3[/grey58]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
 
@@ -724,16 +723,16 @@ def _():
     res = select_multiple(options=["test1", "[yellow1]test2[/yellow1]"], tick_character="😋")
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] [yellow1]test2[/yellow1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] [yellow1]test2[/yellow1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] [yellow1]test2[/yellow1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] [pink1]test1[/pink1]\n\\[  ] [yellow1]test2[/yellow1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1][pink1]test2[/pink1][/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[  ] [pink1][pink1]test2[/pink1][/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
         mock.call(
-            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1][pink1]test2[/pink1][/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[[pink1]😋[/pink1]] test1\n\\[[pink1]😋[/pink1]] [pink1][pink1]test2[/pink1][/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 4
@@ -749,7 +748,7 @@ def _():
     res = select_multiple(options=["test1", "test2", "test3", "test4", "test5", "test6"], ticked_indices=[5], cursor_index=5)
     assert Live.update.call_args_list == [
         mock.call(
-            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] test3\n\\[ ] test4\n\\[ ] test5\n\\[[pink1]✓[/pink1]] [pink1]test6[/pink1]\n\n(Mark with [bold]space[/bold], confirm with [bold]enter[/bold])"
+            renderable="\\[ ] test1\n\\[ ] test2\n\\[ ] test3\n\\[ ] test4\n\\[ ] test5\n\\[[pink1]✓[/pink1]] [pink1]test6[/pink1]\n\n([bold]space[/bold] to tick one, [bold]a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"
         ),
     ]
     assert Live.update.call_count == 1
