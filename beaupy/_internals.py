@@ -57,7 +57,7 @@ def _wrap_style(string_w_styles: str, global_style_str: str) -> str:
 def _render_option_select_multiple(
     option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
 ) -> str:
-    prefix = r'\[{}]'.format(' ' * len(_replace_emojis(tick_character))) 
+    prefix = r'\[{}]'.format(' ' * len(_replace_emojis(tick_character)))
     if ticked:
         prefix = rf'\[[{tick_style}]{tick_character}[/{tick_style}]]'
     if selected:
