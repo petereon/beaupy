@@ -142,7 +142,7 @@ def _navigate_select_multiple(
     elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
         state = _navigate_select(state, keypress=keypress)
     elif keypress in DefaultKeys.select_all:
-        if len(state.selected_indexes) == maximal_count if maximal_count is not None else len(state.options):
+        if len(state.selected_indexes) == (maximal_count if maximal_count is not None else len(state.options)):
             state.selected_indexes = []
         else:
             if maximal_count is not None:
