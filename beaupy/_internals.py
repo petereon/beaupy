@@ -53,7 +53,8 @@ def _wrap_style(string_w_styles: str, global_style_str: str) -> str:
             string_w_styles = string_w_styles.replace(f'[{style_string}]', f'[{style}]')
             string_w_styles = string_w_styles.replace(f'[/{style_string}]', f'[/{style}]')
         except Exception:
-            # In the case where there are non style defining square brakets in the string, ignores invalid colors in square brakets, since these aren't styles
+            # In the case where there are non style defining square brakets in the string,
+            # ignores invalid colors in square brakets, since these aren't styles
             continue
 
     return f'[{global_style_str}]{string_w_styles}[/{global_style_str}]'
