@@ -43,13 +43,19 @@ def _render_option_select(i: int, cursor_index: int, option: str, cursor_style: 
 
 
 def _wrap_style(string_w_styles: str, global_style_str: str) -> str:
-    RE_STYLE_PATTERN = r'\[(.*?)\]'
+    RE_STYLE_PATTERN = r'\[(/?[^]]+)\]'
 
     global_style = Style.parse(global_style_str)
-    style_strings = list(set([i.replace('/', '') for i in re.findall(RE_STYLE_PATTERN, string_w_styles)]))
+    style_strings = list(set(re.findall(RE_STYLE_PATTERN, string_w_styles)))
     for style_string in style_strings:
-        style = Style.combine([Style.parse(style_string), global_style])
-        string_w_styles = string_w_styles.replace(f'{style_string}', f'{style}')
+        try:
+            style = Style.combine([Style.parse(style_string), global_style])
+            string_w_styles = string_w_styles.replace(f'[{style_string}]', f'[{style}]')
+            string_w_styles = string_w_styles.replace(f'[/{style_string}]', f'[/{style}]')
+        except Exception:
+            # In the case where there are non style defining square brakets in the string,
+            # ignores invalid colors in square brakets, since these aren't styles
+            continue
 
     return f'[{global_style_str}]{string_w_styles}[/{global_style_str}]'
 
