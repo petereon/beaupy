@@ -19,7 +19,10 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
-
+        
+  features:
+    - content.code.copy
+    
 site_name: BeauPy
 
 markdown_extensions:
