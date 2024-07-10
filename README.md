@@ -202,4 +202,4 @@ Internal logic of `beaupy` is supported for all the major platforms (Windows, Li
 
 ## License
 
-The project is licensed under the [MIT License](LICENSE).
+The project is licensed under the [MIT License](https://raw.githubusercontent.com/petereon/beaupy/master/LICENSE).
