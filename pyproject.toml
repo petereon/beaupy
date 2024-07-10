@@ -25,7 +25,6 @@ add = { shell = 'poetry add' }
 install = { shell = 'poetry install' }
 build = { shell = 'poetry build' }
 clean = { shell = 'rm -R ./dist .pytest_cache .mypy_cache &> /dev/null' }
-
 isort = { shell = 'poetry run isort ./beaupy' }
 black = { shell = 'poetry run black ./beaupy --skip-string-normalization' }
 mypy = { shell = 'poetry run mypy ./beaupy/' }
@@ -33,7 +32,6 @@ flake8 = { shell = 'poetry run pflake8 ./beaupy/' }
 perflint = { shell = "poetry run perflint ./beaupy/" }
 lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running black..." ; poetry run poe black ; echo "Running unify..." ; poetry run unify ./beaupy -r -i ; echo "Running flake8..." ; poetry run poe flake8 ; echo "Running mypy..." ; poetry run poe mypy ; echo Done!' }
 "lint:watch" = { shell = "poetry run poe lint ; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe lint'" }
-
 "test" = { shell = "poetry run ward" }
 "test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
 
@@ -44,21 +42,16 @@ emoji = "^2.0.0"
 python-yakh = "0.3.2"
 questo = "^0.2.3"
 
-
 [tool.mypy]
-
 files = ["src"]
 warn_return_any = true
 warn_unused_configs = true
-
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 disallow_untyped_decorators = true
-
 warn_redundant_casts = true
 warn_unreachable = true
 warn_unused_ignores = true
-
 show_column_numbers = true
 ignore_missing_imports = true
 
@@ -71,10 +64,9 @@ profile = "black"
 [tool.flake8]
 max-line-length = 140
 max-complexity = 18
-select = ["B","E","F","W","T4","B9"]
+select = ["B", "E", "F", "W", "T4", "B9"]
 
 [[tool.pydoc-markdown.loaders]]
-
 type = 'python'
 search_path = ['./beaupy']
 
@@ -92,13 +84,13 @@ report_type = ["term", "xml"]
 source = ["."]
 branch = true
 relative_files = true
-report = {skip_empty = true}
+report = { skip_empty = true }
 
 [tool.poetry.group.test.dependencies]
 expycted = '*'
 mock = '*'
 poethepoet = '*'
-ward = "^0.67.1b0"
+ward = "^0.68.0b0"
 ward-coverage = "^0.3.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -107,18 +99,15 @@ mypy = '*'
 pyproject-flake8 = "*"
 flake8 = "<5"
 black = "^22.6.0"
-
 ## Bugs
 flake8-simplify = '*'
 flake8-pie = '*'
 flake8-bandit = '*'
-
 ## Complexity
 flake8-cognitive-complexity = '*'
 flake8-expression-complexity = '*'
 radon = '*'
 xenon = '*'
-
 ## Lints
 flake8-quotes = '*'
 flake8-print = '*'
@@ -127,24 +116,18 @@ flake8-comments = '*'
 toml-sort = '*'
 isort = '*'
 unify = "*"
-
 ## Performance
 perflint = '*'
-
 # Expect Pattern Testing
 expycted = '*'
-
 # Unit Testing
-ward = "^0.67.1b0"
+ward = "^0.68.0b0"
 mock = '*'
 watchdog = '*'
-
 # Coverage
 ward-coverage = "^0.3.0"
-
 # Task Runner
 poethepoet = '*'
-
 # Docs
 pydoc-markdown = "^4.6.3"
 types-emoji = "^2.0.1"
