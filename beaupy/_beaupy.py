@@ -79,10 +79,12 @@ class Config:
         raise_on_escape(bool): If True, functions will raise Abort whenever the escape key is encountered when waiting for input, otherwise,
         they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
         `select_multiple` it means an empty list - `[]`.  Defaults to False.
+        transient(bool): If False, elements will remain displayed after its context has ended. Defaults to True.
     """
 
     raise_on_interrupt: bool = False
     raise_on_escape: bool = False
+    transient: bool = False
 
 
 _navigation_keys = [DefaultKeys.up, DefaultKeys.down, DefaultKeys.right, DefaultKeys.left, DefaultKeys.home, DefaultKeys.end]
@@ -212,6 +214,7 @@ def prompt(
             cursor_position=len(initial_value or ''),
         ),
         renderer=renderer,
+        transient=Config.transient
     )
 
     with element.displayed():
@@ -304,6 +307,7 @@ def select(
             page_size=page_size,
         ),
         renderer=renderer,
+        transient=Config.transient
     )
 
     with element.displayed():
@@ -397,6 +401,7 @@ def select_multiple(
             page_size=page_size,
         ),
         renderer=renderer,
+        transient=Config.transient
     )
 
     with element.displayed():
@@ -445,7 +450,7 @@ def confirm(
         Optional[bool]
     """
     rendered = ''
-    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=True) as live:
+    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=Config.transient) as live:
         if cursor_style in ['', None]:
             warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
             cursor_style = 'white'

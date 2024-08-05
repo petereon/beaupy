@@ -47,25 +47,25 @@ wrapt = [
 
 [[package]]
 name = "attrs"
-version = "23.2.0"
+version = "24.1.0"
 description = "Classes Without Boilerplate"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "attrs-23.2.0-py3-none-any.whl", hash = "sha256:99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1"},
-    {file = "attrs-23.2.0.tar.gz", hash = "sha256:935dc3b529c262f6cf76e50877d35a4bd3c1de194fd41f47a2b7ae8f19971f30"},
+    {file = "attrs-24.1.0-py3-none-any.whl", hash = "sha256:377b47448cb61fea38533f671fba0d0f8a96fd58facd4dc518e3dac9dbea0905"},
+    {file = "attrs-24.1.0.tar.gz", hash = "sha256:adbdec84af72d38be7628e353a09b6a6790d15cd71819f6e9d7b0faa8a125745"},
 ]
 
 [package.dependencies]
 importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 
 [package.extras]
-cov = ["attrs[tests]", "coverage[toml] (>=5.3)"]
-dev = ["attrs[tests]", "pre-commit"]
-docs = ["furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-towncrier", "towncrier", "zope-interface"]
-tests = ["attrs[tests-no-zope]", "zope-interface"]
-tests-mypy = ["mypy (>=1.6)", "pytest-mypy-plugins"]
-tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "pytest (>=4.3.0)", "pytest-xdist[psutil]"]
+benchmark = ["cloudpickle", "hypothesis", "mypy (>=1.11.1)", "pympler", "pytest (>=4.3.0)", "pytest-codspeed", "pytest-mypy-plugins", "pytest-xdist[psutil]"]
+cov = ["cloudpickle", "coverage[toml] (>=5.3)", "hypothesis", "mypy (>=1.11.1)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-xdist[psutil]"]
+dev = ["cloudpickle", "hypothesis", "mypy (>=1.11.1)", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-xdist[psutil]"]
+docs = ["cogapp", "furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-towncrier", "towncrier (<24.7)"]
+tests = ["cloudpickle", "hypothesis", "mypy (>=1.11.1)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-xdist[psutil]"]
+tests-mypy = ["mypy (>=1.11.1)", "pytest-mypy-plugins"]
 
 [[package]]
 name = "bandit"
@@ -1394,13 +1394,13 @@ files = [
 
 [[package]]
 name = "questo"
-version = "0.2.3"
+version = "0.3.0"
 description = "A library of extensible and modular CLI prompt elements"
 optional = false
 python-versions = "<4.0.0,>=3.7.8"
 files = [
-    {file = "questo-0.2.3-py3-none-any.whl", hash = "sha256:861d44b1c04d9a24190dda1aba7ec734076560580fe283e5f8db85a92fb3c927"},
-    {file = "questo-0.2.3.tar.gz", hash = "sha256:7eb4861f814ad775e45d1fdae020a06093d4322b427cddac655fa274d82d3114"},
+    {file = "questo-0.3.0-py3-none-any.whl", hash = "sha256:5e1ea5f71058a35edcee49fae2aa4a55b9b28918535ff6d121a505a1f0b0580e"},
+    {file = "questo-0.3.0.tar.gz", hash = "sha256:b5cf16744b0e490ff93522a45fdd953ffc878d22aea404ff14ec4e9186b64c37"},
 ]
 
 [package.dependencies]
@@ -1888,4 +1888,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.7.8,<4.0.0"
-content-hash = "dec265242505b127670625b5b1ddc936d53a73ebad11a7ef76c051f3d15fae2e"
+content-hash = "79fc604a96fa98fbfdff612d7bc4b312b58d8c7df24ac16a9616580c331a6392"
