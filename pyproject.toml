@@ -40,7 +40,7 @@ python = ">=3.7.8,<4.0.0"
 rich = ">=12.2.0"
 emoji = "^2.0.0"
 python-yakh = "0.3.2"
-questo = "^0.2.3"
+questo = "^0.3.0"
 
 [tool.mypy]
 files = ["src"]
