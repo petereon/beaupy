@@ -79,12 +79,17 @@ def _update_rendered(live: Live, renderable: Union[ConsoleRenderable, str]) -> N
 def _render_prompt(secure: bool, state: qprompt.PromptState) -> str:
     typed_values = [*(state.value or '')]
     input_value = len(typed_values) * '*' if secure else ''.join(typed_values)
+
+    # Escape backslashes to prevent them from being interpreted as escape characters
+    cursor_position = state.cursor_position + input_value.count('\\')
+    input_value = input_value.replace('\\', '\\\\')
+
     render_value = (  # noqa: ECE001
-        (input_value + ' ')[: state.cursor_position]
+        (input_value + ' ')[: cursor_position]
         + '[black on white]'  # noqa: W503
-        + (input_value + ' ')[state.cursor_position]  # noqa: W503
+        + (input_value + ' ')[cursor_position]  # noqa: W503
         + '[/black on white]'  # noqa: W503
-        + (input_value + ' ')[(state.cursor_position + 1) :]  # noqa: W503,E203
+        + (input_value + ' ')[(cursor_position + 1) :]  # noqa: W503,E203
     )
 
     if state.completion.options and not secure:
