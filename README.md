@@ -199,6 +199,7 @@ Internal logic of `beaupy` is supported for all the major platforms (Windows, Li
 
 - [therealOri/Genter](https://github.com/therealOri/Genter): A strong password generator and built in password manager made with python3!
 - [therealOri/byte](https://github.com/therealOri/byte): Steganography Image/Data Injector. For artists or people to inject their own Datamark "Watermark" into their images/art or files!
+- [AnirudhG07/ntfyme](https://github.com/AnirudhG07/ntfyme): A notification tool to notify you about status of your long running processes on termination via local-notification, Gmail, Telergram, etc.
 
 ## License
 
