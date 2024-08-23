@@ -84,7 +84,7 @@ class Config:
 
     raise_on_interrupt: bool = False
     raise_on_escape: bool = False
-    transient: bool = False
+    transient: bool = True
 
 
 _navigation_keys = [DefaultKeys.up, DefaultKeys.down, DefaultKeys.right, DefaultKeys.left, DefaultKeys.home, DefaultKeys.end]
