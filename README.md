@@ -196,12 +196,14 @@ Looking forward to your pull requests!
 Internal logic of `beaupy` is supported for all the major platforms (Windows, Linux, macOS).
 
 - For user input from console, `beaupy` relies on [petereon/yakh](https://github.com/petereon/yakh), which is tested against all the major platforms and Python versions.
-- For printing to console `beaupy` relies on [Textualize/rich](https://github.com/Textualize/rich), which [claims to support](https://github.com/Textualize/rich#compatibility) all the major platforms.
+- For printing to console `beaupy` relies on [Textualize/rich](https://github.com/Textualize/rich), which [supports](https://github.com/Textualize/rich#compatibility) all the major platforms.
 
 ## Known Issues
 
-- Version `2.x.x`: arrow keys reportedly don't always work on Windows. Resolved in `3.x.x`
-- Version `3.5.0`: various option display bugs in `select` and `select_multiple`. Resolved in `3.5.4`
+- From version `0.1.7` the CLI elements cause issue with displaying `pdb` prompt ([#93](https://github.com/petereon/beaupy/issues/93)).
+- From version `2.0.0` arrow keys reportedly don't always work on Windows. Resolved in `3.0.0`.
+- From version `3.5.0` there were various option display bugs in `select` and `select_multiple`. Resolved in `3.5.4`.
+- From version `3.9.0`, the CLI elements default to persisting in the terminal after they finish executing. Resolved in `3.9.2`.
 
 ## Awesome projects using `beaupy`
 
