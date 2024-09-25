@@ -116,6 +116,14 @@ From PyPI:
 pip install beaupy
 ```
 
+From [Conda](https://github.com/conda-forge/beaupy-feedstock) (kindly set up and maintained by [@thewchan](https://github.com/thewchan)):
+
+```sh
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda install beaupy
+```
+
 From source:
 
 ```sh
