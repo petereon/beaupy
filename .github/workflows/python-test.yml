@@ -8,7 +8,75 @@ on:
 env:
   POETRY_VERSION: "<1.4.0"
 jobs:
-  build:
+  relock:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry poethepoet
+    - name: Lock dependencies
+      run: |
+        poetry lock
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "chore: update poetry.lock"
+  lint:
+    needs: [relock]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install poetry poethepoet
+        poetry install
+    - name: Build and install the library
+      run: |
+        poe build
+    - name: Test with ward
+      run: |
+        export PYTHONPATH=$(pwd)
+        poe test
+    - name: Typecheck the code
+      run: |
+        poetry run poe mypy
+    - name: Lint the code
+      run: |
+        poetry run poe flake8
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true
+
+  test:
+    needs: [relock]
     if: |
       ! contains(github.event.head_commit.message, 'docs') && 
       ! contains(github.event.head_commit.message, 'chore') 
@@ -16,7 +84,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
       fail-fast: false
     steps:
     - uses: actions/checkout@v2
