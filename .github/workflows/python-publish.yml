@@ -54,7 +54,7 @@ jobs:
         ssh-key: ${{ secrets.DEPLOY_KEY }}
 
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      uses: pypa/gh-action-pypi-publish@916e57631f04a497e4bec0e29e80684e45b4305e
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
