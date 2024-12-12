@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'beaupy'
-version = '3.9.2'
+version = '3.10.0'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
@@ -36,7 +36,7 @@ lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running 
 "test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
 
 [tool.poetry.dependencies]
-python = ">=3.7.8,<4.0.0"
+python = ">=3.9,<4.0.0"
 rich = ">=12.2.0"
 emoji = "^2.0.0"
 python-yakh = "0.3.2"
@@ -98,7 +98,7 @@ ward-coverage = "^0.3.0"
 mypy = '*'
 pyproject-flake8 = "*"
 flake8 = "<5"
-black = "^22.6.0"
+black = "^24.0.0"
 ## Bugs
 flake8-simplify = '*'
 flake8-pie = '*'
