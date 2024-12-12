@@ -97,7 +97,7 @@ ward-coverage = "^0.3.0"
 # Code Scanning and Formatting
 mypy = '*'
 pyproject-flake8 = "*"
-flake8 = "<5"
+flake8 = "<8"
 black = "^24.0.0"
 ## Bugs
 flake8-simplify = '*'
