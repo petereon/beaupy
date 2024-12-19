@@ -36,7 +36,7 @@ lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running 
 "test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0.0"
+python = ">=3.7.8,<4.0.0"
 rich = ">=12.2.0"
 emoji = "^2.0.0"
 python-yakh = "^0.4.0"
