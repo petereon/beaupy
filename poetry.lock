@@ -65,28 +65,28 @@ windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "python-yakh"
-version = "0.3.2"
+version = "0.4.0"
 description = "Yet Another Keypress Handler"
 optional = false
-python-versions = ">=3.7.8,<4.0.0"
+python-versions = "<4.0.0,>=3.7.8"
 files = [
-    {file = "python_yakh-0.3.2-py3-none-any.whl", hash = "sha256:18e526e11fbd185a0da98581b8b08d3848bef97b070590fcd5ec49de0893371e"},
-    {file = "python_yakh-0.3.2.tar.gz", hash = "sha256:f2833a4c00d9823b1e3b517b71bfcb672f81d4e9719f4326389cef38f5b1bfe3"},
+    {file = "python_yakh-0.4.0-py3-none-any.whl", hash = "sha256:b0fbd9f918941ec38c16d226db154cc3b00ad413a4661ed6040cb9e56b900783"},
+    {file = "python_yakh-0.4.0.tar.gz", hash = "sha256:8c4f88c697019985526b798c1648d5027974eaa0ca09a0add6528444aa3520ae"},
 ]
 
 [[package]]
 name = "questo"
-version = "0.3.0"
+version = "0.4.0"
 description = "A library of extensible and modular CLI prompt elements"
 optional = false
 python-versions = "<4.0.0,>=3.7.8"
 files = [
-    {file = "questo-0.3.0-py3-none-any.whl", hash = "sha256:5e1ea5f71058a35edcee49fae2aa4a55b9b28918535ff6d121a505a1f0b0580e"},
-    {file = "questo-0.3.0.tar.gz", hash = "sha256:b5cf16744b0e490ff93522a45fdd953ffc878d22aea404ff14ec4e9186b64c37"},
+    {file = "questo-0.4.0-py3-none-any.whl", hash = "sha256:c862ed9c04acdb835cf17864bf54359abb8286b4a5fc0eb08b11fb3d926493f2"},
+    {file = "questo-0.4.0.tar.gz", hash = "sha256:a22dced0c4912919c0c0f7912ecd604ac1f2d3492e45e9d172baf5fa10ded75d"},
 ]
 
 [package.dependencies]
-python-yakh = ">=0.3.2,<0.4.0"
+python-yakh = ">=0.4.0,<0.5.0"
 rich = ">=12.2.0"
 
 [[package]]
@@ -122,4 +122,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0.0"
-content-hash = "133153624571435bd6700376b4d0f72fb0f0398a19629e21bdc8cfd0b196ac4c"
+content-hash = "45e523eccd137768efde49253232b2764de5b59367dea94e19926cede46fd14f"
