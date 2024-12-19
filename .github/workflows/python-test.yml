@@ -53,7 +53,7 @@ jobs:
     - name: Test with ward
       run: |
         export PYTHONPATH=$(pwd)
-        python -m pip install -r requirements-dev.txt
+        poetry run pip install -r requirements-dev.txt
         poe test
     - name: Typecheck the code
       run: |
@@ -107,5 +107,5 @@ jobs:
         poe build
     - name: Test with ward
       run: |
-        python -m pip install -r requirements-dev.txt
+        poetry run pip install -r requirements-dev.txt
         poe test

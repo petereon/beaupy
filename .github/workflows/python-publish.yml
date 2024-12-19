@@ -40,7 +40,7 @@ jobs:
     - name: Test with ward
       run: |
         export PYTHONPATH=$(pwd)
-        python -m pip install -r requirements-dev.txt
+        poetry run pip install -r requirements-dev.txt
         poe test
     
     - name: Install documentation dependencies
