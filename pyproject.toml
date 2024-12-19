@@ -36,11 +36,11 @@ lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running 
 "test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0.0"
+python = ">=3.7.8,<4.0.0"
 rich = ">=12.2.0"
 emoji = "^2.0.0"
-python-yakh = "0.3.2"
-questo = "^0.3.0"
+python-yakh = "^0.4.0"
+questo = "^0.4.0"
 
 [tool.mypy]
 files = ["src"]
@@ -85,52 +85,6 @@ source = ["."]
 branch = true
 relative_files = true
 report = { skip_empty = true }
-
-[tool.poetry.group.test.dependencies]
-expycted = '*'
-mock = '*'
-poethepoet = '*'
-ward = "^0.68.0b0"
-ward-coverage = "^0.3.0"
-
-[tool.poetry.group.dev.dependencies]
-# Code Scanning and Formatting
-mypy = '*'
-pyproject-flake8 = "*"
-flake8 = "<5"
-black = "^24.0.0"
-## Bugs
-flake8-simplify = '*'
-flake8-pie = '*'
-flake8-bandit = '*'
-## Complexity
-flake8-cognitive-complexity = '*'
-flake8-expression-complexity = '*'
-radon = '*'
-xenon = '*'
-## Lints
-flake8-quotes = '*'
-flake8-print = '*'
-flake8-eradicate = '*'
-flake8-comments = '*'
-toml-sort = '*'
-isort = '*'
-unify = "*"
-## Performance
-perflint = '*'
-# Expect Pattern Testing
-expycted = '*'
-# Unit Testing
-ward = "^0.68.0b0"
-mock = '*'
-watchdog = '*'
-# Coverage
-ward-coverage = "^0.3.0"
-# Task Runner
-poethepoet = '*'
-# Docs
-pydoc-markdown = "^4.6.3"
-types-emoji = "^2.0.1"
 
 [build-system]
 requires = ['poetry-core>=1.2.0']
