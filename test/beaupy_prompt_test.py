@@ -1,8 +1,8 @@
+import pytest
 from unittest import mock
 
 from beaupy import _beaupy as b
 from yakh.key import Keys, Key
-from ward import fixture, raises, test
 
 from beaupy._beaupy import Config, Live, prompt
 from beaupy._internals import ConversionError, ValidationError, Abort
@@ -12,15 +12,14 @@ def raise_keyboard_interrupt():
     raise KeyboardInterrupt()
 
 
-@fixture
+@pytest.fixture
 def set_raise_on_escape():
     Config.raise_on_escape = True
     yield
     Config.raise_on_escape = False
 
 
-@test("Empty prompt with immediately pressing confirm")
-def _():
+def test_empty_prompt_with_immediately_pressing_confirm():
     steps = iter([Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -31,8 +30,7 @@ def _():
     assert res == ""
 
 
-@test("Empty prompt typing `jozo` without validation and type and pressing confirm")
-def _():
+def test_empty_prompt_typing_jozo_without_validation_and_type_and_pressing_confirm():
     steps = iter(["j", "o", "z", "o", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -48,8 +46,7 @@ def _():
     assert res == "jozo"
 
 
-@test("Empty prompt typing `jozo` as secure input without validation and type and pressing confirm")
-def _():
+def test_empty_prompt_typing_jozo_as_secure_input_without_validation_and_type_and_pressing_confirm():
     steps = iter(["j", "o", "z", "o", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -65,8 +62,7 @@ def _():
     assert res == "jozo"
 
 
-@test("Empty prompt typing `True` as secure input with bool as type")
-def _():
+def test_empty_prompt_typing_true_as_secure_input_with_bool_as_type():
     steps = iter(["T", "r", "u", "e", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -82,8 +78,7 @@ def _():
     assert res is True
 
 
-@test("Empty prompt typing `12` as secure input with float as type")
-def _():
+def test_empty_prompt_typing_12_as_secure_input_with_float_as_type():
     steps = iter(["1", "2", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -98,8 +93,7 @@ def _():
     assert res == 12.0
 
 
-@test("`Ask an actual question goddammit` as a prompt typing `No` and validating it is `No`")
-def _():
+def test_ask_an_actual_question_goddammit_as_a_prompt_typing_no_and_validating_it_is_no():
     steps = iter(["o", Keys.LEFT_ARROW, Keys.LEFT_ARROW, "N", Keys.RIGHT_ARROW, Keys.RIGHT_ARROW, Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -130,13 +124,12 @@ def _():
     assert res == "No"
 
 
-@test("Empty prompt typing `12` as secure input with bool as type raising ConversionError")
-def _():
+def test_empty_prompt_typing_12_as_secure_input_with_bool_as_type_raising_conversionerror():
     steps = iter(["1", "2", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     Config.raise_on_interrupt = True
-    with raises(ConversionError):
+    with pytest.raises(ConversionError):
         prompt("", secure=True, target_type=bool)
     assert Live.update.call_args_list == [
         mock.call(renderable="\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
@@ -145,8 +138,7 @@ def _():
     ]
 
 
-@test("Empty prompt typing `12` as secure input with bool as type reporting a ConversionError")
-def _():
+def test_empty_prompt_typing_12_as_secure_input_with_bool_as_type_reporting_a_conversionerror():
     steps = iter(["1", "2", Keys.ENTER, Keys.ESC])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -162,12 +154,11 @@ def _():
     ]
 
 
-@test("Empty prompt typing `12` as secure input validating that value is more than 20 and raising ValidationError")
-def _():
+def test_empty_prompt_typing_12_as_secure_input_validating_that_value_is_more_than_20_and_raising_validationerror():
     steps = iter(["1", "2", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    with raises(ValidationError):
+    with pytest.raises(ValidationError):
         prompt("", secure=True, target_type=float, validator=lambda val: val > 20)
     assert Live.update.call_args_list == [
         mock.call(renderable="\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
@@ -176,8 +167,7 @@ def _():
     ]
 
 
-@test("Empty prompt typing `12` as secure input validating that value is more than 20 and reporting ValidationError")
-def _():
+def test_empty_prompt_typing_12_as_secure_input_validating_that_value_is_more_than_20_and_reporting_validationerror():
     steps = iter(["1", "2", Keys.ENTER, Keys.ESC])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -193,9 +183,7 @@ def _():
     ]
 
 
-@test("Prompt with typing `J`, then deleting it and typing `No`")
-def _():
-
+def test_prompt_with_typing_j_then_deleting_it_and_typing_no():
     steps = iter(["J", Keys.BACKSPACE, Keys.BACKSPACE, "N", "o", Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -204,8 +192,7 @@ def _():
     assert res == "No"
 
 
-@test("Prompt with interrupt and raise on keyboard interrupt as False")
-def _():
+def test_prompt_with_interrupt_and_raise_on_keyboard_interrupt_as_false():
     Config.raise_on_interrupt = False
     Live.update = mock.MagicMock()
     b.get_key = lambda: Keys.CTRL_C
@@ -214,17 +201,15 @@ def _():
     assert ret is None
 
 
-@test("Prompt with interrupt and raise on keyboard interrupt as True")
-def _():
+def test_prompt_with_interrupt_and_raise_on_keyboard_interrupt_as_true():
     Config.raise_on_interrupt = True
     Live.update = mock.MagicMock()
     b.get_key = lambda: Keys.CTRL_C
-    with raises(KeyboardInterrupt):
+    with pytest.raises(KeyboardInterrupt):
         prompt(prompt="Try test")
 
 
-@test("Prompt with initial value without further input")
-def _():
+def test_prompt_with_initial_value_without_further_input():
     steps = iter([Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -232,8 +217,7 @@ def _():
     assert res == "Hello, World!"
 
 
-@test("Prompt with initial value and further input")
-def _():
+def test_prompt_with_initial_value_and_further_input():
     steps = iter([*"World!", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -241,8 +225,7 @@ def _():
     assert res == "Hello, World!"
 
 
-@test("Prompt with initial value and then backspace")
-def _():
+def test_prompt_with_initial_value_and_then_backspace():
     steps = iter([Keys.BACKSPACE, Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -250,8 +233,7 @@ def _():
     assert res == "Hello"
 
 
-@test("Prompt with empty initial value")
-def _():
+def test_prompt_with_empty_initial_value():
     steps = iter([Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -259,8 +241,7 @@ def _():
     assert res == ""
 
 
-@test("Prompt with None initial value")
-def _():
+def test_prompt_with_none_initial_value():
     steps = iter([Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -268,8 +249,7 @@ def _():
     assert res == ""
 
 
-@test("Prompt with None initial value and then backspace")
-def _():
+def test_prompt_with_none_initial_value_and_then_backspace():
     steps = iter([Keys.BACKSPACE, Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -277,8 +257,7 @@ def _():
     assert res == ""
 
 
-@test("Prompt with typing `Hello`, pressing home, and then deleting one char")
-def _():
+def test_prompt_with_typing_hello_pressing_home_and_then_deleting_one_char():
     steps = iter([*"Hello", Keys.HOME, Keys.DELETE, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -287,8 +266,7 @@ def _():
     assert res == "ello"
 
 
-@test("Prompt with typing `Hello`, pressing home, pressing end, and then backspacing one char")
-def _():
+def test_prompt_with_typing_hello_pressing_home_pressing_end_and_then_backspacing_one_char():
     steps = iter([*"Hello", Keys.HOME, Keys.END, Keys.BACKSPACE, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -297,8 +275,7 @@ def _():
     assert res == "Hell"
 
 
-@test("Prompt with typing `Hello`, pressing up and down, and making sure they don't change the result")
-def _():
+def test_prompt_with_typing_hello_pressing_up_and_down_and_making_sure_they_dont_change_the_result():
     steps = iter([*"Hello", Keys.UP_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -307,8 +284,7 @@ def _():
     assert res == "Hello"
 
 
-@test("Verify that pressing delete on empty input doesn't fail")
-def _():
+def test_verify_that_pressing_delete_on_empty_input_doesnt_fail():
     steps = iter([Keys.DELETE, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -317,8 +293,7 @@ def _():
     assert res == ""
 
 
-@test("Verify that pressing delete at the end of the input doesn't change anything")
-def _():
+def test_verify_that_pressing_delete_at_the_end_of_the_input_doesnt_change_anything():
     steps = iter([*"Hello", Keys.DELETE, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -327,8 +302,7 @@ def _():
     assert res == "Hello"
 
 
-@test("Verify that home and end are working properly")
-def _():
+def test_verify_that_home_and_end_are_working_properly():
     steps = iter([*"ell", Keys.HOME, "H", Keys.END, "o", Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -337,8 +311,7 @@ def _():
     assert res == "Hello"
 
 
-@test("Verify that escape returns None")
-def _():
+def test_verify_that_escape_returns_none():
     steps = iter([Keys.ESC])
 
     b.get_key = lambda: next(steps)
@@ -346,25 +319,24 @@ def _():
     assert res is None
 
 
-@test("Verify that escape raises Abort when raise_on_escape is True")
-def _(set_raise_on_escape=set_raise_on_escape):
+def test_verify_that_escape_raises_abort_when_raise_on_escape_is_true(set_raise_on_escape):
     steps = iter([Key("esc", (27,), is_printable=False)])
 
     b.get_key = lambda: next(steps)
-    with raises(Abort) as e:
+    with pytest.raises(Abort) as e:
         prompt(prompt="Try test")
-    assert str(e.raised) == "Aborted by user with key (27,)"
+    assert str(e.value) == "Aborted by user with key (27,)"
 
-@test("Verify that completion works")
-def _():
+
+def test_verify_that_completion_works():
     steps = iter([Keys.TAB, Keys.TAB, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
     res = prompt(prompt="Try test", completion=lambda _: ["Hello", "World"])
     assert res == "World"
 
-@test("Verify that completion renders properly")
-def _():
+
+def test_verify_that_completion_renders_properly():
     steps = iter([Keys.TAB, Keys.TAB, Keys.TAB, Keys.ENTER])
 
     Live.update = mock.MagicMock()
@@ -377,6 +349,5 @@ def _():
         mock.call(renderable='Try test\n> World[black on white] [/black on white]\nHello [black on white]World[/black on white]\n\n([bold]enter[/bold] to confirm)'),
         mock.call(renderable='Try test\n> Hello[black on white] [/black on white]\n[black on white]Hello[/black on white] World\n\n([bold]enter[/bold] to confirm)'),
     ]
-
 
     assert res == "Hello"
