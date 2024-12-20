@@ -1,42 +1,39 @@
 from unittest import mock
 
-from beaupy import _beaupy as b
-from yakh.key import Keys, Key
-from ward import fixture, raises, test
+import pytest
+from yakh.key import Key, Keys
 
-from beaupy._internals import Abort
+from beaupy import _beaupy as b
 from beaupy._beaupy import Config, Live, select, warnings
+from beaupy._internals import Abort
 
 
 def raise_keyboard_interrupt():
     raise KeyboardInterrupt()
 
 
-@fixture
+@pytest.fixture
 def set_raise_on_escape():
     Config.raise_on_escape = True
     yield
     Config.raise_on_escape = False
 
 
-@test("`select` with no options permissive")
-def _():
+def test_select_with_no_options_permissive():
     b.get_key = lambda: Keys.ENTER
     res = select(options=[])
     assert res is None
 
 
-@test("`select` with no options strict")
-def _():
+def test_select_with_no_options_strict():
     b.get_key = lambda: Keys.ENTER
-    with raises(ValueError) as e:
+    with pytest.raises(ValueError) as e:
         select(options=[], strict=True)
 
-    assert str(e.raised) == "`options` cannot be empty"
+    assert str(e.value) == "`options` cannot be empty"
 
 
-@test("`select` with 1 option")
-def _():
+def test_select_with_one_option():
     steps = iter([Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -48,8 +45,7 @@ def _():
     assert Live.update.call_count == 1
 
 
-@test("`select` with 1 option and down step")
-def _():
+def test_select_with_one_option_and_down_step():
     steps = iter([Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -63,8 +59,7 @@ def _():
     assert Live.update.call_count == 2
 
 
-@test("`select` with pressing end")
-def _():
+def test_select_with_pressing_end():
     steps = iter([Keys.END, Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -79,33 +74,63 @@ def _():
     assert res == "test4"
 
 
-@test("`select` with 10 options, stepping through them")
-def _():
-    steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW ,Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
+def test_select_with_ten_options_stepping_through_them():
+    steps = iter(
+        [
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.ENTER,
+        ]
+    )
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"])
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n[pink1]>[/pink1] test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n[pink1]>[/pink1] test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n[pink1]>[/pink1] test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n[pink1]>[/pink1] test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n[pink1]>[/pink1] test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n[pink1]>[/pink1] test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(
+            renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n[pink1]>[/pink1] test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n[pink1]>[/pink1] test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n[pink1]>[/pink1] test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n[pink1]>[/pink1] test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n[pink1]>[/pink1] test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n[pink1]>[/pink1] test10\n\n([bold]enter[/bold] to confirm)"
+        ),
     ]
 
     assert Live.update.call_count == 10
     assert res == "test10"
 
 
-
-@test("`select` with pressing down twice and selecting first with home")
-def _():
+def test_select_with_pressing_down_twice_and_selecting_first_with_home():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.HOME, Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
@@ -122,8 +147,7 @@ def _():
     assert res == "test1"
 
 
-@test("`select` with 4 options stepping down through all with random character inbetween and selecting last")
-def _():
+def test_select_with_four_options_stepping_down_with_random_character_inbetween_and_selecting_last():
     steps = iter(
         [
             Keys.DOWN_ARROW,
@@ -149,10 +173,7 @@ def _():
     assert res == "test4"
 
 
-@test(
-    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor and `green` as a cursor color",
-)
-def _():
+def test_select_with_4_options_stepping_down_and_selecting_last():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -169,8 +190,7 @@ def _():
     assert res == "test4"
 
 
-@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color")
-def _():
+def test_select_with_4_options_stepping_up_and_selecting_last():
     steps = iter([Keys.UP_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -185,8 +205,7 @@ def _():
     assert res == "test4"
 
 
-@test("`select` with 4 options stepping up and selecting last with `x` as a cursor and `green` as a cursor color")
-def _():
+def test_select_with_4_options_stepping_up_and_selecting_first():
     steps = iter([Keys.UP_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -201,10 +220,7 @@ def _():
     assert res == "test1"
 
 
-@test(
-    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt False",
-)
-def _():
+def test_select_with_4_options_ctrl_c_no_raise():
     Live.update = mock.MagicMock()
     Config.raise_on_interrupt = False
     b.get_key = lambda: Keys.CTRL_C
@@ -222,10 +238,7 @@ def _():
     assert res is None
 
 
-@test(
-    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value",
-)
-def _():
+def test_select_with_4_options_stepping_down_and_selecting_last_return_index():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -248,13 +261,10 @@ def _():
     assert res == 3
 
 
-@test(
-    "`select` with 4 options calling `Ctrl+C` with `x` as a cursor and `green` as a cursor color and with raise on keyboard interrupt True",
-)
-def _():
+def test_select_with_4_options_ctrl_c_raise():
     Config.raise_on_interrupt = True
     b.get_key = lambda: Keys.CTRL_C
-    with raises(KeyboardInterrupt):
+    with pytest.raises(KeyboardInterrupt):
         select(
             options=["test1", "test2", "test3", "test4"],
             cursor="x",
@@ -263,8 +273,7 @@ def _():
         )
 
 
-@test("`select` with 2 options and invalid cursor style")
-def _():
+def test_select_with_2_options_invalid_cursor_style():
     steps = iter([Keys.ENTER])
     b.get_key = lambda: next(steps)
     warnings.warn = mock.MagicMock()
@@ -272,10 +281,7 @@ def _():
     warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
 
 
-@test(
-    "`select` with 4 options stepping down through all and selecting last with `x` as a cursor, `green` as a cursor color and returning index instead of value and preprocessor selecting the last element",
-)
-def _():
+def test_select_with_4_options_preprocessor():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -299,8 +305,7 @@ def _():
     assert res == 3
 
 
-@test("`select` returns none when ESC is pressed")
-def _():
+def test_select_returns_none_when_esc_is_pressed():
     steps = iter([Keys.ESC])
 
     b.get_key = lambda: next(steps)
@@ -314,19 +319,17 @@ def _():
     assert res is None
 
 
-@test("`select` raises Abort when ESC is pressed and raise_on_escape is True")
-def _(set_raise_on_escape=set_raise_on_escape):
+def test_select_raises_abort_when_esc_is_pressed_and_raise_on_escape_is_true(set_raise_on_escape):
     steps = iter([Key("esc", (27,), is_printable=False)])
 
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    with raises(Abort) as e:
+    with pytest.raises(Abort) as e:
         select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
-    assert str(e.raised) == "Aborted by user with key (27,)"
+    assert str(e.value) == "Aborted by user with key (27,)"
 
 
-@test("`select` shows only the first 5 options and number of pages if pagination is enabled")
-def _():
+def test_select_shows_only_first_5_options_and_number_of_pages_if_pagination_is_enabled():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -357,8 +360,7 @@ def _():
     assert res == "test4"
 
 
-@test("`select` shows only the first 3 options and number of pages if pagination is enabled and page_size is 3")
-def _():
+def test_select_shows_only_first_3_options_and_number_of_pages_if_pagination_is_enabled_and_page_size_is_3():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -381,8 +383,7 @@ def _():
     assert res == "test3"
 
 
-@test("`select` paginates forward when cursor is on the last option and `DOWN_ARROW` is pressed")
-def _():
+def test_select_paginates_forward_when_cursor_is_on_last_option_and_down_arrow_is_pressed():
     steps = iter([Keys.DOWN_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -405,8 +406,7 @@ def _():
     assert res == "test4"
 
 
-@test("`select` paginates backward when cursor is on the first_option and second page and `UP_ARROW` is pressed")
-def _():
+def test_select_paginates_backward_when_cursor_is_on_first_option_and_second_page_and_up_arrow_is_pressed():
     steps = iter([Keys.UP_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -429,8 +429,7 @@ def _():
     assert res == "test3"
 
 
-@test("`select` paginates forward when `RIGHT_ARROW` is pressed")
-def _():
+def test_select_paginates_forward_when_right_arrow_is_pressed():
     steps = iter([Keys.RIGHT_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -446,8 +445,7 @@ def _():
     assert res == "test4"
 
 
-@test("`select` paginates backwards when it's on second page `LEFT_ARROW` is pressed")
-def _():
+def test_select_paginates_backward_when_on_second_page_and_left_arrow_is_pressed():
     steps = iter([Keys.LEFT_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -469,8 +467,7 @@ def _():
     assert res == "test1"
 
 
-@test("`select` paginates to the first page when it's the last page and `RIGHT_ARROW` is pressed")
-def _():
+def test_select_paginates_to_first_page_when_on_last_page_and_right_arrow_is_pressed():
     steps = iter([Keys.RIGHT_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -492,8 +489,7 @@ def _():
     assert res == "test1"
 
 
-@test("`select` paginates to the last page when it's the first page and `LEFT_ARROW` is pressed")
-def _():
+def test_select_paginates_to_last_page_when_on_first_page_and_left_arrow_is_pressed():
     steps = iter([Keys.LEFT_ARROW, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -508,8 +504,7 @@ def _():
     assert res == "test4"
 
 
-@test("`select` paginates to the first page when it's the last page and `HOME` is pressed")
-def _():
+def test_select_paginates_to_first_page_when_on_last_page_and_home_is_pressed():
     steps = iter([Keys.HOME, Keys.ENTER])
 
     b.get_key = lambda: next(steps)
@@ -531,8 +526,7 @@ def _():
     assert res == "test1"
 
 
-@test("`select` paginates to the last page when it's the first page and `END` is pressed")
-def _():
+def test_select_paginates_to_last_page_when_on_first_page_and_end_is_pressed():
     steps = iter([Keys.END, Keys.ENTER])
 
     b.get_key = lambda: next(steps)

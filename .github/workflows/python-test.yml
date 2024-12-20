@@ -50,7 +50,7 @@ jobs:
     - name: Build and install the library
       run: |
         poe build
-    - name: Test with ward
+    - name: Test with pytest
       run: |
         export PYTHONPATH=$(pwd)
         poetry run pip install -r requirements-dev.txt
@@ -105,7 +105,7 @@ jobs:
     - name: Build and install the library
       run: |
         poe build
-    - name: Test with ward
+    - name: Test with pytest
       run: |
         poetry run pip install -r requirements-dev.txt
         poe test
