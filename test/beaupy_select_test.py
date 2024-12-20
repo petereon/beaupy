@@ -1,11 +1,11 @@
 from unittest import mock
+
 import pytest
+from yakh.key import Key, Keys
 
 from beaupy import _beaupy as b
-from yakh.key import Keys, Key
-
-from beaupy._internals import Abort
 from beaupy._beaupy import Config, Live, select, warnings
+from beaupy._internals import Abort
 
 
 def raise_keyboard_interrupt():
@@ -23,6 +23,7 @@ def test_select_with_no_options_permissive():
     b.get_key = lambda: Keys.ENTER
     res = select(options=[])
     assert res is None
+
 
 def test_select_with_no_options_strict():
     b.get_key = lambda: Keys.ENTER
@@ -74,22 +75,55 @@ def test_select_with_pressing_end():
 
 
 def test_select_with_ten_options_stepping_through_them():
-    steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW ,Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
+    steps = iter(
+        [
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.DOWN_ARROW,
+            Keys.ENTER,
+        ]
+    )
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     res = select(options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"])
 
     assert Live.update.call_args_list == [
-        mock.call(renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n[pink1]>[/pink1] test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n[pink1]>[/pink1] test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n[pink1]>[/pink1] test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n[pink1]>[/pink1] test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n[pink1]>[/pink1] test9\n  test10\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n[pink1]>[/pink1] test10\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(
+            renderable="[pink1]>[/pink1] test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n[pink1]>[/pink1] test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n[pink1]>[/pink1] test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n[pink1]>[/pink1] test4\n  test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n[pink1]>[/pink1] test5\n  test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n[pink1]>[/pink1] test6\n  test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n[pink1]>[/pink1] test7\n  test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n[pink1]>[/pink1] test8\n  test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n[pink1]>[/pink1] test9\n  test10\n\n([bold]enter[/bold] to confirm)"
+        ),
+        mock.call(
+            renderable="  test1\n  test2\n  test3\n  test4\n  test5\n  test6\n  test7\n  test8\n  test9\n[pink1]>[/pink1] test10\n\n([bold]enter[/bold] to confirm)"
+        ),
     ]
 
     assert Live.update.call_count == 10
@@ -137,6 +171,8 @@ def test_select_with_four_options_stepping_down_with_random_character_inbetween_
 
     assert Live.update.call_count == 4
     assert res == "test4"
+
+
 def test_select_with_4_options_stepping_down_and_selecting_last():
     steps = iter([Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.DOWN_ARROW, Keys.ENTER])
 
@@ -267,6 +303,7 @@ def test_select_with_4_options_preprocessor():
 
     assert Live.update.call_count == 4
     assert res == 3
+
 
 def test_select_returns_none_when_esc_is_pressed():
     steps = iter([Keys.ESC])

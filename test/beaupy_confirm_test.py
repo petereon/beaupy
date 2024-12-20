@@ -1,11 +1,11 @@
-import pytest
 from unittest import mock
+
+import pytest
+from yakh.key import Key, Keys
 
 from beaupy import _beaupy as b
 from beaupy._beaupy import Config, Live, confirm, warnings
 from beaupy._internals import Abort
-
-from yakh.key import Keys, Key
 
 
 def raise_keyboard_interrupt():

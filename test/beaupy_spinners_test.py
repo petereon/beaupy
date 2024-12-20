@@ -1,5 +1,6 @@
 from typing import Callable
 from unittest.mock import MagicMock
+
 import pytest
 
 from beaupy.spinners import _spinners

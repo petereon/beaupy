@@ -1,7 +1,8 @@
 import pytest
-from beaupy._internals import _render_prompt, Abort
-from yakh.key import Key
 from questo import prompt as qprompt
+from yakh.key import Key
+
+from beaupy._internals import Abort, _render_prompt
 
 
 def test_prompt_is_rendered_properly():

@@ -1,11 +1,11 @@
-import pytest
 from unittest import mock
 
-from beaupy import _beaupy as b
-from yakh.key import Keys, Key
+import pytest
+from yakh.key import Key, Keys
 
+from beaupy import _beaupy as b
 from beaupy._beaupy import Config, Live, prompt
-from beaupy._internals import ConversionError, ValidationError, Abort
+from beaupy._internals import Abort, ConversionError, ValidationError
 
 
 def raise_keyboard_interrupt():
@@ -101,24 +101,12 @@ def test_ask_an_actual_question_goddammit_as_a_prompt_typing_no_and_validating_i
 
     assert Live.update.call_args_list == [
         mock.call(renderable="Ask an actual question goddammit\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
-        mock.call(
-            renderable="Ask an actual question goddammit\n> o[black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"
-        ),
-        mock.call(
-            renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] \n\n([bold]enter[/bold] to confirm)"
-        ),
-        mock.call(
-            renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] \n\n([bold]enter[/bold] to confirm)"
-        ),
-        mock.call(
-            renderable="Ask an actual question goddammit\n> N[black on white]o[/black on white] \n\n([bold]enter[/bold] to confirm)"
-        ),
-        mock.call(
-            renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"
-        ),
-        mock.call(
-            renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"
-        ),
+        mock.call(renderable="Ask an actual question goddammit\n> o[black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] \n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="Ask an actual question goddammit\n> [black on white]o[/black on white] \n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="Ask an actual question goddammit\n> N[black on white]o[/black on white] \n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
+        mock.call(renderable="Ask an actual question goddammit\n> No[black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
     ]
     assert isinstance(res, str)
     assert res == "No"
@@ -345,9 +333,15 @@ def test_verify_that_completion_renders_properly():
 
     assert Live.update.call_args_list == [
         mock.call(renderable='Try test\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)'),
-        mock.call(renderable='Try test\n> Hello[black on white] [/black on white]\n[black on white]Hello[/black on white] World\n\n([bold]enter[/bold] to confirm)'),
-        mock.call(renderable='Try test\n> World[black on white] [/black on white]\nHello [black on white]World[/black on white]\n\n([bold]enter[/bold] to confirm)'),
-        mock.call(renderable='Try test\n> Hello[black on white] [/black on white]\n[black on white]Hello[/black on white] World\n\n([bold]enter[/bold] to confirm)'),
+        mock.call(
+            renderable='Try test\n> Hello[black on white] [/black on white]\n[black on white]Hello[/black on white] World\n\n([bold]enter[/bold] to confirm)'
+        ),
+        mock.call(
+            renderable='Try test\n> World[black on white] [/black on white]\nHello [black on white]World[/black on white]\n\n([bold]enter[/bold] to confirm)'
+        ),
+        mock.call(
+            renderable='Try test\n> Hello[black on white] [/black on white]\n[black on white]Hello[/black on white] World\n\n([bold]enter[/bold] to confirm)'
+        ),
     ]
 
     assert res == "Hello"
