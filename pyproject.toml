@@ -1,6 +1,6 @@
 [tool.poetry]
 name = 'beaupy'
-version = '3.10.0'
+version = '3.10.1'
 description = 'A library of elements for interactive TUIs in Python'
 authors = ['Peter Vyboch <pvyboch1@gmail.com>']
 license = 'MIT'
@@ -39,8 +39,8 @@ lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running 
 python = ">=3.7.8,<4.0.0"
 rich = ">=12.2.0"
 emoji = "^2.0.0"
-python-yakh = "^0.4.0"
-questo = "^0.4.0"
+python-yakh = "^0.4.1"
+questo = "^0.4.1"
 
 [tool.mypy]
 files = ["src"]
