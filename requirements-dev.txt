@@ -19,7 +19,7 @@ flake8-print==5.0.0
 flake8-eradicate==1.5.0
 flake8-comments==0.1.2
 toml-sort==0.24.2
-isort==5.11.5
+isort==5.13.2
 unify==0.5
 perflint==0.8.1
 watchdog==6.0.0
