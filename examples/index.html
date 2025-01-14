@@ -1003,11 +1003,11 @@
                         <span class="n">completion</span><span class="o">=</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pink&quot;</span><span class="p">,</span> <span class="s2">&quot;PINK&quot;</span><span class="p">,</span> <span class="s2">&quot;P1NK&quot;</span><span class="p">])</span>
 </code></pre></div>
 <p>A more complex example with path completion:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">listdir</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">listdir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># ugly hacky path completion callable:</span>
-<span class="k">def</span> <span class="nf">path_completion</span><span class="p">(</span><span class="n">str_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">path_completion</span><span class="p">(</span><span class="n">str_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">str_path</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
     <span class="k">try</span><span class="p">:</span>
@@ -1033,24 +1033,24 @@
 <h4 id="spinner-animation">Spinner Animation</h4>
 <p>There are few built in spinner animations, namely: ARC, ARROWS, BARS, CLOCK, DIAMOND, DOT, DOTS, LINE, LOADING and MOON</p>
 <p>Each of these can be used in a spinner:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">beaupy.spinners</span> <span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">ARC</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">ARC</span>
 <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">ARC</span><span class="p">,</span> <span class="s2">&quot;Doing some heavy work&quot;</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <p>All that "animations" are, is but a list of string, so making your own is as trivial as this:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">beaupy.spinners</span> <span class="kn">import</span> <span class="n">Spinner</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span>
 <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">&#39;whee&#39;</span><span class="p">,</span> <span class="s1">&#39;whe &#39;</span><span class="p">,</span> <span class="s1">&#39;wh  &#39;</span><span class="p">,</span> <span class="s1">&#39;w   &#39;</span><span class="p">,</span> <span class="s1">&#39;wh  &#39;</span><span class="p">,</span> <span class="s1">&#39;whe &#39;</span><span class="p">,</span> <span class="s1">&#39;whee&#39;</span><span class="p">],</span> <span class="s2">&quot;Whee!&quot;</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <h4 id="rich-styling">Rich styling</h4>
 <p>Every text in spinner does accept and respect rich styles, so the following works:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">beaupy.spinners</span> <span class="kn">import</span> <span class="n">Spinner</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span>
 <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">&#39;[red]⬤[/red] &#39;</span><span class="p">,</span> <span class="s1">&#39;[green]⬤[/green] &#39;</span><span class="p">,</span> <span class="s1">&#39;[blue]⬤[/blue] &#39;</span><span class="p">],</span> <span class="s1">&#39;[pink1]Setting[/pink1] colors!&#39;</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <h4 id="animation-speed">Animation speed</h4>
 <p>Animation speed can be set using <code>refresh_per_second</code> parameter:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">beaupy.spinners</span> <span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">LOADING</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">LOADING</span>
 <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">LOADING</span><span class="p">,</span> <span class="s2">&quot;something&quot;</span><span class="p">,</span> <span class="n">refresh_per_second</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
