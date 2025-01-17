@@ -5,7 +5,7 @@ pytest==8.3.4
 pytest-cov==6.0.0
 mypy==1.4.1
 pyproject-flake8==7.0.0
-flake8==7.0.0
+flake8==7.1.1
 black==24.10.0
 flake8-simplify==0.21.0
 flake8-pie==0.16.0
