@@ -79,7 +79,7 @@ class Config:
         raise_on_escape(bool): If True, functions will raise Abort whenever the escape key is encountered when waiting for input, otherwise,
         they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
         `select_multiple` it means an empty list - `[]`.  Defaults to False.
-        transient(bool): If False, elements will remain displayed after its context has ended. Defaults to True.
+        transient(bool): If False, elements will remain displayed after their context has ended. Defaults to True.
     """
 
     raise_on_interrupt: bool = False

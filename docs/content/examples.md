@@ -215,3 +215,42 @@ from beaupy.spinners import Spinner, LOADING
 spinner = Spinner(LOADING, "something", refresh_per_second=4)
 spinner.start()
 ```
+
+## Global Configuration
+
+`beaupy` exposes global configuration to configure behaviour of the CLI elements globally. There are currently 3 options:
+
+- `raise_on_interrupt`: If `True`, functions will raise `KeyboardInterrupt` whenever one is encountered when waiting for input,
+        otherwise, they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`,
+        while for `select_multiple` it means an empty list - `[]`. Defaults to `False`.
+- `raise_on_escape`: If `True`, functions will raise `Abort` whenever the escape key is encountered when waiting for input, otherwise,
+        they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
+        `select_multiple` it means an empty list - `[]`.  Defaults to `False`.
+- `transient`: If `False`, elements will remain displayed after their context has ended. Defaults to `True`.
+
+You can set these options like follows:
+
+```python
+from beaupy import Config
+
+Config.raise_on_interrupt = True
+Config.raise_on_escape = True
+Config.transient = False
+```
+
+### Usage
+
+For example, if you want to raise an exception when user presses `Ctrl+C` or `Esc` key, you can set `raise_on_interrupt` and `raise_on_escape` to `True`:
+
+```python
+from beaupy import Config, select
+
+Config.raise_on_interrupt = True
+
+try:
+    result = select(['Option 1', 'Option 2'])
+except KeyboardInterrupt:
+    print("User pressed Ctrl+C")
+
+print("Result:", result)
+```
