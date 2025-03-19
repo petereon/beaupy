@@ -214,7 +214,7 @@ def prompt(
             cursor_position=len(initial_value or ''),
         ),
         renderer=renderer,
-        transient=Config.transient
+        transient=Config.transient,
     )
 
     with element.displayed():
@@ -251,7 +251,9 @@ def prompt(
                 return None
             element.state = new_state
 
+
 T = TypeVar('T')
+
 
 def select(
     options: List[Union[str, T]],
@@ -310,7 +312,7 @@ def select(
             page_size=page_size,
         ),
         renderer=renderer,
-        transient=Config.transient
+        transient=Config.transient,
     )
 
     with element.displayed():
@@ -406,7 +408,7 @@ def select_multiple(
             page_size=page_size,
         ),
         renderer=renderer,
-        transient=Config.transient
+        transient=Config.transient,
     )
 
     with element.displayed():

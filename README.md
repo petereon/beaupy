@@ -161,7 +161,7 @@ This project uses [`poetry`](https://python-poetry.org/) as a dependency manager
 poetry install
 ```
 
-For testing, this project relies on [`ward`](https://github.com/darrenburns/ward). It is included as a development dependency, so
+For testing, this project relies on pytest. It is included as a development dependency, so
 after installing the dependencies you can simply execute the following:
 
 ```sh

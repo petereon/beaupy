@@ -85,7 +85,7 @@ def _render_prompt(secure: bool, state: qprompt.PromptState) -> str:
     input_value = input_value.replace('\\', '\\\\')
 
     render_value = (  # noqa: ECE001
-        (input_value + ' ')[: cursor_position]
+        (input_value + ' ')[:cursor_position]
         + '[black on white]'  # noqa: W503
         + (input_value + ' ')[cursor_position]  # noqa: W503
         + '[/black on white]'  # noqa: W503
