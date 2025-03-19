@@ -8,7 +8,7 @@ __license__ = 'MIT'
 import math
 import warnings
 from functools import partial
-from typing import Any, Callable, List, Optional, Tuple, Type, Union
+from typing import Any, Callable, List, Optional, Tuple, Type, TypeVar, Union
 
 from questo import prompt as qprompt
 from questo import select as qselect
@@ -251,10 +251,11 @@ def prompt(
                 return None
             element.state = new_state
 
+T = TypeVar('T')
 
 def select(
-    options: List[Union[Tuple[int, ...], str]],
-    preprocessor: Callable[[Any], Any] = lambda val: val,
+    options: List[Union[str, T]],
+    preprocessor: Callable[[T], str] = lambda val: str(val),
     cursor: str = '>',
     cursor_style: str = 'pink1',
     cursor_index: int = 0,
@@ -266,11 +267,13 @@ def select(
     """A prompt that allows selecting one option from a list of options
 
     Args:
-        options (List[Union[Tuple[int, ...], str]]): A list of options to select from
-        preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
-                                             For example, if you passed a `Person` object with `name` attribute, preprocessor
-                                             could be `lambda person: person.name` to just show the content of `name` attribute
-                                             in the select dialog. Defaults to `lambda val: val`
+        options (List[Union[str, T]]): A list of options to select from. If `preprocessor` is left as default (not passed),
+                                       it needs to be a list of strings or objects with a `__str__` method. Otherwise,
+                                       you can pass a `preprocessor` to create a string representation of arbitrary data-structures.
+        preprocessor (Callable[[T], str]): A callable that can be used to preprocess the list of options prior to printing.
+                                           For example, if you passed a `Person` object with `name` attribute, preprocessor
+                                           could be `lambda person: person.name` to just show the content of `name` attribute
+                                           in the select dialog. Defaults to `lambda val: val`
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
         cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         cursor_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
@@ -332,8 +335,8 @@ def select(
 
 
 def select_multiple(
-    options: List[Union[Tuple[int, ...], str]],
-    preprocessor: Callable[[Any], Any] = lambda val: val,
+    options: List[Union[str, T]],
+    preprocessor: Callable[[T], str] = lambda val: str(val),
     tick_character: str = '✓',
     tick_style: str = 'pink1',
     cursor_style: str = 'pink1',
@@ -349,11 +352,13 @@ def select_multiple(
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
-        options (List[Union[Tuple[int, ...], str]]): A list of options to select from
-        preprocessor (Callable[[Any], Any]): A callable that can be used to preprocess the list of options prior to printing.
-                                             For example, if you passed a `Person` object with `name` attribute, preprocessor
-                                             could be `lambda person: person.name` to just show the content of `name` attribute
-                                             in the select dialog. Defaults to `lambda val: val`
+        options (List[Union[str, T]]): A list of options to select from. If `preprocessor` is left as default (not passed),
+                                       it needs to be a list of strings or objects with a `__str__` method. Otherwise,
+                                       you can pass a `preprocessor` to create a string representation of arbitrary data-structures.
+        preprocessor (Callable[[T], str]): A callable that can be used to preprocess the list of options prior to printing.
+                                           For example, if you passed a `Person` object with `name` attribute, preprocessor
+                                           could be `lambda person: person.name` to just show the content of `name` attribute
+                                           in the select_multiple dialog. Defaults to `lambda val: val`
         tick_character (str, optional): Character that will be used as a tick in a checkbox. Defaults to 'x'.
         tick_style (str, optional): Rich friendly style for the tick character. Defaults to 'pink1'.
         cursor_style (str, optional): Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.
