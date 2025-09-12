@@ -23,6 +23,6 @@ isort==5.13.2
 unify==0.5
 perflint==0.8.1
 watchdog==6.0.0
-pydoc-markdown==4.7.0
+pydoc-markdown==4.8.2
 types-emoji==2.1.0.3
 pyyaml>=6.0.2,<7.0.0
