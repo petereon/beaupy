@@ -5,8 +5,6 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-env:
-  POETRY_VERSION: "<1.4.0"
 jobs:
   relock:
     runs-on: ubuntu-latest
@@ -81,18 +79,18 @@ jobs:
   test:
     needs: [relock]
     if: |
-      ! contains(github.event.head_commit.message, 'docs') && 
-      ! contains(github.event.head_commit.message, 'chore') 
+      ! contains(github.event.head_commit.message, 'docs') &&
+      ! contains(github.event.head_commit.message, 'chore')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0 
+        fetch-depth: 0
         ref: ${{ github.ref }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -100,7 +98,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install "poetry${{ env.POETRY_VERSION }}" poethepoet
+        python -m pip install poetry poethepoet
         poetry install
     - name: Build and install the library
       run: |

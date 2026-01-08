@@ -30,7 +30,7 @@ black = { shell = 'poetry run black ./beaupy --skip-string-normalization' }
 mypy = { shell = 'poetry run mypy ./beaupy/' }
 flake8 = { shell = 'poetry run pflake8 ./beaupy/' }
 perflint = { shell = "poetry run perflint ./beaupy/" }
-lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running black..." ; poetry run poe black ; echo "Running unify..." ; poetry run unify ./beaupy -r -i ; echo "Running flake8..." ; poetry run poe flake8 ; echo "Running mypy..." ; poetry run poe mypy ; echo Done!' }
+lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running black..." ; poetry run poe black ; echo "Running flake8..." ; poetry run poe flake8 ; echo "Running mypy..." ; poetry run poe mypy ; echo Done!' }
 "lint:watch" = { shell = "poetry run poe lint ; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe lint'" }
 "test" = { shell = "poetry run pytest --cov=beaupy --cov-report xml:coverage.xml --cov-report term" }
 "test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
