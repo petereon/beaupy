@@ -33,7 +33,7 @@ from beaupy._internals import (
     _validate_prompt_value,
 )
 
-console = Console()
+console = Console(stderr=True)
 
 
 class DefaultKeys:
@@ -215,6 +215,7 @@ def prompt(
         ),
         renderer=renderer,
         transient=Config.transient,
+        console=console,
     )
 
     with element.displayed():
@@ -313,6 +314,7 @@ def select(
         ),
         renderer=renderer,
         transient=Config.transient,
+        console=console,
     )
 
     with element.displayed():
@@ -409,6 +411,7 @@ def select_multiple(
         ),
         renderer=renderer,
         transient=Config.transient,
+        console=console,
     )
 
     with element.displayed():
