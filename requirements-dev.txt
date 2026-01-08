@@ -1,5 +1,5 @@
 expycted==0.8.2
-mock==5.1.0
+mock==5.2.0
 poethepoet==0.31.1
 pytest==8.4.2
 pytest-cov==6.3.0
