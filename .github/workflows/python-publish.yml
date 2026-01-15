@@ -48,7 +48,7 @@ jobs:
     - name: Build documentation
       run: cd docs && novella
     - name: Publish documentation
-      uses: JamesIves/github-pages-deploy-action@v4.7.3
+      uses: JamesIves/github-pages-deploy-action@v4.8.0
       with:
         branch: gh-pages
         folder: docs/_site
