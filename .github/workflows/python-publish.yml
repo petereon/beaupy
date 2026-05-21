@@ -40,11 +40,11 @@ jobs:
     - name: Test with pytest
       run: |
         export PYTHONPATH=$(pwd)
-        poetry run pip install -r requirements-dev.txt
+        poetry run pip install --only-binary :all: -r requirements-dev.txt
         poe test
     
     - name: Install documentation dependencies
-      run: pip install -r docs/requirements.txt
+      run: pip install --only-binary :all: -r docs/requirements.txt
     - name: Build documentation
       run: cd docs && novella
     - name: Publish documentation
