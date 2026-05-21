@@ -466,6 +466,7 @@ def test_select_multiple_shows_only_5_options_if_pagination_is_enabled():
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
         pagination=True,
+        page_size=5,
     )
 
     assert Live.update.call_args_list == [

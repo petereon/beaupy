@@ -339,6 +339,7 @@ def test_select_shows_only_first_5_options_and_number_of_pages_if_pagination_is_
         cursor="x",
         cursor_style="green",
         pagination=True,
+        page_size=5,
     )
 
     assert Live.update.call_args_list == [
