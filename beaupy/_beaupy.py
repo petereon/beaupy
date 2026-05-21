@@ -265,7 +265,7 @@ def select(
     return_index: bool = False,
     strict: bool = False,
     pagination: bool = False,
-    page_size: int = 5,
+    page_size: Optional[int] = None,
 ) -> Union[int, Any, None]:
     """A prompt that allows selecting one option from a list of options
 
@@ -284,7 +284,10 @@ def select(
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
         if it's `True`, `ValueError` will be thrown. Defaults to False.
         pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
-        page_size (int, optional): Number of options to show on a single page if pagination is enabled. Defaults to 5.
+        page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
+                                             If `None`, the page size is derived automatically from the terminal height.
+                                             Pagination is also enabled automatically when options exceed the terminal height.
+                                             Defaults to None.
 
     Raises:
         ValueError: Thrown if no `options` are provided and strict is `True`
@@ -302,6 +305,9 @@ def select(
         warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
         cursor_style = 'white'
 
+    effective_page_size = page_size if page_size is not None else max(1, console.size.height - 6)
+    effective_pagination = pagination or (page_size is None and len(options) > effective_page_size)
+
     renderer = partial(_render_select, preprocessor, cursor_style, cursor)
 
     element = qselect.Select(
@@ -309,8 +315,8 @@ def select(
             options=options,
             title='',
             index=cursor_index,
-            pagination=pagination,
-            page_size=page_size,
+            pagination=effective_pagination,
+            page_size=effective_page_size,
         ),
         renderer=renderer,
         transient=Config.transient,
@@ -351,7 +357,7 @@ def select_multiple(
     return_indices: bool = False,
     strict: bool = False,
     pagination: bool = False,
-    page_size: int = 5,
+    page_size: Optional[int] = None,
 ) -> List[Union[int, Any]]:
     """A prompt that allows selecting multiple options from a list of options
 
@@ -375,7 +381,10 @@ def select_multiple(
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
                                  if it's `True`, `ValueError` will be thrown. Defaults to False.
         pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
-        page_size (int, optional): Number of options to show on a single page if pagination is enabled. Defaults to 5.
+        page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
+                                             If `None`, the page size is derived automatically from the terminal height.
+                                             Pagination is also enabled automatically when options exceed the terminal height.
+                                             Defaults to None.
 
     Raises:
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
@@ -397,6 +406,9 @@ def select_multiple(
     if ticked_indices is None:
         ticked_indices = []
 
+    effective_page_size = page_size if page_size is not None else max(1, console.size.height - 1)
+    effective_pagination = pagination or (page_size is None and len(options) > effective_page_size)
+
     renderer = partial(_render_select_multiple, preprocessor, tick_character, tick_style, cursor_style)
 
     element = qselect.Select(
@@ -406,8 +418,8 @@ def select_multiple(
             select_multiple=True,
             index=cursor_index,
             selected_indexes=ticked_indices,
-            pagination=pagination,
-            page_size=page_size,
+            pagination=effective_pagination,
+            page_size=effective_page_size,
         ),
         renderer=renderer,
         transient=Config.transient,
