@@ -11,7 +11,7 @@ flake8-simplify==0.30.0
 flake8-pie==0.16.0
 flake8-bandit==4.1.1
 flake8-cognitive-complexity==0.1.0
-flake8-expression-complexity==0.0.11
+flake8-expression-complexity==0.1.1
 radon==6.0.1
 xenon==0.9.3
 flake8-quotes==3.4.0
