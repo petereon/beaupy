@@ -44,7 +44,7 @@ jobs:
         poe test
     
     - name: Install documentation dependencies
-      run: pip install --only-binary :all: -r docs/requirements.txt
+      run: "pip install --only-binary :all: -r docs/requirements.txt"
     - name: Build documentation
       run: cd docs && novella
     - name: Publish documentation
