@@ -468,7 +468,8 @@ def select(
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
         cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         cursor_index (Union[int, Tuple[str, int]], optional): Option can be preselected based on its list index.
-                                                              For sectioned options, it must be `(section_name, index_in_section)`. Defaults to the first option.
+                                                              For sectioned options, it must be `(section_name, index_in_section)`.
+                                                              Defaults to the first option.
         return_index (bool, optional): If `True`, `select` will return the index of selected element in options.
                                        For sectioned options, it's `(section_name, index_in_section)`. Defaults to `False`.
         strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
@@ -725,7 +726,8 @@ def select_multiple(
                                                                                 appears. For sectioned options, they must be
                                                                                 `(section_name, index_in_section)`. Defaults to None.
         cursor_index (Union[int, Tuple[str, int]], optional): Index of the option cursor starts at.
-                                                              For sectioned options, it must be `(section_name, index_in_section)`. Defaults to the first option.
+                                                              For sectioned options, it must be `(section_name, index_in_section)`.
+                                                              Defaults to the first option.
         minimal_count (int, optional): Minimal count of options that need to be selected. Defaults to 0.
         maximal_count (Optional[int], optional): Maximal count of options that need to be selected. Defaults to None.
         return_indices (bool, optional): If `True`, `select_multiple` will return the indices of ticked elements in options.
@@ -740,7 +742,8 @@ def select_multiple(
         title (str, optional): Rich friendly text shown above the options. Defaults to ''.
         instructions (str, optional): Rich friendly text shown below the options. Pass `None` to hide it.
         filterable (bool, optional): If `True`, typing filters the options (case-insensitive substring of the displayed text)
-                                     and backspace edits the filter. Keys bound in `config.keys` keep their action, so space still ticks. Defaults to False.
+                                     and backspace edits the filter. Keys bound in `config.keys` keep their action, so space still ticks.
+                                     Defaults to False.
         config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:

@@ -65,6 +65,8 @@ profile = "black"
 max-line-length = 140
 max-complexity = 18
 select = ["B", "E", "F", "W", "T4", "B9"]
+# Black formats `@overload` stubs as `def f(...) -> T: ...` on one line
+extend-ignore = ["E704"]
 
 [[tool.pydoc-markdown.loaders]]
 type = 'python'

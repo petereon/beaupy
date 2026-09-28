@@ -221,7 +221,9 @@ def _render_options(
 
     shown = visible[(page - 1) * state.page_size : page * state.page_size] if state.pagination else visible  # noqa: E203
 
-    header = ' '.join(([title] if title else []) + ([f'[grey58]{escape(state.filter)}[/grey58]'] if state.filter else []))
+    header = title
+    if state.filter:
+        header = f'{header} [grey58]{escape(state.filter)}[/grey58]'.strip()
     lines = [header] if header else []
     for k, i in enumerate(shown):
         # Header on section change, and repeated at the top of a page so the reader keeps context
