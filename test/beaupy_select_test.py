@@ -14,9 +14,7 @@ def raise_keyboard_interrupt():
 
 @pytest.fixture
 def set_raise_on_escape():
-    Config.raise_on_escape = True
-    yield
-    Config.raise_on_escape = False
+    return Config(raise_on_escape=True)
 
 
 def test_select_with_no_options_permissive():
@@ -222,7 +220,6 @@ def test_select_with_4_options_stepping_up_and_selecting_first():
 
 def test_select_with_4_options_ctrl_c_no_raise():
     Live.update = mock.MagicMock()
-    Config.raise_on_interrupt = False
     b.get_key = lambda: Keys.CTRL_C
     res = select(
         options=["test1", "test2", "test3", "test4"],
@@ -262,7 +259,6 @@ def test_select_with_4_options_stepping_down_and_selecting_last_return_index():
 
 
 def test_select_with_4_options_ctrl_c_raise():
-    Config.raise_on_interrupt = True
     b.get_key = lambda: Keys.CTRL_C
     with pytest.raises(KeyboardInterrupt):
         select(
@@ -270,6 +266,7 @@ def test_select_with_4_options_ctrl_c_raise():
             cursor="x",
             cursor_style="green",
             cursor_index=1,
+            config=Config(raise_on_interrupt=True),
         )
 
 
@@ -325,7 +322,7 @@ def test_select_raises_abort_when_esc_is_pressed_and_raise_on_escape_is_true(set
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     with pytest.raises(Abort) as e:
-        select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
+        select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1, config=set_raise_on_escape)
     assert str(e.value) == "Aborted by user with key (27,)"
 
 

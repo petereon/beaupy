@@ -216,9 +216,9 @@ spinner = Spinner(LOADING, "something", refresh_per_second=4)
 spinner.start()
 ```
 
-## Global Configuration
+## Configuration
 
-`beaupy` exposes global configuration to configure behaviour of the CLI elements globally. There are currently 3 options:
+Each element accepts a `config` argument taking a `Config` instance. Options:
 
 - `raise_on_interrupt`: If `True`, functions will raise `KeyboardInterrupt` whenever one is encountered when waiting for input,
         otherwise, they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`,
@@ -227,30 +227,84 @@ spinner.start()
         they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
         `select_multiple` it means an empty list - `[]`.  Defaults to `False`.
 - `transient`: If `False`, elements will remain displayed after their context has ended. Defaults to `True`.
-
-You can set these options like follows:
-
-```python
-from beaupy import Config
-
-Config.raise_on_interrupt = True
-Config.raise_on_escape = True
-Config.transient = False
-```
-
-### Usage
-
-For example, if you want to raise an exception when user presses `Ctrl+C` or `Esc` key, you can set `raise_on_interrupt` and `raise_on_escape` to `True`:
+- `console`: `rich.console.Console` the elements render to. Defaults to `Console(stderr=True, highlight=False)`.
+- `keys`: `KeyBindings` used by the elements. Defaults to `KeyBindings()`.
 
 ```python
 from beaupy import Config, select
 
-Config.raise_on_interrupt = True
+config = Config(raise_on_interrupt=True)
 
 try:
-    result = select(['Option 1', 'Option 2'])
+    result = select(['Option 1', 'Option 2'], config=config)
 except KeyboardInterrupt:
     print("User pressed Ctrl+C")
-
-print("Result:", result)
 ```
+
+### Using your own console
+
+Pass the console you already use, e.g. the one of a running `rich.live.Live`, so the two don't fight over the terminal:
+
+```python
+from rich.console import Console
+from rich.live import Live
+from rich.panel import Panel
+from beaupy import Config, select_multiple
+
+console = Console()
+with Live(Panel("Foo"), console=console):
+    select_multiple(list(range(15)), config=Config(console=console))
+```
+
+### Keybindings
+
+```python
+from beaupy import Config, KeyBindings, select
+
+vim = Config(keys=KeyBindings(up=['k'], down=['j']))
+select(['one', 'two'], config=vim)
+```
+
+## Title, instructions and sections
+
+`select` and `select_multiple` take a `title` shown above the options. All elements take `instructions` shown below; pass `None` to hide it.
+
+```python
+select(['red', 'green'], title='Pick a color', instructions='([bold]enter[/bold] to pick)')
+```
+
+Pass a dict to show options in sections. Indices (`cursor_index`, `ticked_indices`, `return_index`, `return_indices`)
+are then always `(section_name, index_within_section)` tuples; a plain `int` raises `TypeError` (and is flagged by type checkers):
+
+```python
+select_multiple({'Fruit': ['apple', 'pear'], 'Veg': ['leek']},
+                ticked_indices=[('Veg', 0)],
+                return_indices=True)  # e.g. [('Veg', 0), ('Fruit', 1)]
+```
+
+## Filtering
+
+With `filterable=True`, typing narrows the options to those whose displayed text contains what was typed (case-insensitive,
+markup ignored). Backspace removes the last typed character; the query is shown next to the title.
+
+```python
+select(['apple', 'banana', 'cherry'], title='Fruit', filterable=True)
+```
+
+Keys bound in `KeyBindings` keep their action, so in `select_multiple` space still ticks and `ctrl+a` ticks/unticks all visible options.
+
+Ticked options stay ticked while hidden by the filter.
+
+## Migrating from 3.x
+
+4.0.0 removes process-wide state and makes every argument after the first keyword-only.
+
+| 3.x | 4.x |
+|---|---|
+| `Config.raise_on_escape = True` | `select(..., config=Config(raise_on_escape=True))` |
+| `beaupy._beaupy.console = my_console` | `select(..., config=Config(console=my_console))` |
+| `DefaultKeys.up.append('k')` | `select(..., config=Config(keys=KeyBindings(up=[Keys.UP_ARROW, 'k'])))` |
+| `select(options, my_preprocessor)` | `select(options, preprocessor=my_preprocessor)` |
+| `a` ticks/unticks all in `select_multiple` | `ctrl+a`; restore with `KeyBindings(select_all=['a'])` |
+
+`Keys` above comes from `yakh.key`. Using a removed global raises `RemovedInV4Error` (or `AttributeError` when assigning on `Config`/`KeyBindings`) with a message explaining the replacement.

@@ -14,9 +14,7 @@ def raise_keyboard_interrupt():
 
 @pytest.fixture
 def set_raise_on_escape():
-    Config.raise_on_escape = True
-    yield
-    Config.raise_on_escape = False
+    return Config(raise_on_escape=True)
 
 
 def test_empty_prompt_with_immediately_pressing_confirm():
@@ -66,7 +64,7 @@ def test_empty_prompt_typing_true_as_secure_input_with_bool_as_type():
     steps = iter(["T", "r", "u", "e", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    res = prompt("", secure=True, target_type=bool)
+    res = prompt("", secure=True, target_type=bool, config=Config(raise_on_interrupt=True))
 
     assert Live.update.call_args_list == [
         mock.call(renderable="\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
@@ -116,9 +114,8 @@ def test_empty_prompt_typing_12_as_secure_input_with_bool_as_type_raising_conver
     steps = iter(["1", "2", Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    Config.raise_on_interrupt = True
     with pytest.raises(ConversionError):
-        prompt("", secure=True, target_type=bool)
+        prompt("", secure=True, target_type=bool, config=Config(raise_on_interrupt=True))
     assert Live.update.call_args_list == [
         mock.call(renderable="\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
         mock.call(renderable="\n> *[black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
@@ -130,7 +127,6 @@ def test_empty_prompt_typing_12_as_secure_input_with_bool_as_type_reporting_a_co
     steps = iter(["1", "2", Keys.ENTER, Keys.ESC])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    Config.raise_on_interrupt = False
     prompt("", secure=True, target_type=bool, raise_type_conversion_fail=False)
     assert Live.update.call_args_list == [
         mock.call(renderable="\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
@@ -159,7 +155,6 @@ def test_empty_prompt_typing_12_as_secure_input_validating_that_value_is_more_th
     steps = iter(["1", "2", Keys.ENTER, Keys.ESC])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    Config.raise_on_interrupt = False
     prompt("", secure=True, target_type=float, validator=lambda val: val > 20, raise_validation_fail=False)
     assert Live.update.call_args_list == [
         mock.call(renderable="\n> [black on white] [/black on white]\n\n([bold]enter[/bold] to confirm)"),
@@ -181,7 +176,6 @@ def test_prompt_with_typing_j_then_deleting_it_and_typing_no():
 
 
 def test_prompt_with_interrupt_and_raise_on_keyboard_interrupt_as_false():
-    Config.raise_on_interrupt = False
     Live.update = mock.MagicMock()
     b.get_key = lambda: Keys.CTRL_C
     ret = prompt(prompt="Try test")
@@ -190,11 +184,10 @@ def test_prompt_with_interrupt_and_raise_on_keyboard_interrupt_as_false():
 
 
 def test_prompt_with_interrupt_and_raise_on_keyboard_interrupt_as_true():
-    Config.raise_on_interrupt = True
     Live.update = mock.MagicMock()
     b.get_key = lambda: Keys.CTRL_C
     with pytest.raises(KeyboardInterrupt):
-        prompt(prompt="Try test")
+        prompt(prompt="Try test", config=Config(raise_on_interrupt=True))
 
 
 def test_prompt_with_initial_value_without_further_input():
@@ -312,7 +305,7 @@ def test_verify_that_escape_raises_abort_when_raise_on_escape_is_true(set_raise_
 
     b.get_key = lambda: next(steps)
     with pytest.raises(Abort) as e:
-        prompt(prompt="Try test")
+        prompt(prompt="Try test", config=set_raise_on_escape)
     assert str(e.value) == "Aborted by user with key (27,)"
 
 

@@ -1,11 +1,20 @@
+import sys
+
 import beaupy.spinners as spinners  # noqa
 from beaupy._beaupy import (  # noqa
     Config,
-    DefaultKeys,
+    KeyBindings,
     confirm,
-    console,
     prompt,
     select,
     select_multiple,
 )
-from beaupy._internals import Abort, ConversionError, ValidationError  # noqa
+from beaupy._internals import (  # noqa
+    Abort,
+    ConversionError,
+    RemovedInV4Error,
+    ValidationError,
+    _RemovedGlobalsModule,
+)
+
+sys.modules[__name__].__class__ = _RemovedGlobalsModule

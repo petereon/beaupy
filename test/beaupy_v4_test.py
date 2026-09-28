@@ -1,0 +1,291 @@
+from unittest import mock
+
+import pytest
+from rich.console import Console
+from yakh.key import Key, Keys
+
+import beaupy
+from beaupy import RemovedInV4Error
+from beaupy import _beaupy as b
+from beaupy._beaupy import (
+    Config,
+    KeyBindings,
+    Live,
+    confirm,
+    prompt,
+    select,
+    select_multiple,
+)
+
+
+def test_accessing_removed_console_explains_migration():
+    with pytest.raises(RemovedInV4Error, match=r"removed in beaupy 4\.0\.0.*Config\(console=my_console\)"):
+        beaupy.console
+
+
+def test_importing_removed_default_keys_explains_migration():
+    with pytest.raises(RemovedInV4Error, match=r"removed in beaupy 4\.0\.0.*KeyBindings"):
+        from beaupy import DefaultKeys  # noqa: F401
+
+
+def test_assigning_removed_console_explains_migration():
+    with pytest.raises(RemovedInV4Error, match=r"removed in beaupy 4\.0\.0"):
+        b.console = Console()
+
+
+def test_setting_config_on_class_explains_migration():
+    with pytest.raises(AttributeError, match=r"removed in beaupy 4\.0\.0.*config=Config\(raise_on_escape=\.\.\.\)"):
+        Config.raise_on_escape = True
+    assert Config().raise_on_escape is False
+
+
+def test_setting_keybindings_on_class_explains_migration():
+    with pytest.raises(AttributeError, match=r"config=Config\(keys=KeyBindings\(up=\.\.\.\)\)"):
+        KeyBindings.up = ["k"]
+
+
+def test_unknown_module_attribute_still_raises_plain_attribute_error():
+    with pytest.raises(AttributeError, match="has no attribute 'nope'"):
+        beaupy.nope
+
+
+@pytest.mark.parametrize(
+    "call",
+    [
+        lambda: select(["a"], str),
+        lambda: select_multiple(["a"], str),
+        lambda: prompt("q", int),
+        lambda: confirm("q", "Y"),
+    ],
+)
+def test_only_first_argument_is_positional(call):
+    with pytest.raises(TypeError):
+        call()
+
+
+def test_select_uses_console_from_config():
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+    select(options=["a", "b", "c", "d"], config=Config(console=Console(height=8)))
+
+    assert Live.update.call_args.kwargs["renderable"] == "[pink1]>[/pink1] a\n  b[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
+
+
+def test_select_uses_keys_from_config():
+    steps = iter(["j", Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select(options=["a", "b"], config=Config(keys=KeyBindings(down=["j"]))) == "b"
+
+
+def test_select_renders_title_and_custom_instructions():
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+    select(options=["a"], title="Pick one", instructions="(enter = ok)")
+
+    Live.update.assert_called_once_with(renderable="Pick one\n[pink1]>[/pink1] a\n\n(enter = ok)")
+
+
+def test_select_multiple_renders_title_without_instructions():
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+    select_multiple(options=["a"], title="Pick", instructions=None)
+
+    Live.update.assert_called_once_with(renderable="Pick\n\\[ ] [pink1]a[/pink1]")
+
+
+def test_prompt_and_confirm_render_custom_instructions():
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+    prompt("q", instructions=None)
+    confirm("q", instructions="(ok)")
+
+    assert [c.kwargs["renderable"] for c in Live.update.call_args_list] == [
+        "q\n> [black on white] [/black on white]",
+        "q (Y/N) \n  Yes\n[pink1]>[/pink1] No\n\n(ok)",
+    ]
+
+
+def test_select_renders_sections_and_returns_sectioned_index():
+    steps = iter([Keys.DOWN_ARROW, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    result = select(options={"Fruit": ["apple"], "Veg": ["leek", "kale"]}, cursor_index=("Veg", 0), return_index=True)
+
+    assert result == ("Veg", 1)
+    assert Live.update.call_args_list[0].kwargs["renderable"] == (
+        "[bold]Fruit[/bold]\n  apple\n[bold]Veg[/bold]\n[pink1]>[/pink1] leek\n  kale\n\n([bold]enter[/bold] to confirm)"
+    )
+
+
+def test_select_repeats_section_header_at_top_of_page():
+    steps = iter([Keys.RIGHT_ARROW, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    result = select(options={"Veg": ["leek", "kale", "okra"]}, pagination=True, page_size=2)
+
+    assert result == "okra"
+    assert Live.update.call_args.kwargs["renderable"] == (
+        "[bold]Veg[/bold]\n[pink1]>[/pink1] okra[grey58]\n\nPage 2/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
+    )
+
+
+def test_select_multiple_accepts_and_returns_sectioned_indices():
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+    options = {"Fruit": ["apple"], "Veg": ["leek", "kale"]}
+
+    assert select_multiple(options=options, ticked_indices=[("Veg", 1), ("Fruit", 0)], return_indices=True) == [("Veg", 1), ("Fruit", 0)]
+    assert select_multiple(options=options, ticked_indices=[("Veg", 1)]) == ["kale"]
+
+
+def test_select_with_empty_sections_returns_none():
+    assert select(options={"Empty": []}) is None
+
+
+def typed(text):
+    return [Key(c, (ord(c),), is_printable=True) for c in text]
+
+
+def test_select_ignores_typing_by_default():
+    steps = iter(typed("b") + [Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select(options=["a", "b"]) == "a"
+
+
+def test_select_filters_by_typed_text_and_shows_query():
+    steps = iter(typed("AN") + [Keys.DOWN_ARROW, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    result = select(options=["apple", "[red]banana[/red]", "mango"], title="Fruit", filterable=True)
+
+    assert result == "mango"
+    assert Live.update.call_args.kwargs["renderable"] == (
+        "Fruit [grey58]AN[/grey58]\n  [red]banana[/red]\n[pink1]>[/pink1] mango\n\n([bold]enter[/bold] to confirm)"
+    )
+
+
+def test_select_filter_matches_markup_free_text_and_backspace_widens_it():
+    steps = iter(typed("red") + [Keys.BACKSPACE, Keys.BACKSPACE, Keys.BACKSPACE, Keys.END, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    renders = []
+    Live.update.side_effect = lambda renderable: renders.append(renderable)
+
+    assert select(options=["[red]apple[/red]", "kale"], filterable=True, instructions=None) == "kale"
+    assert renders[3] == "[grey58]red[/grey58]"
+
+
+def test_select_ignores_confirm_when_nothing_matches():
+    steps = iter(typed("zz") + [Keys.ENTER, Keys.BACKSPACE, Keys.BACKSPACE, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select(options=["a", "b"], cursor_index=1, filterable=True) == "b"
+
+
+def test_select_filter_handles_regex_characters_literally():
+    steps = iter(typed("(") + [Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select(options=["a", "b (c)"], filterable=True) == "b (c)"
+
+
+def test_select_multiple_filter_keeps_hidden_ticks_and_select_all_ticks_visible_only():
+    steps = iter(typed("e") + [Keys.CTRL_A, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select_multiple(options=["apple", "kiwi", "pear", "fig"], ticked_indices=[1], filterable=True) == ["apple", "kiwi", "pear"]
+
+
+def test_select_multiple_filter_accepts_a():
+    steps = iter(typed("a") + [Keys.CTRL_A, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select_multiple(options=["kiwi", "pear"], filterable=True) == ["pear"]
+
+
+def test_select_multiple_select_all_toggles_all_options():
+    steps = iter([Keys.CTRL_A, Keys.CTRL_A, Keys.CTRL_A, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select_multiple(options=["a", "b", "c"], ticked_indices=[2]) == ["a", "b", "c"]
+
+
+def test_select_multiple_select_all_respects_maximal_count_keeping_existing_ticks():
+    steps = iter([Keys.CTRL_A, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select_multiple(options=["a", "b", "c"], ticked_indices=[2], maximal_count=2) == ["a", "c"]
+
+
+def test_select_multiple_a_no_longer_selects_all_by_default():
+    steps = iter(typed("a") + [Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    assert select_multiple(options=["a", "b"]) == []
+
+
+def test_default_console_does_not_highlight():
+    assert Config().console.render_str("Option 42 is True").spans == []
+
+
+@pytest.mark.parametrize(
+    "call, error, message",
+    [
+        (lambda: select({"Veg": ["leek"]}, cursor_index=0), TypeError, r"must be a `\(section_name, index_in_section\)` tuple.*\('Veg', 0\)"),
+        (lambda: select_multiple({"Veg": ["leek"]}, ticked_indices=[0]), TypeError, "must be a"),
+        (lambda: select(["leek"], cursor_index=("Veg", 0)), TypeError, "but `options` is a list"),
+        (lambda: select({"Veg": ["leek"]}, cursor_index=("Veg", 5)), ValueError, r"no option at \('Veg', 5\)"),
+    ],
+)
+def test_index_kind_must_match_options_kind(call, error, message):
+    with pytest.raises(error, match=message):
+        call()
+
+
+def test_sectioned_select_starts_on_first_option_by_default():
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    assert select({"Fruit": ["apple"], "Veg": ["leek"]}, return_index=True) == ("Fruit", 0)
+
+
+def test_type_checker_ties_index_types_to_options_kind(tmp_path):
+    mypy_api = pytest.importorskip("mypy.api")
+    snippet = tmp_path / "snippet.py"
+    snippet.write_text(
+        """
+from beaupy import select, select_multiple
+
+flag: bool = True
+reveal_type(select(["a"], return_index=True))
+reveal_type(select({"s": ["a"]}, return_index=True))
+reveal_type(select({"s": ["a"]}, return_index=flag))
+reveal_type(select_multiple({"s": [1]}, return_indices=True))
+select({"s": ["a"]}, cursor_index=0)
+select(["a"], cursor_index=("s", 0))
+select_multiple({"s": ["a"]}, ticked_indices=[0])
+"""
+    )
+    stdout, _, _ = mypy_api.run(["--no-incremental", "--no-error-summary", "--hide-error-context", str(snippet)])
+    lines = [line.split(": ", 1)[1] for line in stdout.splitlines() if "Possible overload" not in line and "note:     " not in line]
+
+    assert lines == [
+        'note: Revealed type is "int | None"',
+        'note: Revealed type is "tuple[str, int] | None"',
+        'note: Revealed type is "str | tuple[str, int] | None"',
+        'note: Revealed type is "list[tuple[str, int]]"',
+        'error: No overload variant of "select" matches argument types "dict[str, list[str]]", "int"  [call-overload]',
+        'error: No overload variant of "select" matches argument types "list[str]", "tuple[str, int]"  [call-overload]',
+        'error: List item 0 has incompatible type "int"; expected "tuple[str, int]"  [list-item]',
+    ]
