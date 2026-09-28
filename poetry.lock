@@ -73,14 +73,14 @@ windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "python-yakh"
-version = "0.4.1"
+version = "0.4.2"
 description = "Yet Another Keypress Handler"
 optional = false
 python-versions = "<4.0.0,>=3.7.8"
 groups = ["main"]
 files = [
-    {file = "python_yakh-0.4.1-py3-none-any.whl", hash = "sha256:d69507e13e03d09cefd88030f74b6d5369b67de004be975a35be28eb286122e4"},
-    {file = "python_yakh-0.4.1.tar.gz", hash = "sha256:da03e800b4f2f5d85344f1668e852687c12dc1a99a03c65cf3dc13a3680da49d"},
+    {file = "python_yakh-0.4.2-py3-none-any.whl", hash = "sha256:2aaecaada368a164e8bf334f9ebf7c565406f303ce4fea9f5d19311a3418e04f"},
+    {file = "python_yakh-0.4.2.tar.gz", hash = "sha256:7c4b73e8e8ba8f36ca53ed963a3a035f0e11bfa429b807c9aca58105cfd151c0"},
 ]
 
 [[package]]
@@ -135,4 +135,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.8,<4.0.0"
-content-hash = "f087cc4583b501a6f32d555ccbf14bf805cc6b57ddd2c83fd3fc879997812da2"
+content-hash = "733b76de46fbc0bf96093aa13c1ebc52f605032d3582a5eec1a7e3b65182a4f6"
