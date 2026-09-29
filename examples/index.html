@@ -678,22 +678,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#global-configuration" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Global Configuration
+        Configuration
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Global Configuration">
+    <nav class="md-nav" aria-label="Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#using-your-own-console" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage
+        Using your own console
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keybindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keybindings
       
     </span>
   </a>
@@ -702,6 +713,39 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#title-instructions-and-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Title, instructions and sections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrating-from-3x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migrating from 3.x
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1052,22 +1096,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#global-configuration" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Global Configuration
+        Configuration
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Global Configuration">
+    <nav class="md-nav" aria-label="Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#using-your-own-console" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage
+        Using your own console
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keybindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keybindings
       
     </span>
   </a>
@@ -1076,6 +1131,39 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#title-instructions-and-sections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Title, instructions and sections
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filtering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrating-from-3x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migrating from 3.x
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1104,22 +1192,22 @@
 <h3 id="functionality">Functionality</h3>
 <h4 id="return-index">Return index</h4>
 <p>Selective elements default to return the selected item (in case of <code>select</code>) or list of items (in case of <code>select_multiple</code>). This behavior can be modified by <code>return_index</code> parameter (or <code>return_indices</code> in case of the latter), see example,</p>
-<div class="highlight"><pre><span></span><code><span class="n">result_index</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 0&#39;</span><span class="p">,</span> <span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll be returned as 1&#39;</span><span class="p">],</span>
+<div class="highlight"><pre><span></span><code><span class="n">result_index</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="s1">'I</span><span class="se">\'</span><span class="s1">ll be returned as 0'</span><span class="p">,</span> <span class="s1">'I</span><span class="se">\'</span><span class="s1">ll be returned as 1'</span><span class="p">],</span>
                       <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="starting-cursor-index">Starting cursor index</h4>
 <p>By default cursor is placed on the first element, this can be configured by <code>cursor_index</code> parameter as follows,</p>
-<div class="highlight"><pre><span></span><code><span class="n">results</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="s1">&#39;Not here either&#39;</span><span class="p">,</span> <span class="s1">&#39;Not here&#39;</span><span class="p">,</span> <span class="s1">&#39;Start from here&#39;</span><span class="p">],</span>
+<div class="highlight"><pre><span></span><code><span class="n">results</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="s1">'Not here either'</span><span class="p">,</span> <span class="s1">'Not here'</span><span class="p">,</span> <span class="s1">'Start from here'</span><span class="p">],</span>
                  <span class="n">cursor_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="preticked-indices-for-select_multiple">Preticked indices for <code>select_multiple</code></h4>
 <p>You can have preticked options using <code>ticked_indices</code> in <code>select_multiple</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="n">loved_children</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">([</span><span class="s1">&#39;Oldest child&#39;</span><span class="p">,</span> <span class="s1">&#39;Middle child&#39;</span><span class="p">,</span> <span class="s1">&#39;Youngest Child&#39;</span><span class="p">],</span>
+<div class="highlight"><pre><span></span><code><span class="n">loved_children</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">([</span><span class="s1">'Oldest child'</span><span class="p">,</span> <span class="s1">'Middle child'</span><span class="p">,</span> <span class="s1">'Youngest Child'</span><span class="p">],</span>
                                  <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 </code></pre></div>
 <h4 id="maximal-and-minimal-count-for-select_multiple">Maximal and minimal count for <code>select_multiple</code></h4>
 <p>With <code>select_multiple</code> you can restrict maximum and minimum count of elements using <code>maximal_count</code> and <code>minimal_count</code> respectively,</p>
-<div class="highlight"><pre><span></span><code><span class="n">pizza_toppings</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">([</span><span class="s1">&#39;pineapple&#39;</span><span class="p">,</span> <span class="s1">&#39;olives&#39;</span><span class="p">,</span> <span class="s1">&#39;anchovies&#39;</span><span class="p">,</span> <span class="s1">&#39;mozzarella&#39;</span><span class="p">,</span> <span class="s1">&#39;parma ham&#39;</span><span class="p">]</span>
+<div class="highlight"><pre><span></span><code><span class="n">pizza_toppings</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">([</span><span class="s1">'pineapple'</span><span class="p">,</span> <span class="s1">'olives'</span><span class="p">,</span> <span class="s1">'anchovies'</span><span class="p">,</span> <span class="s1">'mozzarella'</span><span class="p">,</span> <span class="s1">'parma ham'</span><span class="p">]</span>
                                  <span class="n">maximal_count</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                                  <span class="n">minimal_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
@@ -1129,13 +1217,13 @@
 <p>For styling you can leverage <a href="https://rich.readthedocs.io/en/stable/style.html">numerous styling options</a> provided by rich</p>
 </div>
 <h4 id="style-as-text">Style as text</h4>
-<div class="highlight"><pre><span></span><code><span class="n">stylish</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">],</span>
-                 <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span>
-                 <span class="n">cursor_style</span><span class="o">=</span> <span class="s2">&quot;red on white&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">stylish</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"on"</span><span class="p">,</span> <span class="s2">"white"</span><span class="p">],</span>
+                 <span class="n">cursor</span> <span class="o">=</span> <span class="s2">"x"</span><span class="p">,</span>
+                 <span class="n">cursor_style</span><span class="o">=</span> <span class="s2">"red on white"</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="style-as-hex">Style as hex</h4>
-<div class="highlight"><pre><span></span><code><span class="n">selections</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span> <span class="s2">&quot;d&quot;</span><span class="p">],</span>
-                             <span class="n">tick_style</span><span class="o">=</span><span class="s2">&quot;#af00ff&quot;</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="n">selections</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"s"</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">"l"</span><span class="p">,</span> <span class="s2">"i"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">"v"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">],</span>
+                             <span class="n">tick_style</span><span class="o">=</span><span class="s2">"#af00ff"</span><span class="p">,</span>
                              <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">11</span><span class="p">])</span>
 </code></pre></div>
 <h3 id="cursor-characters">Cursor characters</h3>
@@ -1144,29 +1232,29 @@
 <p class="admonition-title">Bug</p>
 <p>Some emojis can appear as one character instead of two!</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;here&quot;</span><span class="p">,</span> <span class="s2">&quot;comes&quot;</span><span class="p">,</span> <span class="s2">&quot;the&quot;</span><span class="p">,</span> <span class="s2">&quot;sun&quot;</span><span class="p">],</span>
-                <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;🌞&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"here"</span><span class="p">,</span> <span class="s2">"comes"</span><span class="p">,</span> <span class="s2">"the"</span><span class="p">,</span> <span class="s2">"sun"</span><span class="p">],</span>
+                <span class="n">cursor</span> <span class="o">=</span> <span class="s2">"🌞"</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="non-ascii-as-a-cursor">Non-ascii as a cursor</h4>
-<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hardcore&quot;</span><span class="p">,</span> <span class="s2">&quot;unicode&quot;</span><span class="p">],</span>
-                <span class="n">cursor</span> <span class="o">=</span> <span class="s2">&quot;⇉&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"hardcore"</span><span class="p">,</span> <span class="s2">"unicode"</span><span class="p">],</span>
+                <span class="n">cursor</span> <span class="o">=</span> <span class="s2">"⇉"</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="multi-character-cursorsticks">Multi-character cursors/ticks</h4>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>You can use multiple characters as a cursor</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="n">correct_abba_lyric</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;queen&quot;</span><span class="p">,</span> <span class="s2">&quot;bean&quot;</span><span class="p">],</span>
-                                     <span class="n">tick_character</span> <span class="o">=</span> <span class="s2">&quot;dancing&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">correct_abba_lyric</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"queen"</span><span class="p">,</span> <span class="s2">"bean"</span><span class="p">],</span>
+                                     <span class="n">tick_character</span> <span class="o">=</span> <span class="s2">"dancing"</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="prompt"><code>prompt</code></h2>
 <h3 id="functionality_1">Functionality</h3>
 <p>You can have a default prompt, which will collect the user typed response to the mood variable as string</p>
-<div class="highlight"><pre><span></span><code><span class="n">mood</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;How are you today?&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">mood</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">"How are you today?"</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="validation">Validation</h4>
 <p>Additionally, you can validate the input using some sort of Callable <code>validator</code>, for example a lambda expression to make sure input is not numeric,</p>
-<div class="highlight"><pre><span></span><code><span class="n">answer</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;What is the answer to life the universe and everything?&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="n">answer</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">"What is the answer to life the universe and everything?"</span>
                 <span class="n">validator</span><span class="o">=</span><span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="ow">not</span> <span class="n">val</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">())</span>
 </code></pre></div>
 <h4 id="type-conversion">Type Conversion</h4>
@@ -1175,45 +1263,45 @@
 <p class="admonition-title">Note</p>
 <p>Validation is always second to type conversion</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="n">number_between_1_and_10</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;Give me a number between 1 and 10&quot;</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="n">number_between_1_and_10</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">"Give me a number between 1 and 10"</span><span class="p">,</span>
                                  <span class="n">target_type</span><span class="o">=</span><span class="nb">int</span>
                                  <span class="n">validator</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="hiddensecure-input">Hidden/secure input</h4>
 <p>For sensitive input, <code>secure</code> flag can be utilized, replacing user entered input with <code>*</code></p>
-<div class="highlight"><pre><span></span><code><span class="n">very_secret_info</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;Type you API key, hehe&quot;</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="n">very_secret_info</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">"Type you API key, hehe"</span><span class="p">,</span>
                           <span class="n">secure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="completion">Completion</h4>
 <p>You can provide a python callable such as <code>Callable[[str], List[str]]</code> to provide completion options. String passed to the callable is the current user input.</p>
-<div class="highlight"><pre><span></span><code><span class="n">favorite_color</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;What is your favorite color?&quot;</span><span class="p">,</span>
-                        <span class="n">completion</span><span class="o">=</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pink&quot;</span><span class="p">,</span> <span class="s2">&quot;PINK&quot;</span><span class="p">,</span> <span class="s2">&quot;P1NK&quot;</span><span class="p">])</span>
+<div class="highlight"><pre><span></span><code><span class="n">favorite_color</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">"What is your favorite color?"</span><span class="p">,</span>
+                        <span class="n">completion</span><span class="o">=</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="p">[</span><span class="s2">"pink"</span><span class="p">,</span> <span class="s2">"PINK"</span><span class="p">,</span> <span class="s2">"P1NK"</span><span class="p">])</span>
 </code></pre></div>
 <p>A more complex example with path completion:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">listdir</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># ugly hacky path completion callable:</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">path_completion</span><span class="p">(</span><span class="n">str_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">path_completion</span><span class="p">(</span><span class="n">str_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">str_path</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">str_path</span><span class="p">)</span>
-        <span class="n">rest</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">rest</span> <span class="o">=</span> <span class="s1">''</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">str_path</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">str_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">str_path</span> <span class="ow">or</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="n">str_path</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">str_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">str_path</span> <span class="ow">or</span> <span class="s1">'/'</span><span class="p">)</span>
 
         <span class="n">filtered_list_dir</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">rest</span><span class="p">)]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">():</span>
-            <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;./&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">/</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">filtered_list_dir</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s1">'./'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">/</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">filtered_list_dir</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">/</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">filtered_list_dir</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[]</span>
 
-<span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="n">completion</span><span class="o">=</span><span class="n">path_completion</span><span class="p">)</span>
+<span class="n">prompt</span><span class="p">(</span><span class="s2">"&gt;"</span><span class="p">,</span> <span class="n">completion</span><span class="o">=</span><span class="n">path_completion</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="spinners">Spinners</h2>
 <h3 id="styling_1">Styling</h3>
@@ -1221,28 +1309,28 @@
 <p>There are few built in spinner animations, namely: ARC, ARROWS, BARS, CLOCK, DIAMOND, DOT, DOTS, LINE, LOADING and MOON</p>
 <p>Each of these can be used in a spinner:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">ARC</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">ARC</span><span class="p">,</span> <span class="s2">&quot;Doing some heavy work&quot;</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">ARC</span><span class="p">,</span> <span class="s2">"Doing some heavy work"</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <p>All that "animations" are, is but a list of string, so making your own is as trivial as this:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">&#39;whee&#39;</span><span class="p">,</span> <span class="s1">&#39;whe &#39;</span><span class="p">,</span> <span class="s1">&#39;wh  &#39;</span><span class="p">,</span> <span class="s1">&#39;w   &#39;</span><span class="p">,</span> <span class="s1">&#39;wh  &#39;</span><span class="p">,</span> <span class="s1">&#39;whe &#39;</span><span class="p">,</span> <span class="s1">&#39;whee&#39;</span><span class="p">],</span> <span class="s2">&quot;Whee!&quot;</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">'whee'</span><span class="p">,</span> <span class="s1">'whe '</span><span class="p">,</span> <span class="s1">'wh  '</span><span class="p">,</span> <span class="s1">'w   '</span><span class="p">,</span> <span class="s1">'wh  '</span><span class="p">,</span> <span class="s1">'whe '</span><span class="p">,</span> <span class="s1">'whee'</span><span class="p">],</span> <span class="s2">"Whee!"</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <h4 id="rich-styling">Rich styling</h4>
 <p>Every text in spinner does accept and respect rich styles, so the following works:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">&#39;[red]⬤[/red] &#39;</span><span class="p">,</span> <span class="s1">&#39;[green]⬤[/green] &#39;</span><span class="p">,</span> <span class="s1">&#39;[blue]⬤[/blue] &#39;</span><span class="p">],</span> <span class="s1">&#39;[pink1]Setting[/pink1] colors!&#39;</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">'[red]⬤[/red] '</span><span class="p">,</span> <span class="s1">'[green]⬤[/green] '</span><span class="p">,</span> <span class="s1">'[blue]⬤[/blue] '</span><span class="p">],</span> <span class="s1">'[pink1]Setting[/pink1] colors!'</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <h4 id="animation-speed">Animation speed</h4>
 <p>Animation speed can be set using <code>refresh_per_second</code> parameter:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">LOADING</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">LOADING</span><span class="p">,</span> <span class="s2">&quot;something&quot;</span><span class="p">,</span> <span class="n">refresh_per_second</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">LOADING</span><span class="p">,</span> <span class="s2">"something"</span><span class="p">,</span> <span class="n">refresh_per_second</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
-<h2 id="global-configuration">Global Configuration</h2>
-<p><code>beaupy</code> exposes global configuration to configure behaviour of the CLI elements globally. There are currently 3 options:</p>
+<h2 id="configuration">Configuration</h2>
+<p>Each element accepts a <code>config</code> argument taking a <code>Config</code> instance. Options:</p>
 <ul>
 <li><code>raise_on_interrupt</code>: If <code>True</code>, functions will raise <code>KeyboardInterrupt</code> whenever one is encountered when waiting for input,
         otherwise, they will return some sane alternative to their usual return. For <code>select</code>, <code>prompt</code> and <code>confirm</code> this means <code>None</code>,
@@ -1251,27 +1339,85 @@
         they will return some sane alternative to their usual return. For <code>select</code>, <code>prompt</code> and <code>confirm</code> this means <code>None</code>, while for
         <code>select_multiple</code> it means an empty list - <code>[]</code>.  Defaults to <code>False</code>.</li>
 <li><code>transient</code>: If <code>False</code>, elements will remain displayed after their context has ended. Defaults to <code>True</code>.</li>
+<li><code>console</code>: <code>rich.console.Console</code> the elements render to. Defaults to <code>Console(stderr=True, highlight=False)</code>.</li>
+<li><code>keys</code>: <code>KeyBindings</code> used by the elements. Defaults to <code>KeyBindings()</code>.</li>
 </ul>
-<p>You can set these options like follows:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
-
-<span class="n">Config</span><span class="o">.</span><span class="n">raise_on_interrupt</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">Config</span><span class="o">.</span><span class="n">raise_on_escape</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">Config</span><span class="o">.</span><span class="n">transient</span> <span class="o">=</span> <span class="kc">False</span>
-</code></pre></div>
-<h3 id="usage">Usage</h3>
-<p>For example, if you want to raise an exception when user presses <code>Ctrl+C</code> or <code>Esc</code> key, you can set <code>raise_on_interrupt</code> and <code>raise_on_escape</code> to <code>True</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span><span class="p">,</span> <span class="n">select</span>
 
-<span class="n">Config</span><span class="o">.</span><span class="n">raise_on_interrupt</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">raise_on_interrupt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="s1">&#39;Option 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Option 2&#39;</span><span class="p">])</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="s1">'Option 1'</span><span class="p">,</span> <span class="s1">'Option 2'</span><span class="p">],</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
 <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;User pressed Ctrl+C&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result:&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"User pressed Ctrl+C"</span><span class="p">)</span>
 </code></pre></div>
+<h3 id="using-your-own-console">Using your own console</h3>
+<p>Pass the console you already use, e.g. the one of a running <code>rich.live.Live</code>, so the two don't fight over the terminal:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.live</span><span class="w"> </span><span class="kn">import</span> <span class="n">Live</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.panel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Panel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">beaupy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span><span class="p">,</span> <span class="n">select_multiple</span>
+
+<span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">Live</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="s2">"Foo"</span><span class="p">),</span> <span class="n">console</span><span class="o">=</span><span class="n">console</span><span class="p">):</span>
+    <span class="n">select_multiple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">)),</span> <span class="n">config</span><span class="o">=</span><span class="n">Config</span><span class="p">(</span><span class="n">console</span><span class="o">=</span><span class="n">console</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="keybindings">Keybindings</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span><span class="p">,</span> <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">select</span>
+
+<span class="n">vim</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="n">KeyBindings</span><span class="p">(</span><span class="n">up</span><span class="o">=</span><span class="p">[</span><span class="s1">'k'</span><span class="p">],</span> <span class="n">down</span><span class="o">=</span><span class="p">[</span><span class="s1">'j'</span><span class="p">]))</span>
+<span class="n">select</span><span class="p">([</span><span class="s1">'one'</span><span class="p">,</span> <span class="s1">'two'</span><span class="p">],</span> <span class="n">config</span><span class="o">=</span><span class="n">vim</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="title-instructions-and-sections">Title, instructions and sections</h2>
+<p><code>select</code> and <code>select_multiple</code> take a <code>title</code> shown above the options. All elements take <code>instructions</code> shown below; pass <code>None</code> to hide it.</p>
+<div class="highlight"><pre><span></span><code><span class="n">select</span><span class="p">([</span><span class="s1">'red'</span><span class="p">,</span> <span class="s1">'green'</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Pick a color'</span><span class="p">,</span> <span class="n">instructions</span><span class="o">=</span><span class="s1">'([bold]enter[/bold] to pick)'</span><span class="p">)</span>
+</code></pre></div>
+<p>Pass a dict to show options in sections. Indices (<code>cursor_index</code>, <code>ticked_indices</code>, <code>return_index</code>, <code>return_indices</code>)
+are then always <code>(section_name, index_within_section)</code> tuples; a plain <code>int</code> raises <code>TypeError</code> (and is flagged by type checkers):</p>
+<div class="highlight"><pre><span></span><code><span class="n">select_multiple</span><span class="p">({</span><span class="s1">'Fruit'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'apple'</span><span class="p">,</span> <span class="s1">'pear'</span><span class="p">],</span> <span class="s1">'Veg'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'leek'</span><span class="p">]},</span>
+                <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[(</span><span class="s1">'Veg'</span><span class="p">,</span> <span class="mi">0</span><span class="p">)],</span>
+                <span class="n">return_indices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># e.g. [('Veg', 0), ('Fruit', 1)]</span>
+</code></pre></div>
+<h2 id="filtering">Filtering</h2>
+<p>With <code>filterable=True</code>, typing narrows the options to those whose displayed text contains what was typed (case-insensitive,
+markup ignored). Backspace removes the last typed character; the query is shown next to the title.</p>
+<div class="highlight"><pre><span></span><code><span class="n">select</span><span class="p">([</span><span class="s1">'apple'</span><span class="p">,</span> <span class="s1">'banana'</span><span class="p">,</span> <span class="s1">'cherry'</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Fruit'</span><span class="p">,</span> <span class="n">filterable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<p>Keys bound in <code>KeyBindings</code> keep their action, so in <code>select_multiple</code> space still ticks and <code>ctrl+a</code> ticks/unticks all visible options.</p>
+<p>Ticked options stay ticked while hidden by the filter.</p>
+<h2 id="migrating-from-3x">Migrating from 3.x</h2>
+<p>4.0.0 removes process-wide state and makes every argument after the first keyword-only.</p>
+<table>
+<thead>
+<tr>
+<th>3.x</th>
+<th>4.x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Config.raise_on_escape = True</code></td>
+<td><code>select(..., config=Config(raise_on_escape=True))</code></td>
+</tr>
+<tr>
+<td><code>beaupy._beaupy.console = my_console</code></td>
+<td><code>select(..., config=Config(console=my_console))</code></td>
+</tr>
+<tr>
+<td><code>DefaultKeys.up.append('k')</code></td>
+<td><code>select(..., config=Config(keys=KeyBindings(up=[Keys.UP_ARROW, 'k'])))</code></td>
+</tr>
+<tr>
+<td><code>select(options, my_preprocessor)</code></td>
+<td><code>select(options, preprocessor=my_preprocessor)</code></td>
+</tr>
+<tr>
+<td><code>a</code> ticks/unticks all in <code>select_multiple</code></td>
+<td><code>ctrl+a</code>; restore with <code>KeyBindings(select_all=['a'])</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>Keys</code> above comes from <code>yakh.key</code>. Using a removed global raises <code>RemovedInV4Error</code> (or <code>AttributeError</code> when assigning on <code>Config</code>/<code>KeyBindings</code>) with a message explaining the replacement.</p>
 
 
 

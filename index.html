@@ -703,67 +703,67 @@
 <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
 
 <span class="c1"># Confirm a dialog</span>
-<span class="k">if</span> <span class="n">confirm</span><span class="p">(</span><span class="s2">&quot;Will you take the ring to Mordor?&quot;</span><span class="p">):</span>
+<span class="k">if</span> <span class="n">confirm</span><span class="p">(</span><span class="s2">"Will you take the ring to Mordor?"</span><span class="p">):</span>
     <span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;Frodo Baggins&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Samwise Gamgee&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Legolas&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Aragorn&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;[red]Sauron[/red]&quot;</span><span class="p">,</span>
+        <span class="s2">"Frodo Baggins"</span><span class="p">,</span>
+        <span class="s2">"Samwise Gamgee"</span><span class="p">,</span>
+        <span class="s2">"Legolas"</span><span class="p">,</span>
+        <span class="s2">"Aragorn"</span><span class="p">,</span>
+        <span class="s2">"[red]Sauron[/red]"</span><span class="p">,</span>
     <span class="p">]</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Who are you?&quot;</span><span class="p">)</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">"Who are you?"</span><span class="p">)</span>
     <span class="c1"># Choose one item from a list</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">cursor</span><span class="o">=</span><span class="s2">&quot;🢧&quot;</span><span class="p">,</span> <span class="n">cursor_style</span><span class="o">=</span><span class="s2">&quot;cyan&quot;</span><span class="p">)</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Alámenë, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">cursor</span><span class="o">=</span><span class="s2">"🢧"</span><span class="p">,</span> <span class="n">cursor_style</span><span class="o">=</span><span class="s2">"cyan"</span><span class="p">)</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Alámenë, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 
     <span class="n">item_options</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;The One Ring&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Dagger&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Po-tae-toes&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;Lightsaber (Wrong franchise! Nevermind, roll with it!)&quot;</span><span class="p">,</span>
+        <span class="s2">"The One Ring"</span><span class="p">,</span>
+        <span class="s2">"Dagger"</span><span class="p">,</span>
+        <span class="s2">"Po-tae-toes"</span><span class="p">,</span>
+        <span class="s2">"Lightsaber (Wrong franchise! Nevermind, roll with it!)"</span><span class="p">,</span>
     <span class="p">]</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;What do you bring with you?&quot;</span><span class="p">)</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">"What do you bring with you?"</span><span class="p">)</span>
     <span class="c1"># Choose multiple options from a list</span>
-    <span class="n">items</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">item_options</span><span class="p">,</span> <span class="n">tick_character</span><span class="o">=</span><span class="s1">&#39;🎒&#39;</span><span class="p">,</span> <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">maximal_count</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">select_multiple</span><span class="p">(</span><span class="n">item_options</span><span class="p">,</span> <span class="n">tick_character</span><span class="o">=</span><span class="s1">'🎒'</span><span class="p">,</span> <span class="n">ticked_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">maximal_count</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
     <span class="n">potato_count</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="s2">&quot;Po-tae-toes&quot;</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"Po-tae-toes"</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
         <span class="c1"># Prompt with type conversion and validation</span>
-        <span class="n">potato_count</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s1">&#39;How many potatoes?&#39;</span><span class="p">,</span> <span class="n">target_type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="k">lambda</span> <span class="n">count</span><span class="p">:</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">potato_count</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s1">'How many potatoes?'</span><span class="p">,</span> <span class="n">target_type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="k">lambda</span> <span class="n">count</span><span class="p">:</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Spinner to show while doing some work</span>
-    <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">DOTS</span><span class="p">,</span> <span class="s2">&quot;Packing things...&quot;</span><span class="p">)</span>
+    <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">DOTS</span><span class="p">,</span> <span class="s2">"Packing things..."</span><span class="p">)</span>
     <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="c1"># Get input without showing it being typed</span>
-    <span class="k">if</span> <span class="s2">&quot;friend&quot;</span> <span class="o">==</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">&quot;Speak, [blue bold underline]friend[/blue bold underline], and enter&quot;</span><span class="p">,</span> <span class="n">secure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">"friend"</span> <span class="o">==</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">"Speak, [blue bold underline]friend[/blue bold underline], and enter"</span><span class="p">,</span> <span class="n">secure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
 
         <span class="c1"># Custom spinner animation</span>
-        <span class="n">spinner_animation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;▉▉&#39;</span><span class="p">,</span> <span class="s1">&#39;▌▐&#39;</span><span class="p">,</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="s1">&#39;▌▐&#39;</span><span class="p">,</span> <span class="s1">&#39;▉▉&#39;</span><span class="p">]</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="s2">&quot;Opening the Door of Durin...&quot;</span><span class="p">)</span>
+        <span class="n">spinner_animation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'▉▉'</span><span class="p">,</span> <span class="s1">'▌▐'</span><span class="p">,</span> <span class="s1">'  '</span><span class="p">,</span> <span class="s1">'▌▐'</span><span class="p">,</span> <span class="s1">'▉▉'</span><span class="p">]</span>
+        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="s2">"Opening the Door of Durin..."</span><span class="p">)</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">spinner_animation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;🐙🌊    ⚔️ &#39;</span><span class="p">,</span> <span class="s1">&#39;🐙 🌊   ⚔️ &#39;</span><span class="p">,</span> <span class="s1">&#39;🐙  🌊  ⚔️ &#39;</span><span class="p">,</span> <span class="s1">&#39;🐙   🌊 ⚔️ &#39;</span><span class="p">,</span> <span class="s1">&#39;🐙    🌊⚔️ &#39;</span><span class="p">]</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="s2">&quot;Getting attacked by an octopus...&quot;</span><span class="p">)</span>
+        <span class="n">spinner_animation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'🐙🌊    ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙 🌊   ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙  🌊  ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙   🌊 ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙    🌊⚔️ '</span><span class="p">]</span>
+        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="s2">"Getting attacked by an octopus..."</span><span class="p">)</span>
         <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
         <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="s1">&#39;The One Ring&#39;</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[green]You throw The One Ring to a lava from an eagle![/green]&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">'The One Ring'</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">"[green]You throw The One Ring to a lava from an eagle![/green]"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[red]You forgot the ring and brought Middle-Earth to its knees![/red]&quot;</span><span class="p">)</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;And you brought </span><span class="si">{</span><span class="n">potato_count</span><span class="si">}</span><span class="s2"> taters!&quot;</span><span class="p">)</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">"[red]You forgot the ring and brought Middle-Earth to its knees![/red]"</span><span class="p">)</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"And you brought </span><span class="si">{</span><span class="n">potato_count</span><span class="si">}</span><span class="s2"> taters!"</span><span class="p">)</span>
 </code></pre></div>
 <p>For more information refer to <a href="https://petereon.github.io/beaupy/examples/">more examples</a> or definitive, but much less exciting <a href="https://petereon.github.io/beaupy/api/">API documentation</a></p>
 <h2 id="installation">Installation</h2>
