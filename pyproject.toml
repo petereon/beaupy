@@ -1,10 +1,9 @@
-[tool.poetry]
+[project]
 name = 'beaupy'
 version = '4.0.0'
 description = 'A library of elements for interactive TUIs in Python'
-authors = ['Peter Vyboch <pvyboch1@gmail.com>']
+authors = [{ name = 'Peter Vyboch', email = 'pvyboch1@gmail.com' }]
 license = 'MIT'
-repository = 'https://github.com/petereon/beaupy'
 readme = 'README.md'
 keywords = ["cli", "interactive", "console", "terminal", "interface"]
 classifiers = [
@@ -15,35 +14,67 @@ classifiers = [
     'Environment :: Console',
     'Intended Audience :: Developers'
 ]
-packages = [{ include = "beaupy" }]
+requires-python = ">=3.8,<4.0.0"
+dependencies = [
+    "rich>=12.2.0",
+    "emoji>=2.0.0,<3.0.0",
+    "python-yakh>=0.4.2,<0.5.0",
+    "questo>=0.4.1,<0.5.0",
+]
+
+[project.urls]
+Repository = 'https://github.com/petereon/beaupy'
+
+[tool.uv]
+# dev's watchdog==6.0.0 (local file-watch tasks) and docs' novella (needs watchdog<3.0.0)
+# are never installed together, so let uv resolve each independently.
+conflicts = [[{ group = "dev" }, { group = "docs" }]]
+
+[tool.uv.build-backend]
+# Flat layout (beaupy/ at repo root), not the src/ layout uv_build defaults to.
+module-root = ""
+
+[dependency-groups]
+# pytest/mypy themselves need Python >=3.10, though the published package supports >=3.8 (dev
+# tooling is only ever installed/run on the Python versions CI actually lints and tests with).
+dev = [
+    "poethepoet==0.31.1; python_version >= '3.10'",
+    "pytest==9.1.1; python_version >= '3.10'",
+    "pytest-cov==7.1.0; python_version >= '3.10'",
+    "mypy==2.2.0; python_version >= '3.10'",
+    "ruff==0.14.5; python_version >= '3.10'",
+    "watchdog==6.0.0; python_version >= '3.10'",
+    "types-emoji==2.1.0.3; python_version >= '3.10'",
+]
+docs = [
+    "mkdocs==1.6.1",
+    "mkdocs-material==9.7.6",
+    "novella==0.2.6",
+    "pydoc-markdown==4.8.2",
+    # novella's nr.util.plugins uses the deprecated pkg_resources API without declaring
+    # setuptools itself; uv's venvs don't bundle it the way pip/poetry's historically did.
+    # setuptools>=81 dropped pkg_resources entirely, so pin below that.
+    "setuptools<81",
+]
 
 [tool.poe]
 verbosity = -1
 
 [tool.poe.tasks]
-add = { shell = 'poetry add' }
-install = { shell = 'poetry install' }
-build = { shell = 'poetry build' }
+add = { shell = 'uv add' }
+install = { shell = 'uv sync' }
+build = { shell = 'uv build' }
 clean = { shell = 'rm -R ./dist .pytest_cache .mypy_cache &> /dev/null' }
-isort = { shell = 'poetry run isort ./beaupy' }
-black = { shell = 'poetry run black ./beaupy --skip-string-normalization' }
-mypy = { shell = 'poetry run mypy ./beaupy/' }
-flake8 = { shell = 'poetry run pflake8 ./beaupy/' }
-perflint = { shell = "poetry run perflint ./beaupy/" }
-lint = { shell = 'echo "Running isort..." ; poetry run poe isort; echo "Running black..." ; poetry run poe black ; echo "Running flake8..." ; poetry run poe flake8 ; echo "Running mypy..." ; poetry run poe mypy ; echo Done!' }
-"lint:watch" = { shell = "poetry run poe lint ; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe lint'" }
-"test" = { shell = "poetry run pytest --cov=beaupy --cov-report xml:coverage.xml --cov-report term" }
-"test:watch" = { shell = "poetry run poe test; poetry run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='poetry run poe test'" }
-
-[tool.poetry.dependencies]
-python = ">=3.8,<4.0.0"
-rich = ">=12.2.0"
-emoji = "^2.0.0"
-python-yakh = "^0.4.2"
-questo = "^0.4.1"
+format = { shell = 'uv run ruff format ./beaupy' }
+lint = { shell = 'uv run ruff check ./beaupy' }
+mypy = { shell = 'uv run mypy ./beaupy/' }
+check = { shell = 'echo "Running ruff format..." ; uv run poe format ; echo "Running ruff check..." ; uv run poe lint ; echo "Running mypy..." ; uv run poe mypy ; echo Done!' }
+"check:watch" = { shell = "uv run poe check ; uv run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='uv run poe check'" }
+"test" = { shell = "uv run pytest --cov=beaupy --cov-report xml:coverage.xml --cov-report term" }
+"test:watch" = { shell = "uv run poe test; uv run watchmedo shell-command --patterns='*.py;*.feature;*.toml' --recursive --drop --command='uv run poe test'" }
 
 [tool.mypy]
-files = ["src"]
+files = ["beaupy"]
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -55,18 +86,18 @@ warn_unused_ignores = true
 show_column_numbers = true
 ignore_missing_imports = true
 
-[tool.black]
+[tool.ruff]
 line-length = 140
+target-version = "py38"
 
-[tool.isort]
-profile = "black"
+[tool.ruff.format]
+quote-style = "single"
 
-[tool.flake8]
-max-line-length = 140
-max-complexity = 18
-select = ["B", "E", "F", "W", "T4", "B9"]
-# Black formats `@overload` stubs as `def f(...) -> T: ...` on one line
-extend-ignore = ["E704"]
+[tool.ruff.lint]
+select = ["E", "W", "F", "B", "C4", "C90", "SIM", "PIE", "S", "T20", "ERA", "PERF", "UP"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 19
 
 [[tool.pydoc-markdown.loaders]]
 type = 'python'
@@ -77,5 +108,5 @@ type = 'markdown'
 render_toc = true
 
 [build-system]
-requires = ['poetry-core>=1.2.0']
-build-backend = 'poetry.core.masonry.api'
+requires = ["uv_build>=0.10.2,<0.11.0"]
+build-backend = "uv_build"

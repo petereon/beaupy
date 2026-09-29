@@ -35,7 +35,7 @@ class Spinner:
             ValueError: Raised when no `spinner_characters` are provided in
         """
         if len(spinner_characters) == 0:
-            raise ValueError('`spinner_characters` can\'t be empty')
+            raise ValueError("`spinner_characters` can't be empty")
         self._spinner_characters = cycle(spinner_characters)
         self._live_display = Live(
             '',

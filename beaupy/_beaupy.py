@@ -502,7 +502,7 @@ def select(
             raise ValueError('`options` cannot be empty')
         return None
     if cursor_style in ['', None]:
-        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`', stacklevel=2)
         cursor_style = 'white'
 
     labels = _option_labels(flat_options, preprocessor) if filterable else []
@@ -525,7 +525,6 @@ def select(
     )
 
     with element.displayed():
-
         while True:
             keypress = get_key()
 
@@ -760,10 +759,10 @@ def select_multiple(
             raise ValueError('`options` cannot be empty')
         return []
     if cursor_style in ['', None]:
-        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`', stacklevel=2)
         cursor_style = 'white'
     if tick_style in ['', None]:
-        warnings.warn('`tick_style` should be a valid style, defaulting to `white`')
+        warnings.warn('`tick_style` should be a valid style, defaulting to `white`', stacklevel=2)
         tick_style = 'white'
 
     labels = _option_labels(flat_options, preprocessor) if filterable else []
@@ -846,7 +845,7 @@ def confirm(
     rendered = ''
     with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=config.transient) as live:
         if cursor_style in ['', None]:
-            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`', stacklevel=2)
             cursor_style = 'white'
         is_yes = default_is_yes
         is_selected = enter_empty_confirms

@@ -143,20 +143,24 @@ def _render_option_select(i: int, cursor_index: int, option: str, cursor_style: 
     )
 
 
+def _combined_style(style_string: str, global_style: Style) -> Optional[Style]:
+    # Returns None for non-style square brackets in the string (e.g. `[0]`), since those aren't styles
+    try:
+        return Style.combine([Style.parse(style_string), global_style])
+    except Exception:
+        return None
+
+
 def _wrap_style(string_w_styles: str, global_style_str: str) -> str:
     RE_STYLE_PATTERN = r'\[(/?[^]]+)\]'
 
     global_style = Style.parse(global_style_str)
     style_strings = list(set(re.findall(RE_STYLE_PATTERN, string_w_styles)))
     for style_string in style_strings:
-        try:
-            style = Style.combine([Style.parse(style_string), global_style])
+        style = _combined_style(style_string, global_style)
+        if style is not None:
             string_w_styles = string_w_styles.replace(f'[{style_string}]', f'[{style}]')
             string_w_styles = string_w_styles.replace(f'[/{style_string}]', f'[/{style}]')
-        except Exception:
-            # In the case where there are non style defining square brakets in the string,
-            # ignores invalid colors in square brackets, since these aren't styles
-            continue
 
     return f'[{global_style_str}]{string_w_styles}[/{global_style_str}]'
 
@@ -185,12 +189,12 @@ def _render_prompt(secure: bool, instructions: Optional[str], state: qprompt.Pro
     cursor_position = state.cursor_position + input_value.count('\\')
     input_value = input_value.replace('\\', '\\\\')
 
-    render_value = (  # noqa: ECE001
+    render_value = (
         (input_value + ' ')[:cursor_position]
-        + '[black on white]'  # noqa: W503
-        + (input_value + ' ')[cursor_position]  # noqa: W503
-        + '[/black on white]'  # noqa: W503
-        + (input_value + ' ')[(cursor_position + 1) :]  # noqa: W503,E203
+        + '[black on white]'
+        + (input_value + ' ')[cursor_position]
+        + '[/black on white]'
+        + (input_value + ' ')[(cursor_position + 1) :]
     )
 
     if state.completion.options and not secure:
@@ -219,7 +223,7 @@ def _render_options(
     page: int = position // state.page_size + 1
     total_pages = max(1, math.ceil(len(visible) / state.page_size))
 
-    shown = visible[(page - 1) * state.page_size : page * state.page_size] if state.pagination else visible  # noqa: E203
+    shown = visible[(page - 1) * state.page_size : page * state.page_size] if state.pagination else visible
 
     header = title
     if state.filter:
@@ -231,10 +235,10 @@ def _render_options(
             lines.append(f'[bold]{sections[i]}[/bold]')
         lines.append(render_option(i, state.options[i]))
 
-    return (  # noqa: ECE001
+    return (
         '\n'.join(lines)
-        + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')  # noqa: W503
-        + (f'\n\n{instructions}' if instructions else '')  # noqa: W503
+        + (f'[grey58]\n\nPage {page}/{total_pages}[/grey58]' if state.pagination and total_pages > 1 else '')
+        + (f'\n\n{instructions}' if instructions else '')
     )
 
 
@@ -315,11 +319,11 @@ def _validate_prompt_value(
         if validator(result):
             return result
         else:
-            error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} is invalid"
+            error = f'Input {"<secure_input>" if secure else "`" + str_value + "`"} is invalid'
             raise ValidationError(error)
-    except ValueError:
-        error = f"Input {'<secure_input>' if secure else '`'+str_value+'`'} cannot be converted to type `{target_type}`"
-        raise ConversionError(error)
+    except ValueError as e:
+        error = f'Input {"<secure_input>" if secure else "`" + str_value + "`"} cannot be converted to type `{target_type}`'
+        raise ConversionError(error) from e
 
 
 def _paginate_forward(page_num: int, total_pages: int) -> int:

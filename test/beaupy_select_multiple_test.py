@@ -387,7 +387,7 @@ def test_select_multiple_with_2_options_and_invalid_tick_style():
     b.get_key = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     select_multiple(options=["test1", "test2"], tick_style="")
-    warnings.warn.assert_called_once_with("`tick_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`tick_style` should be a valid style, defaulting to `white`", stacklevel=2)
 
 
 def test_select_multiple_with_2_options_and_invalid_cursor_style():
@@ -395,7 +395,7 @@ def test_select_multiple_with_2_options_and_invalid_cursor_style():
     b.get_key = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     select_multiple(options=["test1", "test2"], cursor_style="")
-    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`", stacklevel=2)
 
 
 def test_select_multiple_with_2_options_starting_from_first_selecting_going_down_and_selecting_second_then_deselecting_with_preprocessor():
