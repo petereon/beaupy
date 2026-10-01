@@ -559,3 +559,26 @@ def test_options_exceeding_the_terminal_are_paginated_by_default(fn):
 def test_the_pagination_flag_is_gone(fn):
     with pytest.raises(TypeError, match="pagination"):
         fn(options=["a"], pagination=True)
+
+
+@pytest.mark.parametrize("cursor, width", [(">", 1), ("🌞", 2), ("⚔️", 2), ("✔️", 2), ("👍🏽", 2), ("🇨🇿", 2), ("漢", 2), ("dancing", 7)])
+def test_unselected_rows_are_padded_to_the_cursor_width(cursor, width):
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    select(["one", "two"], cursor=cursor)
+
+    unselected_row = Live.update.call_args.kwargs["renderable"].splitlines()[1]
+    assert unselected_row == " " * (width + 1) + "two"
+
+
+@pytest.mark.parametrize("tick, width", [("✓", 1), ("🎒", 2), ("❤️", 2), ("👨‍👩‍👧", 2)])
+def test_unticked_boxes_are_as_wide_as_ticked_ones(tick, width):
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    select_multiple(["one", "two"], tick_character=tick, ticked_indices=[1])
+
+    unticked, ticked = Live.update.call_args.kwargs["renderable"].splitlines()[:2]
+    assert unticked.startswith("\\[" + " " * width + "]")
+    assert ticked.startswith(f"\\[[pink1]{tick}[/pink1]]")

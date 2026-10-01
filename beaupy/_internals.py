@@ -6,9 +6,9 @@ from contextlib import contextmanager
 from types import ModuleType
 from typing import Any, Callable, Iterator, List, Mapping, Optional, Sequence, Tuple, Type, Union
 
-import emoji
 from questo import prompt as qprompt
 from questo import select as qselect
+from rich.cells import cell_len
 from rich.console import Console, ConsoleRenderable
 from rich.live import Live
 from rich.markup import escape
@@ -168,14 +168,8 @@ def _to_flat_index(positions: List[Any], index: Union[int, SectionedPosition, No
     return positions.index(index)
 
 
-def _replace_emojis(text: str) -> str:
-    return str(emoji.replace_emoji(text, '  '))
-
-
 def _render_option_select(i: int, cursor_index: int, option: str, cursor_style: str, cursor: str) -> str:
-    return '{}{}'.format(
-        f'[{cursor_style}]{cursor}[/{cursor_style}] ' if i == cursor_index else ' ' * (len(_replace_emojis(cursor)) + 1), option
-    )
+    return '{}{}'.format(f'[{cursor_style}]{cursor}[/{cursor_style}] ' if i == cursor_index else ' ' * (cell_len(cursor) + 1), option)
 
 
 def _combined_style(style_string: str, global_style: Style) -> Optional[Style]:
@@ -203,7 +197,7 @@ def _wrap_style(string_w_styles: str, global_style_str: str) -> str:
 def _render_option_select_multiple(
     option: str, ticked: bool, tick_character: str, tick_style: str, selected: bool, cursor_style: str
 ) -> str:
-    prefix = r'\[{}]'.format(' ' * len(_replace_emojis(tick_character)))
+    prefix = r'\[{}]'.format(' ' * cell_len(tick_character))
     if ticked:
         prefix = rf'\[[{tick_style}]{tick_character}[/{tick_style}]]'
     if selected:

@@ -16,8 +16,7 @@ classifiers = [
 ]
 requires-python = ">=3.8,<4.0.0"
 dependencies = [
-    "rich>=12.2.0",
-    "emoji>=2.0.0,<3.0.0",
+    "rich>=14.3.0",
     "python-yakh>=0.4.2,<0.5.0",
     "questo>=0.4.1,<0.5.0",
 ]
@@ -44,7 +43,6 @@ dev = [
     "mypy==2.2.0; python_version >= '3.10'",
     "ruff==0.14.5; python_version >= '3.10'",
     "watchdog==6.0.0; python_version >= '3.10'",
-    "types-emoji==2.1.0.3; python_version >= '3.10'",
 ]
 docs = [
     "mkdocs==1.6.1",

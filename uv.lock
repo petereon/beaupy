@@ -159,7 +159,6 @@ name = "beaupy"
 version = "4.0.0b2"
 source = { editable = "." }
 dependencies = [
-    { name = "emoji" },
     { name = "python-yakh" },
     { name = "questo" },
     { name = "rich", version = "14.3.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9' or (extra == 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs')" },
@@ -173,7 +172,6 @@ dev = [
     { name = "pytest", marker = "python_full_version >= '3.10'" },
     { name = "pytest-cov", marker = "python_full_version >= '3.10'" },
     { name = "ruff", marker = "python_full_version >= '3.10'" },
-    { name = "types-emoji", marker = "python_full_version >= '3.10'" },
     { name = "watchdog", version = "6.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
 docs = [
@@ -186,10 +184,9 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "emoji", specifier = ">=2.0.0,<3.0.0" },
     { name = "python-yakh", specifier = ">=0.4.2,<0.5.0" },
     { name = "questo", specifier = ">=0.4.1,<0.5.0" },
-    { name = "rich", specifier = ">=12.2.0" },
+    { name = "rich", specifier = ">=14.3.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -199,7 +196,6 @@ dev = [
     { name = "pytest", marker = "python_full_version >= '3.10'", specifier = "==9.1.1" },
     { name = "pytest-cov", marker = "python_full_version >= '3.10'", specifier = "==7.1.0" },
     { name = "ruff", marker = "python_full_version >= '3.10'", specifier = "==0.14.5" },
-    { name = "types-emoji", marker = "python_full_version >= '3.10'", specifier = "==2.1.0.3" },
     { name = "watchdog", marker = "python_full_version >= '3.10'", specifier = "==6.0.0" },
 ]
 docs = [
@@ -714,15 +710,6 @@ name = "docstring-parser"
 version = "0.11"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a2/ce/5d6a3782b9f88097ce3e579265015db3372ae78d12f67629b863a9208c96/docstring_parser-0.11.tar.gz", hash = "sha256:93b3f8f481c7d24e37c5d9f30293c89e2933fa209421c8abd731dd3ef0715ecb", size = 22775, upload-time = "2021-09-30T07:44:10.288Z" }
-
-[[package]]
-name = "emoji"
-version = "2.16.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/34/01/a25a9c13e2f8945d06b219e08e88a5dd8a504ad1a79f872f25d6814f498c/emoji-2.16.0.tar.gz", hash = "sha256:ff9e9b1c48389ef78ed1787e7693c555e84e6bb9bac16be1fd65e1616dbf80c8", size = 617905, upload-time = "2026-09-16T19:47:57.051Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/fd/8a/75e3177f374877b19dd3112820b071836ad1100f9f58424630b4783519bc/emoji-2.16.0-py3-none-any.whl", hash = "sha256:c4230d80640def9071599ff56b1b5950fe13a2a94c0da98c5deab12431b24330", size = 610912, upload-time = "2026-09-16T19:47:55.507Z" },
-]
 
 [[package]]
 name = "exceptiongroup"
@@ -2145,15 +2132,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/d5/92/5a23ad34aa877edf00906166e339bfdc571543ea183ea7ab727bb01516c7/typeapi-2.3.0.tar.gz", hash = "sha256:a60d11f72c5ec27338cfd1c807f035b0b16ed2e3b798fb1c1d34fc5589f544be", size = 122687, upload-time = "2025-10-23T13:44:11.26Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d4/84/021bbeb7edb990dd6875cb6ab08d32faaa49fec63453d863730260a01f9e/typeapi-2.3.0-py3-none-any.whl", hash = "sha256:576b7dcb94412e91c5cae107a393674f8f99c10a24beb8be2302e3fed21d5cc2", size = 26858, upload-time = "2025-10-23T13:44:09.833Z" },
-]
-
-[[package]]
-name = "types-emoji"
-version = "2.1.0.3"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1b/4c/b7885238cf4588d79309919613f09e4fa0e95bc2a6cf6d1da5b1ed30788b/types-emoji-2.1.0.3.tar.gz", hash = "sha256:98ddb0ff5f48622550c431206e4dbfcbde8ca8bc03fcfbb9962a778d2049aa13", size = 3629, upload-time = "2023-03-27T18:23:57.857Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/b0/fa907f45a260a1f84f5aa3f39f0d63865115991244fa7725fa1e23a34259/types_emoji-2.1.0.3-py3-none-any.whl", hash = "sha256:32fe5cf02c4834bb59579380f600a89d1471571fb56e36465cbd0c7d95f669ca", size = 3546, upload-time = "2023-03-27T18:23:56.854Z" },
 ]
 
 [[package]]
