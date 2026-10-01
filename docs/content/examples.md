@@ -174,6 +174,22 @@ prompt(">", completion=path_completion)
 
 ## Spinners
 
+Everything after the first argument (the animation) is keyword-only. A spinner can be driven by hand with `start()`/`stop()`,
+or used as a context manager, which also stops it if the body raises:
+
+```python
+from beaupy.spinners import Spinner, DOTS
+
+with Spinner(DOTS, text="Packing things..."):
+    do_some_work()
+```
+
+To render on the same console as the other elements (e.g. a console you pass through `Config`), pass `console=`:
+
+```python
+Spinner(DOTS, text="Packing things...", console=my_console)
+```
+
 ### Styling
 
 #### Spinner Animation
@@ -184,7 +200,7 @@ Each of these can be used in a spinner:
 
 ```python
 from beaupy.spinners import Spinner, ARC
-spinner = Spinner(ARC, "Doing some heavy work")
+spinner = Spinner(ARC, text="Doing some heavy work")
 spinner.start()
 ```
 
@@ -192,7 +208,7 @@ All that "animations" are, is but a list of string, so making your own is as tri
 
 ```python
 from beaupy.spinners import Spinner
-spinner = Spinner(['whee', 'whe ', 'wh  ', 'w   ', 'wh  ', 'whe ', 'whee'], "Whee!")
+spinner = Spinner(['whee', 'whe ', 'wh  ', 'w   ', 'wh  ', 'whe ', 'whee'], text="Whee!")
 spinner.start()
 ```
 
@@ -202,7 +218,7 @@ Every text in spinner does accept and respect rich styles, so the following work
 
 ```python
 from beaupy.spinners import Spinner
-spinner = Spinner(['[red]⬤[/red] ', '[green]⬤[/green] ', '[blue]⬤[/blue] '], '[pink1]Setting[/pink1] colors!')
+spinner = Spinner(['[red]⬤[/red] ', '[green]⬤[/green] ', '[blue]⬤[/blue] '], text='[pink1]Setting[/pink1] colors!')
 spinner.start()
 ```
 
@@ -212,7 +228,7 @@ Animation speed can be set using `refresh_per_second` parameter:
 
 ```python
 from beaupy.spinners import Spinner, LOADING
-spinner = Spinner(LOADING, "something", refresh_per_second=4)
+spinner = Spinner(LOADING, text="something", refresh_per_second=4)
 spinner.start()
 ```
 
@@ -324,6 +340,7 @@ runners), they raise `RuntimeError('Interactive terminal required')`.
 | `DefaultKeys.up.append('k')` | `select(..., config=Config(keys=KeyBindings(up=[Keys.UP_ARROW, 'k'])))` |
 | `select(options, my_preprocessor)` | `select(options, preprocessor=my_preprocessor)` |
 | `a` ticks/unticks all in `select_multiple` | `ctrl+a`; restore with `KeyBindings(select_all=['a'])` |
+| `Spinner(DOTS, "text")` | `Spinner(DOTS, text="text")` (options are keyword-only); also usable as `with Spinner(...):` |
 | Ctrl+C returns `None`/`[]` (`raise_on_interrupt=False`) | Raises `KeyboardInterrupt`; pass `Config(raise_on_interrupt=False)` for the old behavior |
 | `strict` defaults to `False` (empty `options` returns `None`/`[]`) | Defaults to `True` (raises `ValueError`); pass `strict=False` for the old behavior |
 

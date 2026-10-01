@@ -72,31 +72,20 @@ if confirm("Will you take the ring to Mordor?"):
         potato_count = prompt('How many potatoes?', target_type=int, validator=lambda count: count > 0)
 
     # Spinner to show while doing some work
-    spinner = Spinner(DOTS, "Packing things...")
-    spinner.start()
+    with Spinner(DOTS, text="Packing things..."):
+        time.sleep(2)
 
-    time.sleep(2)
-
-    spinner.stop()
     # Get input without showing it being typed
     if "friend" == prompt("Speak, [blue bold underline]friend[/blue bold underline], and enter", secure=True).lower():
 
         # Custom spinner animation
         spinner_animation = ['▉▉', '▌▐', '  ', '▌▐', '▉▉']
-        spinner = Spinner(spinner_animation, "Opening the Door of Durin...")
-        spinner.start()
-
-        time.sleep(2)
-
-        spinner.stop()
+        with Spinner(spinner_animation, text="Opening the Door of Durin..."):
+            time.sleep(2)
     else:
         spinner_animation = ['🐙🌊    ⚔️ ', '🐙 🌊   ⚔️ ', '🐙  🌊  ⚔️ ', '🐙   🌊 ⚔️ ', '🐙    🌊⚔️ ']
-        spinner = Spinner(spinner_animation, "Getting attacked by an octopus...")
-        spinner.start()
-
-        time.sleep(2)
-
-        spinner.stop()
+        with Spinner(spinner_animation, text="Getting attacked by an octopus..."):
+            time.sleep(2)
 
     if 'The One Ring' in items:
         console.print("[green]You throw The One Ring to a lava from an eagle![/green]")
