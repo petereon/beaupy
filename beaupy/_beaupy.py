@@ -96,9 +96,9 @@ class Config(metaclass=_InstanceOnly):
     """Configuration of the elements. Create an instance and pass it via the `config=` argument.
 
     Attributes:
-        raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input,
+        raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever Ctrl+C is pressed when waiting for input,
         otherwise, they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`,
-        while for `select_multiple` it means an empty list - `[]`. Defaults to False.
+        while for `select_multiple` it means an empty list - `[]`. Defaults to True.
         raise_on_escape(bool): If True, functions will raise Abort whenever the escape key is encountered when waiting for input, otherwise,
         they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
         `select_multiple` it means an empty list - `[]`.  Defaults to False.
@@ -108,7 +108,7 @@ class Config(metaclass=_InstanceOnly):
         keys(KeyBindings): Keybindings used by the elements. Defaults to `KeyBindings()`.
     """
 
-    raise_on_interrupt: bool = False
+    raise_on_interrupt: bool = True
     raise_on_escape: bool = False
     transient: bool = True
     console: Console = field(default_factory=lambda: Console(stderr=True, highlight=False))

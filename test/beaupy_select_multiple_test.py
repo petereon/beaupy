@@ -365,7 +365,7 @@ def test_select_multiple_with_minimal_count():
 def test_select_multiple_with_2_options_and_calling_ctrl_c_with_raise_on_keyboard_interrupt_false():
     Live.update = mock.MagicMock()
     b.get_key = lambda: Keys.CTRL_C
-    res = select_multiple(options=["test1", "test2"], tick_character="😋")
+    res = select_multiple(options=["test1", "test2"], tick_character="😋", config=Config(raise_on_interrupt=False))
     assert Live.update.call_args_list == [
         mock.call(
             renderable="\\[  ] [pink1]test1[/pink1]\n\\[  ] test2\n\n([bold]space[/bold] to tick one, [bold]ctrl+a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)"

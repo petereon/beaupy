@@ -329,3 +329,20 @@ def test_select_multiple_filter_shows_match_count():
     select_multiple(options=["apple", "kiwi", "pear"], filterable=True)
 
     assert "(2/3)" in Live.update.call_args.kwargs["renderable"]
+
+
+@pytest.mark.parametrize(
+    "call",
+    [
+        lambda: select(["a"]),
+        lambda: select_multiple(["a"]),
+        lambda: prompt("q"),
+        lambda: confirm("q"),
+    ],
+)
+def test_ctrl_c_raises_keyboard_interrupt_by_default(call):
+    b.get_key = lambda: Keys.CTRL_C
+    Live.update = mock.MagicMock()
+
+    with pytest.raises(KeyboardInterrupt):
+        call()

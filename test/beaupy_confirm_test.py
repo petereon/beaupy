@@ -180,7 +180,7 @@ def test_confirm_with_empty_cursor_style():
 
 def test_confirm_with_keyboard_interrupt_and_raise_on_interrupt_false():
     b.get_key = lambda: Keys.CTRL_C
-    res = confirm(question="Test", cursor_style="red")
+    res = confirm(question="Test", cursor_style="red", config=Config(raise_on_interrupt=False))
     assert res is None
 
 

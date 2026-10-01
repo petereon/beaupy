@@ -178,7 +178,7 @@ def test_prompt_with_typing_j_then_deleting_it_and_typing_no():
 def test_prompt_with_interrupt_and_raise_on_keyboard_interrupt_as_false():
     Live.update = mock.MagicMock()
     b.get_key = lambda: Keys.CTRL_C
-    ret = prompt(prompt="Try test")
+    ret = prompt(prompt="Try test", config=Config(raise_on_interrupt=False))
 
     assert ret is None
 

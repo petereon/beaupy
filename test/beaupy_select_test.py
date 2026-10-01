@@ -226,6 +226,7 @@ def test_select_with_4_options_ctrl_c_no_raise():
         cursor="x",
         cursor_style="green",
         cursor_index=1,
+        config=Config(raise_on_interrupt=False),
     )
 
     assert Live.update.call_args_list == [

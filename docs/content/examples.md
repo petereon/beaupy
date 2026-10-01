@@ -220,9 +220,9 @@ spinner.start()
 
 Each element accepts a `config` argument taking a `Config` instance. Options:
 
-- `raise_on_interrupt`: If `True`, functions will raise `KeyboardInterrupt` whenever one is encountered when waiting for input,
+- `raise_on_interrupt`: If `True`, functions will raise `KeyboardInterrupt` whenever Ctrl+C is pressed when waiting for input,
         otherwise, they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`,
-        while for `select_multiple` it means an empty list - `[]`. Defaults to `False`.
+        while for `select_multiple` it means an empty list - `[]`. Defaults to `True`.
 - `raise_on_escape`: If `True`, functions will raise `Abort` whenever the escape key is encountered when waiting for input, otherwise,
         they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
         `select_multiple` it means an empty list - `[]`.  Defaults to `False`.
@@ -233,11 +233,9 @@ Each element accepts a `config` argument taking a `Config` instance. Options:
 ```python
 from beaupy import Config, select
 
-config = Config(raise_on_interrupt=True)
-
-try:
-    result = select(['Option 1', 'Option 2'], config=config)
-except KeyboardInterrupt:
+# Ctrl+C raises KeyboardInterrupt by default; opt out to get `None` back instead
+result = select(['Option 1', 'Option 2'], config=Config(raise_on_interrupt=False))
+if result is None:
     print("User pressed Ctrl+C")
 ```
 
@@ -320,6 +318,7 @@ always raises `ValueError`, regardless of `strict` — there's no legitimate rea
 | `DefaultKeys.up.append('k')` | `select(..., config=Config(keys=KeyBindings(up=[Keys.UP_ARROW, 'k'])))` |
 | `select(options, my_preprocessor)` | `select(options, preprocessor=my_preprocessor)` |
 | `a` ticks/unticks all in `select_multiple` | `ctrl+a`; restore with `KeyBindings(select_all=['a'])` |
+| Ctrl+C returns `None`/`[]` (`raise_on_interrupt=False`) | Raises `KeyboardInterrupt`; pass `Config(raise_on_interrupt=False)` for the old behavior |
 | `strict` defaults to `False` (empty `options` returns `None`/`[]`) | Defaults to `True` (raises `ValueError`); pass `strict=False` for the old behavior |
 
 `Keys` above comes from `yakh.key`. Using a removed global raises `RemovedInV4Error` (or `AttributeError` when assigning on `Config`/`KeyBindings`) with a message explaining the replacement.
