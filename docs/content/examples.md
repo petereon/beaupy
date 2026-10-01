@@ -307,6 +307,9 @@ select(options=[], strict=False)   # returns None
 A blank option (after preprocessing and stripping markup, e.g. `''`, `'   '`, or `'[red][/red]'`) or a blank section name
 always raises `ValueError`, regardless of `strict` — there's no legitimate reason to want a menu row with nothing in it.
 
+All elements read keypresses from the terminal, so they need an interactive one. When stdin isn't a TTY (piped input, most CI
+runners), they raise `RuntimeError('Interactive terminal required')`.
+
 ## Migrating from 3.x
 
 4.0.0 removes process-wide state and makes every argument after the first keyword-only.

@@ -118,6 +118,18 @@ class Config(metaclass=_InstanceOnly):
 KeyBindings._locked = True
 Config._locked = True
 
+
+def _read_key() -> Key:
+    """Reads a keypress, turning the opaque failure of reading keys without a terminal into a clear error."""
+    try:
+        return get_key()
+    except Exception as e:
+        # yakh puts the terminal into raw mode to read keys, which fails (e.g. `termios.error`) when stdin isn't a TTY
+        if sys.stdin is None or not sys.stdin.isatty():
+            raise RuntimeError('Interactive terminal required') from e
+        raise
+
+
 _CONFIRM_INSTRUCTIONS = '([bold]enter[/bold] to confirm)'
 _SELECT_MULTIPLE_INSTRUCTIONS = '([bold]space[/bold] to tick one, [bold]ctrl+a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)'
 
@@ -279,7 +291,7 @@ def prompt(
 
     with element.displayed():
         while True:
-            key = get_key()
+            key = _read_key()
             new_state = element.state
             new_state.completion.options = completion(new_state.value) if completion else []
             new_state = _prompt_key_handler(new_state, key)
@@ -526,7 +538,7 @@ def select(
 
     with element.displayed():
         while True:
-            keypress = get_key()
+            keypress = _read_key()
 
             state = element.state
             if keys.is_navigation(keypress):
@@ -791,7 +803,7 @@ def select_multiple(
 
     with element.displayed():
         while True:
-            keypress = get_key()
+            keypress = _read_key()
             new_state = element.state
             new_state.error = ''
 
@@ -863,7 +875,7 @@ def confirm(
             rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}' + (f'\n\n{instructions}' if instructions else '')
             _update_rendered(live, rendered)
 
-            keypress = get_key()
+            keypress = _read_key()
             if keypress in keys.interrupt:
                 if config.raise_on_interrupt:
                     raise KeyboardInterrupt()

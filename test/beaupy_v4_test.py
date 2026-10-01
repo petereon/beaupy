@@ -346,3 +346,47 @@ def test_ctrl_c_raises_keyboard_interrupt_by_default(call):
 
     with pytest.raises(KeyboardInterrupt):
         call()
+
+
+class _FakeStdin:
+    def __init__(self, tty):
+        self._tty = tty
+
+    def isatty(self):
+        return self._tty
+
+
+def _raise_terminal_error():
+    raise OSError(25, "Inappropriate ioctl for device")
+
+
+@pytest.mark.parametrize(
+    "call",
+    [
+        lambda: select(["a"]),
+        lambda: select_multiple(["a"]),
+        lambda: prompt("q"),
+        lambda: confirm("q"),
+    ],
+)
+def test_reading_keys_without_a_terminal_raises_a_clear_error(call, monkeypatch):
+    import sys
+
+    monkeypatch.setattr(sys, "stdin", _FakeStdin(tty=False))
+    b.get_key = _raise_terminal_error
+    Live.update = mock.MagicMock()
+
+    with pytest.raises(RuntimeError, match="Interactive terminal required") as e:
+        call()
+    assert isinstance(e.value.__cause__, OSError)
+
+
+def test_key_reading_errors_with_a_terminal_are_not_masked(monkeypatch):
+    import sys
+
+    monkeypatch.setattr(sys, "stdin", _FakeStdin(tty=True))
+    b.get_key = _raise_terminal_error
+    Live.update = mock.MagicMock()
+
+    with pytest.raises(OSError):
+        select(["a"])
