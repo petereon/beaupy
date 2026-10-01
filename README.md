@@ -98,6 +98,9 @@ For more information refer to [more examples](https://petereon.github.io/beaupy/
 
 ## Installation
 
+`beaupy` declares support for Python 3.8 and newer, but only Python 3.10 and newer are tested in CI: support for earlier
+versions is no longer actively tested.
+
 From PyPI:
 
 ```sh
