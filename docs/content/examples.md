@@ -285,7 +285,8 @@ select_multiple({'Fruit': ['apple', 'pear'], 'Veg': ['leek']},
 ## Filtering
 
 With `filterable=True`, typing narrows the options to those whose displayed text contains what was typed (case-insensitive,
-markup ignored). Backspace removes the last typed character; the query is shown next to the title.
+markup ignored). Backspace removes the last typed character; the query is shown next to the title, along with a
+`(matches/total)` count.
 
 ```python
 select(['apple', 'banana', 'cherry'], title='Fruit', filterable=True)
@@ -294,6 +295,19 @@ select(['apple', 'banana', 'cherry'], title='Fruit', filterable=True)
 Keys bound in `KeyBindings` keep their action, so in `select_multiple` space still ticks and `ctrl+a` ticks/unticks all visible options.
 
 Ticked options stay ticked while hidden by the filter.
+
+## Input validation
+
+Empty `options` raises `ValueError` by default; pass `strict=False` to get `None` (`select`) or `[]` (`select_multiple`)
+back instead:
+
+```python
+select(options=[])                 # raises ValueError
+select(options=[], strict=False)   # returns None
+```
+
+A blank option (after preprocessing and stripping markup, e.g. `''`, `'   '`, or `'[red][/red]'`) or a blank section name
+always raises `ValueError`, regardless of `strict` — there's no legitimate reason to want a menu row with nothing in it.
 
 ## Migrating from 3.x
 
@@ -306,5 +320,6 @@ Ticked options stay ticked while hidden by the filter.
 | `DefaultKeys.up.append('k')` | `select(..., config=Config(keys=KeyBindings(up=[Keys.UP_ARROW, 'k'])))` |
 | `select(options, my_preprocessor)` | `select(options, preprocessor=my_preprocessor)` |
 | `a` ticks/unticks all in `select_multiple` | `ctrl+a`; restore with `KeyBindings(select_all=['a'])` |
+| `strict` defaults to `False` (empty `options` returns `None`/`[]`) | Defaults to `True` (raises `ValueError`); pass `strict=False` for the old behavior |
 
 `Keys` above comes from `yakh.key`. Using a removed global raises `RemovedInV4Error` (or `AttributeError` when assigning on `Config`/`KeyBindings`) with a message explaining the replacement.

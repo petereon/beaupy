@@ -28,7 +28,6 @@ from beaupy._internals import (
     _cursor_hidden,
     _flatten_options,
     _InstanceOnly,
-    _option_labels,
     _paginate_back,
     _paginate_forward,
     _prompt_key_handler,
@@ -38,6 +37,7 @@ from beaupy._internals import (
     _render_select_multiple,
     _to_flat_index,
     _update_rendered,
+    _validate_no_blank_options,
     _validate_prompt_value,
     _visible_indexes,
 )
@@ -446,7 +446,7 @@ def select(
     cursor_style: str = 'pink1',
     cursor_index: Optional[Index] = None,
     return_index: bool = False,
-    strict: bool = False,
+    strict: bool = True,
     pagination: bool = False,
     page_size: Optional[int] = None,
     title: str = '',
@@ -472,8 +472,8 @@ def select(
                                                               Defaults to the first option.
         return_index (bool, optional): If `True`, `select` will return the index of selected element in options.
                                        For sectioned options, it's `(section_name, index_in_section)`. Defaults to `False`.
-        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
-        if it's `True`, `ValueError` will be thrown. Defaults to False.
+        strict (bool, optional): If `True` and `options` is empty, `ValueError` is raised; if `False`, `None` is
+        returned instead. Defaults to True.
         pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
         page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
                                              If `None`, the page size is derived automatically from the terminal height.
@@ -487,7 +487,7 @@ def select(
         config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:
-        ValueError: Thrown if no `options` are provided and strict is `True`
+        ValueError: Thrown if no `options` are provided and strict is `True`, or if an option or section name is blank
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
@@ -505,7 +505,7 @@ def select(
         warnings.warn('`cursor_style` should be a valid style, defaulting to `white`', stacklevel=2)
         cursor_style = 'white'
 
-    labels = _option_labels(flat_options, preprocessor) if filterable else []
+    labels = _validate_no_blank_options(flat_options, positions, preprocessor)
     effective_page_size = page_size if page_size is not None else _auto_page_size(config.console, 6, title, sections, filterable)
     effective_pagination = pagination or (page_size is None and len(flat_options) > effective_page_size)
 
@@ -699,7 +699,7 @@ def select_multiple(
     minimal_count: int = 0,
     maximal_count: Optional[int] = None,
     return_indices: bool = False,
-    strict: bool = False,
+    strict: bool = True,
     pagination: bool = False,
     page_size: Optional[int] = None,
     title: str = '',
@@ -731,8 +731,8 @@ def select_multiple(
         maximal_count (Optional[int], optional): Maximal count of options that need to be selected. Defaults to None.
         return_indices (bool, optional): If `True`, `select_multiple` will return the indices of ticked elements in options.
                                          For sectioned options, they are `(section_name, index_in_section)`. Defaults to `False`.
-        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
-                                 if it's `True`, `ValueError` will be thrown. Defaults to False.
+        strict (bool, optional): If `True` and `options` is empty, `ValueError` is raised; if `False`, an empty list is
+                                 returned instead. Defaults to True.
         pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
         page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
                                              If `None`, the page size is derived automatically from the terminal height.
@@ -746,6 +746,7 @@ def select_multiple(
         config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:
+        ValueError: Thrown if no `options` are provided and strict is `True`, or if an option or section name is blank
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
@@ -765,7 +766,7 @@ def select_multiple(
         warnings.warn('`tick_style` should be a valid style, defaulting to `white`', stacklevel=2)
         tick_style = 'white'
 
-    labels = _option_labels(flat_options, preprocessor) if filterable else []
+    labels = _validate_no_blank_options(flat_options, positions, preprocessor)
     effective_page_size = page_size if page_size is not None else _auto_page_size(config.console, 1, title, sections, filterable)
     effective_pagination = pagination or (page_size is None and len(flat_options) > effective_page_size)
 

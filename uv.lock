@@ -156,7 +156,7 @@ wheels = [
 
 [[package]]
 name = "beaupy"
-version = "4.0.0"
+version = "4.0.0b1"
 source = { editable = "." }
 dependencies = [
     { name = "emoji" },

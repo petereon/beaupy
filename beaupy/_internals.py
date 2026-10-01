@@ -97,6 +97,9 @@ def _flatten_options(options: Union[List[Any], Dict[str, List[Any]]]) -> Tuple[L
     For a list, position is the list index. For a dict, it's `(section_name, index_within_section)`.
     """
     if isinstance(options, dict):
+        for section in options:
+            if not section.strip():
+                raise ValueError(f'section name {section!r} is blank')
         flat = [(section, i, option) for section, section_options in options.items() for i, option in enumerate(section_options)]
         return [option for _, _, option in flat], [section for section, _, _ in flat], [(section, i) for section, i, _ in flat]
     return list(options), [None] * len(options), list(range(len(options)))
@@ -105,6 +108,15 @@ def _flatten_options(options: Union[List[Any], Dict[str, List[Any]]]) -> Tuple[L
 def _option_labels(options: List[Any], preprocessor: Callable[[Any], str]) -> List[str]:
     """Lowercased plain text of each option as displayed, used for filtering."""
     return [Text.from_markup(preprocessor(option)).plain.lower() for option in options]
+
+
+def _validate_no_blank_options(options: List[Any], positions: List[Any], preprocessor: Callable[[Any], str]) -> List[str]:
+    """Raises if any option's displayed text (preprocessed, markup stripped) is blank. Returns the labels for reuse."""
+    labels = _option_labels(options, preprocessor)
+    for label, position in zip(labels, positions):
+        if not label.strip():
+            raise ValueError(f'option at {position!r} is blank')
+    return labels
 
 
 def _visible_indexes(state: qselect.SelectState, labels: List[str]) -> List[int]:
@@ -227,7 +239,7 @@ def _render_options(
 
     header = title
     if state.filter:
-        header = f'{header} [grey58]{escape(state.filter)}[/grey58]'.strip()
+        header = f'{header} [grey58]{escape(state.filter)} ({len(visible)}/{len(state.options)})[/grey58]'.strip()
     lines = [header] if header else []
     for k, i in enumerate(shown):
         # Header on section change, and repeated at the top of a page so the reader keeps context

@@ -140,8 +140,13 @@ def test_select_multiple_accepts_and_returns_sectioned_indices():
     assert select_multiple(options=options, ticked_indices=[("Veg", 1)]) == ["kale"]
 
 
-def test_select_with_empty_sections_returns_none():
-    assert select(options={"Empty": []}) is None
+def test_select_with_all_empty_sections_raises_by_default():
+    with pytest.raises(ValueError):
+        select(options={"Empty": []})
+
+
+def test_select_with_all_empty_sections_permissive():
+    assert select(options={"Empty": []}, strict=False) is None
 
 
 def typed(text):
@@ -164,7 +169,7 @@ def test_select_filters_by_typed_text_and_shows_query():
 
     assert result == "mango"
     assert Live.update.call_args.kwargs["renderable"] == (
-        "Fruit [grey58]AN[/grey58]\n  [red]banana[/red]\n[pink1]>[/pink1] mango\n\n([bold]enter[/bold] to confirm)"
+        "Fruit [grey58]AN (2/3)[/grey58]\n  [red]banana[/red]\n[pink1]>[/pink1] mango\n\n([bold]enter[/bold] to confirm)"
     )
 
 
@@ -176,7 +181,7 @@ def test_select_filter_matches_markup_free_text_and_backspace_widens_it():
     Live.update.side_effect = lambda renderable: renders.append(renderable)
 
     assert select(options=["[red]apple[/red]", "kale"], filterable=True, instructions=None) == "kale"
-    assert renders[3] == "[grey58]red[/grey58]"
+    assert renders[3] == "[grey58]red (0/2)[/grey58]"
 
 
 def test_select_ignores_confirm_when_nothing_matches():
@@ -289,3 +294,38 @@ select_multiple({"s": ["a"]}, ticked_indices=[0])
         'error: No overload variant of "select" matches argument types "list[str]", "tuple[str, int]"  [call-overload]',
         'error: List item 0 has incompatible type "int"; expected "tuple[str, int]"  [list-item]',
     ]
+
+
+def test_select_raises_on_blank_option():
+    with pytest.raises(ValueError, match=r"option at 1 is blank"):
+        select(options=["a", "  ", "b"])
+
+
+def test_select_raises_on_option_that_is_blank_once_markup_is_stripped():
+    with pytest.raises(ValueError, match=r"option at 0 is blank"):
+        select(options=["[red][/red]"])
+
+
+def test_select_raises_on_blank_option_in_section():
+    with pytest.raises(ValueError, match=r"option at \('Veg', 1\) is blank"):
+        select(options={"Veg": ["leek", ""]})
+
+
+def test_select_raises_on_blank_section_name():
+    with pytest.raises(ValueError, match=r"section name '' is blank"):
+        select(options={"": ["leek"]})
+
+
+def test_select_multiple_raises_on_blank_option():
+    with pytest.raises(ValueError, match=r"option at 0 is blank"):
+        select_multiple(options=[""])
+
+
+def test_select_multiple_filter_shows_match_count():
+    steps = iter(typed("e") + [Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+
+    select_multiple(options=["apple", "kiwi", "pear"], filterable=True)
+
+    assert "(2/3)" in Live.update.call_args.kwargs["renderable"]

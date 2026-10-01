@@ -17,18 +17,18 @@ def set_raise_on_escape():
     return Config(raise_on_escape=True)
 
 
-def test_select_with_no_options_permissive():
-    b.get_key = lambda: Keys.ENTER
-    res = select(options=[])
-    assert res is None
-
-
-def test_select_with_no_options_strict():
+def test_select_with_no_options_raises_by_default():
     b.get_key = lambda: Keys.ENTER
     with pytest.raises(ValueError) as e:
-        select(options=[], strict=True)
+        select(options=[])
 
     assert str(e.value) == "`options` cannot be empty"
+
+
+def test_select_with_no_options_permissive():
+    b.get_key = lambda: Keys.ENTER
+    res = select(options=[], strict=False)
+    assert res is None
 
 
 def test_select_with_one_option():
