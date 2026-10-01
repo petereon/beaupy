@@ -4,7 +4,7 @@ import re
 from ast import literal_eval
 from contextlib import contextmanager
 from types import ModuleType
-from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Type, Union
+from typing import Any, Callable, Iterator, List, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import emoji
 from questo import prompt as qprompt
@@ -91,12 +91,12 @@ class _InstanceOnly(type):
 SectionedPosition = Tuple[str, int]
 
 
-def _flatten_options(options: Union[List[Any], Dict[str, List[Any]]]) -> Tuple[List[Any], List[Optional[str]], List[Any]]:
+def _flatten_options(options: Union[Sequence[Any], Mapping[str, Sequence[Any]]]) -> Tuple[List[Any], List[Optional[str]], List[Any]]:
     """Returns flat options, the section of each option (None if not sectioned) and the user-facing position of each option.
 
     For a list, position is the list index. For a dict, it's `(section_name, index_within_section)`.
     """
-    if isinstance(options, dict):
+    if isinstance(options, Mapping):
         for section in options:
             if not section.strip():
                 raise ValueError(f'section name {section!r} is blank')

@@ -10,7 +10,7 @@ import sys
 import warnings
 from dataclasses import dataclass, field
 from functools import partial
-from typing import Any, Callable, Dict, List, Literal, Optional, Sequence, Tuple, Type, TypeVar, Union, overload
+from typing import Any, Callable, List, Literal, Mapping, Optional, Sequence, Tuple, Type, TypeVar, Union, overload
 
 from questo import prompt as qprompt
 from questo import select as qselect
@@ -359,7 +359,7 @@ def prompt(
             element.state = new_state
 
 
-Options = Union[List[T], Dict[str, List[T]]]
+Options = Union[Sequence[T], Mapping[str, Sequence[T]]]
 Index = Union[int, SectionedPosition]
 
 
@@ -371,7 +371,7 @@ def _auto_page_size(console: Console, reserved_lines: int, title: str, sections:
 
 @overload
 def select(
-    options: List[T],
+    options: Sequence[T],
     *,
     preprocessor: Callable[[T], str] = ...,
     cursor: str = ...,
@@ -390,7 +390,7 @@ def select(
 
 @overload
 def select(
-    options: List[T],
+    options: Sequence[T],
     *,
     preprocessor: Callable[[T], str] = ...,
     cursor: str = ...,
@@ -409,7 +409,7 @@ def select(
 
 @overload
 def select(
-    options: Dict[str, List[T]],
+    options: Mapping[str, Sequence[T]],
     *,
     preprocessor: Callable[[T], str] = ...,
     cursor: str = ...,
@@ -428,7 +428,7 @@ def select(
 
 @overload
 def select(
-    options: Dict[str, List[T]],
+    options: Mapping[str, Sequence[T]],
     *,
     preprocessor: Callable[[T], str] = ...,
     cursor: str = ...,
@@ -447,7 +447,7 @@ def select(
 
 @overload
 def select(
-    options: List[T],
+    options: Sequence[T],
     *,
     preprocessor: Callable[[T], str] = ...,
     cursor: str = ...,
@@ -466,7 +466,7 @@ def select(
 
 @overload
 def select(
-    options: Dict[str, List[T]],
+    options: Mapping[str, Sequence[T]],
     *,
     preprocessor: Callable[[T], str] = ...,
     cursor: str = ...,
@@ -502,7 +502,7 @@ def select(
     """A prompt that allows selecting one option from a list of options
 
     Args:
-        options (Union[List[Union[str, T]], Dict[str, List[Union[str, T]]]]): A list of options to select from. If `preprocessor` is
+        options (Union[Sequence[T], Mapping[str, Sequence[T]]]): A sequence of options to select from. If `preprocessor` is
                                        left as default (not passed), it needs to be a list of strings or objects with a `__str__` method.
                                        Otherwise, you can pass a `preprocessor` to create a string representation of arbitrary
                                        data-structures. Pass a dict of `{section_name: options}` to show options in sections.
@@ -596,13 +596,13 @@ def select(
 
 @overload
 def select_multiple(
-    options: List[T],
+    options: Sequence[T],
     *,
     preprocessor: Callable[[T], str] = ...,
     tick_character: str = ...,
     tick_style: str = ...,
     cursor_style: str = ...,
-    ticked_indices: Optional[List[int]] = ...,
+    ticked_indices: Optional[Sequence[int]] = ...,
     cursor_index: int = ...,
     minimal_count: int = ...,
     maximal_count: Optional[int] = ...,
@@ -619,13 +619,13 @@ def select_multiple(
 
 @overload
 def select_multiple(
-    options: List[T],
+    options: Sequence[T],
     *,
     preprocessor: Callable[[T], str] = ...,
     tick_character: str = ...,
     tick_style: str = ...,
     cursor_style: str = ...,
-    ticked_indices: Optional[List[int]] = ...,
+    ticked_indices: Optional[Sequence[int]] = ...,
     cursor_index: int = ...,
     minimal_count: int = ...,
     maximal_count: Optional[int] = ...,
@@ -642,13 +642,13 @@ def select_multiple(
 
 @overload
 def select_multiple(
-    options: Dict[str, List[T]],
+    options: Mapping[str, Sequence[T]],
     *,
     preprocessor: Callable[[T], str] = ...,
     tick_character: str = ...,
     tick_style: str = ...,
     cursor_style: str = ...,
-    ticked_indices: Optional[List[SectionedPosition]] = ...,
+    ticked_indices: Optional[Sequence[SectionedPosition]] = ...,
     cursor_index: SectionedPosition = ...,
     minimal_count: int = ...,
     maximal_count: Optional[int] = ...,
@@ -665,13 +665,13 @@ def select_multiple(
 
 @overload
 def select_multiple(
-    options: Dict[str, List[T]],
+    options: Mapping[str, Sequence[T]],
     *,
     preprocessor: Callable[[T], str] = ...,
     tick_character: str = ...,
     tick_style: str = ...,
     cursor_style: str = ...,
-    ticked_indices: Optional[List[SectionedPosition]] = ...,
+    ticked_indices: Optional[Sequence[SectionedPosition]] = ...,
     cursor_index: SectionedPosition = ...,
     minimal_count: int = ...,
     maximal_count: Optional[int] = ...,
@@ -688,13 +688,13 @@ def select_multiple(
 
 @overload
 def select_multiple(
-    options: List[T],
+    options: Sequence[T],
     *,
     preprocessor: Callable[[T], str] = ...,
     tick_character: str = ...,
     tick_style: str = ...,
     cursor_style: str = ...,
-    ticked_indices: Optional[List[int]] = ...,
+    ticked_indices: Optional[Sequence[int]] = ...,
     cursor_index: int = ...,
     minimal_count: int = ...,
     maximal_count: Optional[int] = ...,
@@ -711,13 +711,13 @@ def select_multiple(
 
 @overload
 def select_multiple(
-    options: Dict[str, List[T]],
+    options: Mapping[str, Sequence[T]],
     *,
     preprocessor: Callable[[T], str] = ...,
     tick_character: str = ...,
     tick_style: str = ...,
     cursor_style: str = ...,
-    ticked_indices: Optional[List[SectionedPosition]] = ...,
+    ticked_indices: Optional[Sequence[SectionedPosition]] = ...,
     cursor_index: SectionedPosition = ...,
     minimal_count: int = ...,
     maximal_count: Optional[int] = ...,
@@ -755,7 +755,7 @@ def select_multiple(
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
-        options (Union[List[Union[str, T]], Dict[str, List[Union[str, T]]]]): A list of options to select from. If `preprocessor` is
+        options (Union[Sequence[T], Mapping[str, Sequence[T]]]): A sequence of options to select from. If `preprocessor` is
                                        left as default (not passed), it needs to be a list of strings or objects with a `__str__` method.
                                        Otherwise, you can pass a `preprocessor` to create a string representation of arbitrary
                                        data-structures. Pass a dict of `{section_name: options}` to show options in sections.

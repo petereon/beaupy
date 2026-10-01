@@ -445,3 +445,39 @@ prompt("a", target_type=int, validator=lambda s: s.startswith("x"))
         'note: Revealed type is "int | None"',
         'error: "int" has no attribute "startswith"  [attr-defined]',
     ]
+
+
+def test_options_can_be_any_sequence_or_mapping():
+    from types import MappingProxyType
+
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    assert select(("a", "b")) == "a"
+    assert select(range(3), return_index=True) == 0
+    assert select(MappingProxyType({"Veg": ("leek", "kale")}), cursor_index=("Veg", 1)) == "kale"
+
+
+def test_type_checker_accepts_sequences_and_invariant_dict_variables(tmp_path):
+    mypy_api = pytest.importorskip("mypy.api")
+    snippet = tmp_path / "snippet.py"
+    snippet.write_text(
+        """
+from typing import Dict, List, Tuple
+
+from beaupy import select, select_multiple
+
+sections: Dict[str, List[str]] = {"s": ["a"]}
+names: Tuple[str, ...] = ("a", "b")
+reveal_type(select(names))
+reveal_type(select(sections, return_index=True))
+reveal_type(select_multiple(names, ticked_indices=(0,)))
+"""
+    )
+    stdout, _, _ = mypy_api.run(["--no-incremental", "--no-error-summary", "--hide-error-context", str(snippet)])
+
+    assert [line.split(": ", 1)[1] for line in stdout.splitlines()] == [
+        'note: Revealed type is "str | None"',
+        'note: Revealed type is "tuple[str, int] | None"',
+        'note: Revealed type is "list[str]"',
+    ]
