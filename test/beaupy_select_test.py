@@ -14,23 +14,21 @@ def raise_keyboard_interrupt():
 
 @pytest.fixture
 def set_raise_on_escape():
-    Config.raise_on_escape = True
-    yield
-    Config.raise_on_escape = False
+    return Config(raise_on_escape=True)
+
+
+def test_select_with_no_options_raises_by_default():
+    b.get_key = lambda: Keys.ENTER
+    with pytest.raises(ValueError) as e:
+        select(options=[])
+
+    assert str(e.value) == "`options` cannot be empty"
 
 
 def test_select_with_no_options_permissive():
     b.get_key = lambda: Keys.ENTER
-    res = select(options=[])
+    res = select(options=[], strict=False)
     assert res is None
-
-
-def test_select_with_no_options_strict():
-    b.get_key = lambda: Keys.ENTER
-    with pytest.raises(ValueError) as e:
-        select(options=[], strict=True)
-
-    assert str(e.value) == "`options` cannot be empty"
 
 
 def test_select_with_one_option():
@@ -222,13 +220,13 @@ def test_select_with_4_options_stepping_up_and_selecting_first():
 
 def test_select_with_4_options_ctrl_c_no_raise():
     Live.update = mock.MagicMock()
-    Config.raise_on_interrupt = False
     b.get_key = lambda: Keys.CTRL_C
     res = select(
         options=["test1", "test2", "test3", "test4"],
         cursor="x",
         cursor_style="green",
         cursor_index=1,
+        config=Config(raise_on_interrupt=False),
     )
 
     assert Live.update.call_args_list == [
@@ -262,7 +260,6 @@ def test_select_with_4_options_stepping_down_and_selecting_last_return_index():
 
 
 def test_select_with_4_options_ctrl_c_raise():
-    Config.raise_on_interrupt = True
     b.get_key = lambda: Keys.CTRL_C
     with pytest.raises(KeyboardInterrupt):
         select(
@@ -270,6 +267,7 @@ def test_select_with_4_options_ctrl_c_raise():
             cursor="x",
             cursor_style="green",
             cursor_index=1,
+            config=Config(raise_on_interrupt=True),
         )
 
 
@@ -278,7 +276,7 @@ def test_select_with_2_options_invalid_cursor_style():
     b.get_key = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     select(options=["test1", "test2"], cursor_style="")
-    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`", stacklevel=2)
 
 
 def test_select_with_4_options_preprocessor():
@@ -325,7 +323,7 @@ def test_select_raises_abort_when_esc_is_pressed_and_raise_on_escape_is_true(set
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     with pytest.raises(Abort) as e:
-        select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1)
+        select(options=["test1", "test2", "test3", "test4"], cursor="x", cursor_style="green", cursor_index=1, config=set_raise_on_escape)
     assert str(e.value) == "Aborted by user with key (27,)"
 
 
@@ -338,7 +336,6 @@ def test_select_shows_only_first_5_options_and_number_of_pages_if_pagination_is_
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=5,
     )
 
@@ -370,7 +367,6 @@ def test_select_shows_only_first_3_options_and_number_of_pages_if_pagination_is_
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -394,7 +390,6 @@ def test_select_paginates_forward_when_cursor_is_on_last_option_and_down_arrow_i
         cursor_index=2,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -417,7 +412,6 @@ def test_select_paginates_backward_when_cursor_is_on_first_option_and_second_pag
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -435,7 +429,7 @@ def test_select_paginates_forward_when_right_arrow_is_pressed():
 
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
+    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", page_size=3)
 
     assert Live.update.call_args_list == [
         mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
@@ -456,7 +450,6 @@ def test_select_paginates_backward_when_on_second_page_and_left_arrow_is_pressed
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -478,7 +471,6 @@ def test_select_paginates_to_first_page_when_on_last_page_and_right_arrow_is_pre
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -495,7 +487,7 @@ def test_select_paginates_to_last_page_when_on_first_page_and_left_arrow_is_pres
 
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
+    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", page_size=3)
 
     assert Live.update.call_args_list == [
         mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
@@ -515,7 +507,6 @@ def test_select_paginates_to_first_page_when_on_last_page_and_home_is_pressed():
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -536,7 +527,6 @@ def test_select_paginates_to_last_page_when_on_first_page_and_end_is_pressed():
         options=["test1", "test2", "test3", "test4", "test5"],
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 

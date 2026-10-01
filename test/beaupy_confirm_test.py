@@ -175,21 +175,19 @@ def test_confirm_with_empty_cursor_style():
     b.get_key = lambda: next(steps)
     warnings.warn = mock.MagicMock()
     confirm(question="Test", cursor_style="")
-    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`")
+    warnings.warn.assert_called_once_with("`cursor_style` should be a valid style, defaulting to `white`", stacklevel=2)
 
 
 def test_confirm_with_keyboard_interrupt_and_raise_on_interrupt_false():
-    Config.raise_on_interrupt = False
     b.get_key = lambda: Keys.CTRL_C
-    res = confirm(question="Test", cursor_style="red")
+    res = confirm(question="Test", cursor_style="red", config=Config(raise_on_interrupt=False))
     assert res is None
 
 
 def test_confirm_with_keyboard_interrupt_and_raise_on_interrupt_true():
-    Config.raise_on_interrupt = True
     b.get_key = lambda: Keys.CTRL_C
     with pytest.raises(KeyboardInterrupt):
-        confirm(question="Test", cursor_style="red")
+        confirm(question="Test", cursor_style="red", config=Config(raise_on_interrupt=True))
 
 
 def test_confirm_with_typing_n_and_tab():
@@ -255,9 +253,7 @@ def test_confirm_returns_none_on_esc():
 
 @pytest.fixture
 def set_raise_on_escape():
-    Config.raise_on_escape = True
-    yield
-    Config.raise_on_escape = False
+    return Config(raise_on_escape=True)
 
 
 def test_confirm_raises_abort_on_esc(set_raise_on_escape):
@@ -265,7 +261,7 @@ def test_confirm_raises_abort_on_esc(set_raise_on_escape):
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
     with pytest.raises(Abort) as e:
-        confirm(question="Test", cursor_style="red", default_is_yes=True)
+        confirm(question="Test", cursor_style="red", default_is_yes=True, config=set_raise_on_escape)
     assert str(e.value) == "Aborted by user with key (27,)"
     assert Live.update.call_args_list == [
         mock.call(renderable="Test (Y/N) \n[red]>[/red] Yes\n  No\n\n([bold]enter[/bold] to confirm)"),

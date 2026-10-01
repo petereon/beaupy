@@ -6,9 +6,11 @@ A Python library of interactive CLI elements you have been looking for
 __license__ = 'MIT'
 
 import math
+import sys
 import warnings
+from dataclasses import dataclass, field
 from functools import partial
-from typing import Any, Callable, List, Optional, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, List, Literal, Mapping, Optional, Sequence, Tuple, Type, TypeVar, Union, overload
 
 from questo import prompt as qprompt
 from questo import select as qselect
@@ -20,24 +22,38 @@ from yakh.key import Key, Keys
 from beaupy._internals import (
     Abort,
     ConversionError,
-    TargetType,
+    SectionedPosition,
     ValidationError,
     _cursor_hidden,
+    _flatten_options,
+    _InstanceOnly,
     _paginate_back,
     _paginate_forward,
     _prompt_key_handler,
+    _RemovedGlobalsModule,
     _render_prompt,
     _render_select,
     _render_select_multiple,
+    _to_flat_index,
     _update_rendered,
+    _validate_confirm_texts,
+    _validate_no_blank_options,
     _validate_prompt_value,
+    _visible_indexes,
 )
 
-console = Console(stderr=True)
+sys.modules[__name__].__class__ = _RemovedGlobalsModule
+
+KeyList = List[Union[Tuple[int, ...], str]]
 
 
-class DefaultKeys:
-    """A map of default keybindings.
+def _keys(*keys: Union[Tuple[int, ...], str]) -> Any:
+    return field(default_factory=lambda: list(keys))
+
+
+@dataclass
+class KeyBindings(metaclass=_InstanceOnly):
+    """Keybindings used by the elements. Pass an instance via `Config(keys=KeyBindings(...))`.
 
     Attributes:
         escape(List[Union[Tuple[int, ...], str]]): Keys that escape the current context.
@@ -49,110 +65,155 @@ class DefaultKeys:
         up(List[Union[Tuple[int, ...], str]]): Keys that select the element above.
         left(List[Union[Tuple[int, ...], str]]): Keys that select the element to the left.
         right(List[Union[Tuple[int, ...], str]]): Keys that select the element to the right.
+        tab(List[Union[Tuple[int, ...], str]]): Keys that complete the current selection in `confirm`.
         home(List[Union[Tuple[int, ...], str]]): Keys that move to the beginning of the context.
         end(List[Union[Tuple[int, ...], str]]): Keys that move to the end of the context.
+        interrupt(List[Union[Tuple[int, ...], str]]): Keys that interrupt the current context.
+        select_all(List[Union[Tuple[int, ...], str]]): Keys that tick/untick all options in `select_multiple`.
     """
 
-    escape: List[Union[Tuple[int, ...], str]] = [Keys.ESC]
-    select: List[Union[Tuple[int, ...], str]] = [' ']
-    confirm: List[Union[Tuple[int, ...], str]] = [Keys.ENTER]
-    backspace: List[Union[Tuple[int, ...], str]] = [Keys.BACKSPACE]
-    delete: List[Union[Tuple[int, ...], str]] = [Keys.DELETE]
-    down: List[Union[Tuple[int, ...], str]] = [Keys.DOWN_ARROW, Keys.NUMPAD_DOWN_ARROW]
-    up: List[Union[Tuple[int, ...], str]] = [Keys.UP_ARROW, Keys.NUMPAD_UP_ARROW]
-    left: List[Union[Tuple[int, ...], str]] = [Keys.LEFT_ARROW, Keys.NUMPAD_LEFT_ARROW]
-    right: List[Union[Tuple[int, ...], str]] = [Keys.RIGHT_ARROW, Keys.NUMPAD_RIGHT_ARROW]
-    tab: List[Union[Tuple[int, ...], str]] = [Keys.TAB]
-    home: List[Union[Tuple[int, ...], str]] = [Keys.HOME]
-    end: List[Union[Tuple[int, ...], str]] = [Keys.END]
-    interrupt: List[Union[Tuple[int, ...], str]] = [Keys.CTRL_C]
-    select_all: List[Union[Tuple[int, ...], str]] = ['a']
+    escape: KeyList = _keys(Keys.ESC)
+    select: KeyList = _keys(' ')
+    confirm: KeyList = _keys(Keys.ENTER)
+    backspace: KeyList = _keys(Keys.BACKSPACE)
+    delete: KeyList = _keys(Keys.DELETE)
+    down: KeyList = _keys(Keys.DOWN_ARROW, Keys.NUMPAD_DOWN_ARROW)
+    up: KeyList = _keys(Keys.UP_ARROW, Keys.NUMPAD_UP_ARROW)
+    left: KeyList = _keys(Keys.LEFT_ARROW, Keys.NUMPAD_LEFT_ARROW)
+    right: KeyList = _keys(Keys.RIGHT_ARROW, Keys.NUMPAD_RIGHT_ARROW)
+    tab: KeyList = _keys(Keys.TAB)
+    home: KeyList = _keys(Keys.HOME)
+    end: KeyList = _keys(Keys.END)
+    interrupt: KeyList = _keys(Keys.CTRL_C)
+    select_all: KeyList = _keys(Keys.CTRL_A)
+
+    def is_navigation(self, keypress: Key) -> bool:
+        return any(keypress in keys for keys in (self.up, self.down, self.right, self.left, self.home, self.end))
 
 
-class Config:
-    """A map of default configuration
+@dataclass
+class Config(metaclass=_InstanceOnly):
+    """Configuration of the elements. Create an instance and pass it via the `config=` argument.
 
     Attributes:
-        raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input,
+        raise_on_interrupt(bool): If True, functions will raise KeyboardInterrupt whenever Ctrl+C is pressed when waiting for input,
         otherwise, they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`,
-        while for `select_multiple` it means an empty list - `[]`. Defaults to False.
+        while for `select_multiple` it means an empty list - `[]`. Defaults to True.
         raise_on_escape(bool): If True, functions will raise Abort whenever the escape key is encountered when waiting for input, otherwise,
         they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
         `select_multiple` it means an empty list - `[]`.  Defaults to False.
         transient(bool): If False, elements will remain displayed after their context has ended. Defaults to True.
+        console(rich.console.Console): Console the elements are rendered to. Pass your own to share it with other Rich
+        output, e.g. a `rich.live.Live`. Defaults to `Console(stderr=True, highlight=False)`.
+        keys(KeyBindings): Keybindings used by the elements. Defaults to `KeyBindings()`.
     """
 
-    raise_on_interrupt: bool = False
+    raise_on_interrupt: bool = True
     raise_on_escape: bool = False
     transient: bool = True
+    console: Console = field(default_factory=lambda: Console(stderr=True, highlight=False))
+    keys: KeyBindings = field(default_factory=KeyBindings)
 
 
-_navigation_keys = [DefaultKeys.up, DefaultKeys.down, DefaultKeys.right, DefaultKeys.left, DefaultKeys.home, DefaultKeys.end]
+KeyBindings._locked = True
+Config._locked = True
 
 
-def _navigate_select(
-    state: qselect.SelectState,
-    keypress: Key,
-) -> qselect.SelectState:
+def _read_key() -> Key:
+    """Reads a keypress, turning the opaque failure of reading keys without a terminal into a clear error."""
+    try:
+        return get_key()
+    except Exception as e:
+        # yakh puts the terminal into raw mode to read keys, which fails (e.g. `termios.error`) when stdin isn't a TTY
+        if sys.stdin is None or not sys.stdin.isatty():
+            raise RuntimeError('Interactive terminal required') from e
+        raise
 
-    total_options = len(state.options)
 
-    page: int = state.index // state.page_size + 1
-    total_pages = math.ceil(len(state.options) / state.page_size)
+_CONFIRM_INSTRUCTIONS = '([bold]enter[/bold] to confirm)'
+_SELECT_MULTIPLE_INSTRUCTIONS = '([bold]space[/bold] to tick one, [bold]ctrl+a[/bold] to tick/untick all, [bold]enter[/bold] to confirm)'
+
+
+def _navigate_select(state: qselect.SelectState, keypress: Key, keys: KeyBindings, visible: List[int]) -> qselect.SelectState:
+    """Moves the cursor among `visible` option indexes (all options unless filtered)."""
+    if not visible:
+        return state
+    total_options = len(visible)
+    position = visible.index(state.index) if state.index in visible else 0
+
+    page: int = position // state.page_size + 1
+    total_pages = math.ceil(total_options / state.page_size)
 
     show_from = (page - 1) * state.page_size
-    show_to = min(show_from + state.page_size, len(state.options))
+    show_to = min(show_from + state.page_size, total_options)
 
-    index = state.index
-
-    if keypress in DefaultKeys.up:
-        if index <= show_from and state.pagination:
+    if keypress in keys.up:
+        if position <= show_from and state.pagination:
             page = _paginate_back(page, total_pages)
-        index -= 1
-        index = index % total_options
-    elif keypress in DefaultKeys.down:
-        if index > show_to - 2 and state.pagination:
+        position = (position - 1) % total_options
+    elif keypress in keys.down:
+        if position > show_to - 2 and state.pagination:
             page = _paginate_forward(page, total_pages)
-        index += 1
-        index = index % total_options
-    elif keypress in DefaultKeys.right and state.pagination:
+        position = (position + 1) % total_options
+    elif keypress in keys.right and state.pagination:
         page = _paginate_forward(page, total_pages)
-        index = (page - 1) * state.page_size
-    elif keypress in DefaultKeys.left and state.pagination:
+        position = (page - 1) * state.page_size
+    elif keypress in keys.left and state.pagination:
         page = _paginate_back(page, total_pages)
-        index = (page - 1) * state.page_size
-    elif keypress in DefaultKeys.home:
-        page = 1
-        index = 0
-    elif keypress in DefaultKeys.end:
-        page = total_pages
-        index = total_options - 1
+        position = (page - 1) * state.page_size
+    elif keypress in keys.home:
+        position = 0
+    elif keypress in keys.end:
+        position = total_options - 1
 
-    state.index = index
+    state.index = visible[position]
     return state
 
 
+def _update_filter(state: qselect.SelectState, keypress: Key, keys: KeyBindings, labels: List[str]) -> bool:
+    """Edits the filter query for typed/backspace keys. Returns False if the key isn't a filter key."""
+    if keypress in keys.backspace:
+        state.filter = state.filter[:-1]
+    elif getattr(keypress, 'is_printable', False):
+        state.filter += keypress.key
+    else:
+        return False
+    visible = _visible_indexes(state, labels)
+    if visible and state.index not in visible:
+        state.index = visible[0]
+    return True
+
+
 def _navigate_select_multiple(
-    state: qselect.SelectState, keypress: Key, minimal_count: int, maximal_count: Union[int, None]
+    state: qselect.SelectState,
+    keypress: Key,
+    minimal_count: int,
+    maximal_count: Union[int, None],
+    config: Config,
+    labels: Optional[List[str]] = None,
 ) -> qselect.SelectState:
-    if keypress in DefaultKeys.interrupt:
+    """Handles a keypress. `labels` enables filtering by typing when given."""
+    keys = config.keys
+    visible = _visible_indexes(state, labels or [])
+    if keypress in keys.interrupt:
         state.selected_indexes = []
-        if Config.raise_on_interrupt:
+        if config.raise_on_interrupt:
             raise KeyboardInterrupt()
         state.abort = True
 
-    elif any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-        state = _navigate_select(state, keypress=keypress)
-    elif keypress in DefaultKeys.select_all:
-        if len(state.selected_indexes) == (maximal_count if maximal_count is not None else len(state.options)):
-            state.selected_indexes = []
+    elif keys.is_navigation(keypress):
+        state = _navigate_select(state, keypress=keypress, keys=keys, visible=visible)
+    elif keypress in keys.select_all:
+        targets = visible[:maximal_count] if maximal_count is not None else visible
+        if all(i in state.selected_indexes for i in targets):
+            state.selected_indexes = [i for i in state.selected_indexes if i not in targets]
         else:
+            ticked = state.selected_indexes + [i for i in targets if i not in state.selected_indexes]
             if maximal_count is not None:
-                state.selected_indexes = list(range(maximal_count))
+                ticked = ticked[:maximal_count]
                 state.error = f'Must select at most {maximal_count} options'
-            else:
-                state.selected_indexes = list(range(len(state.options)))
-    elif keypress in DefaultKeys.select:
+            state.selected_indexes = sorted(ticked)
+    elif keypress in keys.select and state.index in visible:
         if state.index in state.selected_indexes:
             state.selected_indexes.remove(state.index)
         else:
@@ -160,29 +221,68 @@ def _navigate_select_multiple(
                 state.error = f'Must select at most {maximal_count} options'
             else:
                 state.selected_indexes.append(state.index)
-    elif keypress in DefaultKeys.confirm:
+    elif keypress in keys.confirm:
         if minimal_count > len(state.selected_indexes):
             state.error = f'Must select at least {minimal_count} options'
         else:
             state.exit = True
-    elif keypress in DefaultKeys.escape:
+    elif keypress in keys.escape:
         state.selected_indexes = []
-        if Config.raise_on_escape:
+        if config.raise_on_escape:
             raise Abort(keypress)
         state.exit = True
+    elif labels is not None:
+        _update_filter(state, keypress, keys, labels)
     return state
+
+
+T = TypeVar('T')
+
+
+@overload
+def prompt(
+    prompt: str,
+    *,
+    validator: Callable[[str], bool] = ...,
+    secure: bool = ...,
+    raise_validation_fail: bool = ...,
+    raise_type_conversion_fail: bool = ...,
+    initial_value: Optional[str] = ...,
+    completion: Optional[Callable[[str], List[str]]] = ...,
+    instructions: Optional[str] = ...,
+    config: Optional[Config] = ...,
+) -> Optional[str]: ...
+
+
+@overload
+def prompt(
+    prompt: str,
+    *,
+    target_type: Type[T],
+    validator: Callable[[T], bool] = ...,
+    secure: bool = ...,
+    raise_validation_fail: bool = ...,
+    raise_type_conversion_fail: bool = ...,
+    initial_value: Optional[str] = ...,
+    completion: Optional[Callable[[str], List[str]]] = ...,
+    instructions: Optional[str] = ...,
+    config: Optional[Config] = ...,
+) -> Optional[T]: ...
 
 
 def prompt(
     prompt: str,
-    target_type: Type[TargetType] = str,
-    validator: Callable[[TargetType], bool] = lambda input: True,
+    *,
+    target_type: Type[Any] = str,
+    validator: Callable[[Any], bool] = lambda input: True,
     secure: bool = False,
     raise_validation_fail: bool = True,
     raise_type_conversion_fail: bool = True,
     initial_value: Optional[str] = None,
     completion: Optional[Callable[[str], List[str]]] = None,
-) -> TargetType:
+    instructions: Optional[str] = _CONFIRM_INSTRUCTIONS,
+    config: Optional[Config] = None,
+) -> Any:
     """Function that prompts the user for written input
 
     Args:
@@ -190,22 +290,28 @@ def prompt(
         target_type (Union[Type[T], Type[str]], optional): Type to convert the answer to. Defaults to str.
         validator (Callable[[Any], bool], optional): Optional function to validate the input. Defaults to lambda input: True.
         secure (bool, optional): If True, input will be hidden. Defaults to False.
-        raise_validation_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ValidationError`, else
+        raise_validation_fail (bool, optional): If True, invalid inputs will raise `ValidationError`, else
                                                 the error will be reported onto the console. Defaults to True.
-        raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ConversionError`, else
+        raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `ConversionError`, else
                                                      the error will be reported onto the console. Defaults to True.
         initial_value (str, optional): If present, the value is placed in the prompt as the default value.
+        completion (Callable[[str], List[str]], optional): Returns completion options for the current input.
+        instructions (str, optional): Rich friendly text shown below the input. Pass `None` to hide it.
+                                      Defaults to '([bold]enter[/bold] to confirm)'.
+        config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:
         ValidationError: Raised if validation with provided validator fails
         ConversionError: Raised if the value cannot be converted to provided type
-        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
-        Union[T, str]: Returns a value formatted as provided type or string if no type is provided
+        Optional[T]: The input converted to `target_type` (a string by default), or `None` if the prompt was aborted
+                     (Esc, or Ctrl+C when `config.raise_on_interrupt` is False)
     """
+    config = config or Config()
 
-    renderer = partial(_render_prompt, secure)
+    renderer = partial(_render_prompt, secure, instructions)
 
     element = qprompt.Prompt(
         state=qprompt.PromptState(
@@ -214,19 +320,19 @@ def prompt(
             cursor_position=len(initial_value or ''),
         ),
         renderer=renderer,
-        transient=Config.transient,
-        console=console,
+        transient=config.transient,
+        console=config.console,
     )
 
     with element.displayed():
         while True:
-            key = get_key()
+            key = _read_key()
             new_state = element.state
             new_state.completion.options = completion(new_state.value) if completion else []
             new_state = _prompt_key_handler(new_state, key)
             if new_state.exit:
                 if key == Keys.ESC:
-                    if Config.raise_on_escape:
+                    if config.raise_on_escape:
                         raise Abort(key)
                     return None
                 try:
@@ -247,124 +353,406 @@ def prompt(
                         raise e
                     new_state.error = str(e)
             elif new_state.abort:
-                if Config.raise_on_interrupt:
+                if config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
             element.state = new_state
 
 
-T = TypeVar('T')
+Options = Union[Sequence[T], Mapping[str, Sequence[T]]]
+Index = Union[int, SectionedPosition]
+
+
+def _auto_page_size(
+    console: Console, title: str, instructions: Optional[str], sections: List[Optional[str]], filterable: bool, error_line: bool
+) -> int:
+    """Largest page that still fits the terminal together with everything else the element renders around the options."""
+    chrome = title.count('\n') + 1 if title or filterable else 0  # title, or the filter query line
+    chrome += 2  # blank line and "Page x/y"
+    chrome += 2 + instructions.count('\n') if instructions else 0  # blank line and the instructions
+    chrome += 1 if error_line else 0
+    available = console.size.height - chrome
+    # A page holds at most `page_size` options and at most one section header per option (and per section)
+    section_count = len(set(sections) - {None})
+    return max(1, available - section_count, available // 2)
+
+
+@overload
+def select(
+    options: Sequence[T],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    cursor: str = ...,
+    cursor_style: str = ...,
+    cursor_index: int = ...,
+    return_index: Literal[False] = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> Optional[T]: ...
+
+
+@overload
+def select(
+    options: Sequence[T],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    cursor: str = ...,
+    cursor_style: str = ...,
+    cursor_index: int = ...,
+    return_index: Literal[True],
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> Optional[int]: ...
+
+
+@overload
+def select(
+    options: Mapping[str, Sequence[T]],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    cursor: str = ...,
+    cursor_style: str = ...,
+    cursor_index: SectionedPosition = ...,
+    return_index: Literal[False] = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> Optional[T]: ...
+
+
+@overload
+def select(
+    options: Mapping[str, Sequence[T]],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    cursor: str = ...,
+    cursor_style: str = ...,
+    cursor_index: SectionedPosition = ...,
+    return_index: Literal[True],
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> Optional[SectionedPosition]: ...
+
+
+@overload
+def select(
+    options: Sequence[T],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    cursor: str = ...,
+    cursor_style: str = ...,
+    cursor_index: int = ...,
+    return_index: bool = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> Optional[Union[T, int]]: ...
+
+
+@overload
+def select(
+    options: Mapping[str, Sequence[T]],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    cursor: str = ...,
+    cursor_style: str = ...,
+    cursor_index: SectionedPosition = ...,
+    return_index: bool = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> Optional[Union[T, SectionedPosition]]: ...
 
 
 def select(
-    options: List[Union[str, T]],
+    options: Options,
+    *,
     preprocessor: Callable[[T], str] = lambda val: str(val),
     cursor: str = '>',
     cursor_style: str = 'pink1',
-    cursor_index: int = 0,
+    cursor_index: Optional[Index] = None,
     return_index: bool = False,
-    strict: bool = False,
-    pagination: bool = False,
+    strict: bool = True,
     page_size: Optional[int] = None,
-) -> Union[int, Any, None]:
+    title: str = '',
+    instructions: Optional[str] = _CONFIRM_INSTRUCTIONS,
+    filterable: bool = False,
+    config: Optional[Config] = None,
+) -> Any:
     """A prompt that allows selecting one option from a list of options
 
     Args:
-        options (List[Union[str, T]]): A list of options to select from. If `preprocessor` is left as default (not passed),
-                                       it needs to be a list of strings or objects with a `__str__` method. Otherwise,
-                                       you can pass a `preprocessor` to create a string representation of arbitrary data-structures.
+        options (Union[Sequence[T], Mapping[str, Sequence[T]]]): A sequence of options to select from. If `preprocessor` is
+                                       left as default (not passed), it needs to be a list of strings or objects with a `__str__` method.
+                                       Otherwise, you can pass a `preprocessor` to create a string representation of arbitrary
+                                       data-structures. Pass a dict of `{section_name: options}` to show options in sections.
         preprocessor (Callable[[T], str]): A callable that can be used to preprocess the list of options prior to printing.
                                            For example, if you passed a `Person` object with `name` attribute, preprocessor
                                            could be `lambda person: person.name` to just show the content of `name` attribute
                                            in the select dialog. Defaults to `lambda val: val`
         cursor (str, optional): Cursor that is going to appear in front of currently selected option. Defaults to '> '.
         cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
-        cursor_index (int, optional): Option can be preselected based on its list index. Defaults to 0.
-        return_index (bool, optional): If `True`, `select` will return the index of selected element in options. Defaults to `False`.
-        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
-        if it's `True`, `ValueError` will be thrown. Defaults to False.
-        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
-        page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
-                                             If `None`, the page size is derived automatically from the terminal height.
-                                             Pagination is also enabled automatically when options exceed the terminal height.
-                                             Defaults to None.
+        cursor_index (Union[int, Tuple[str, int]], optional): Option can be preselected based on its list index.
+                                                              For sectioned options, it must be `(section_name, index_in_section)`.
+                                                              Defaults to the first option.
+        return_index (bool, optional): If `True`, `select` will return the index of selected element in options.
+                                       For sectioned options, it's `(section_name, index_in_section)`. Defaults to `False`.
+        strict (bool, optional): If `True` and `options` is empty, `ValueError` is raised; if `False`, `None` is
+        returned instead. Defaults to True.
+        page_size (Optional[int], optional): Number of options to show on a single page. If `None`, the page size is derived
+                                             from the terminal height, and pagination is only used when the options don't fit.
+                                             If set, options are always paginated with this many per page. Defaults to None.
+        title (str, optional): Rich friendly text shown above the options. Defaults to ''.
+        instructions (str, optional): Rich friendly text shown below the options. Pass `None` to hide it.
+                                      Defaults to '([bold]enter[/bold] to confirm)'.
+        filterable (bool, optional): If `True`, typing filters the options (case-insensitive substring of the displayed text)
+                                     and backspace edits the filter. Keys bound in `config.keys` keep their action. Defaults to False.
+        config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:
-        ValueError: Thrown if no `options` are provided and strict is `True`
-        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
+        ValueError: Thrown if no `options` are provided and strict is `True`, or if an option or section name is blank
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
-        Union[int, str, None]: Selected value or the index of a selected option or `None`
+        Union[int, Tuple[str, int], str, None]: Selected value or the index of a selected option or `None`
     """
+    config = config or Config()
+    keys = config.keys
+    flat_options, sections, positions = _flatten_options(options)
 
-    if not options:
+    if not flat_options:
         if strict:
             raise ValueError('`options` cannot be empty')
         return None
     if cursor_style in ['', None]:
-        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`', stacklevel=2)
         cursor_style = 'white'
 
-    effective_page_size = page_size if page_size is not None else max(1, console.size.height - 6)
-    effective_pagination = pagination or (page_size is None and len(options) > effective_page_size)
+    labels = _validate_no_blank_options(flat_options, positions, preprocessor)
+    effective_page_size = (
+        page_size if page_size is not None else _auto_page_size(config.console, title, instructions, sections, filterable, error_line=False)
+    )
+    effective_pagination = page_size is not None or len(flat_options) > effective_page_size
 
-    renderer = partial(_render_select, preprocessor, cursor_style, cursor)
+    renderer = partial(_render_select, preprocessor, cursor_style, cursor, title, instructions, sections, labels)
 
     element = qselect.Select(
         qselect.SelectState(
-            options=options,
-            title='',
-            index=cursor_index,
+            options=flat_options,
+            title=title,
+            index=_to_flat_index(positions, cursor_index),
             pagination=effective_pagination,
             page_size=effective_page_size,
         ),
         renderer=renderer,
-        transient=Config.transient,
-        console=console,
+        transient=config.transient,
+        console=config.console,
     )
 
     with element.displayed():
-
         while True:
-            keypress = get_key()
+            keypress = _read_key()
 
-            if any([keypress in navigation_keys for navigation_keys in _navigation_keys]):
-                element.state = _navigate_select(element.state, keypress=keypress)
-            elif keypress in DefaultKeys.confirm:
+            state = element.state
+            if keys.is_navigation(keypress):
+                element.state = _navigate_select(state, keypress=keypress, keys=keys, visible=_visible_indexes(state, labels))
+            elif keypress in keys.confirm:
+                if state.index not in _visible_indexes(state, labels):
+                    continue
                 if return_index:
-                    return element.state.index
-                return options[element.state.index]
-            elif keypress in DefaultKeys.escape:
-                if Config.raise_on_escape:
+                    return positions[element.state.index]
+                return flat_options[element.state.index]
+            elif keypress in keys.escape:
+                if config.raise_on_escape:
                     raise Abort(keypress)
                 return None
-            elif keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
+            elif keypress in keys.interrupt:
+                if config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
+            elif filterable and _update_filter(state, keypress, keys, labels):
+                element.state = state
+
+
+@overload
+def select_multiple(
+    options: Sequence[T],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    tick_character: str = ...,
+    tick_style: str = ...,
+    cursor_style: str = ...,
+    ticked_indices: Optional[Sequence[int]] = ...,
+    cursor_index: int = ...,
+    minimal_count: int = ...,
+    maximal_count: Optional[int] = ...,
+    return_indices: Literal[False] = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> List[T]: ...
+
+
+@overload
+def select_multiple(
+    options: Sequence[T],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    tick_character: str = ...,
+    tick_style: str = ...,
+    cursor_style: str = ...,
+    ticked_indices: Optional[Sequence[int]] = ...,
+    cursor_index: int = ...,
+    minimal_count: int = ...,
+    maximal_count: Optional[int] = ...,
+    return_indices: Literal[True],
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> List[int]: ...
+
+
+@overload
+def select_multiple(
+    options: Mapping[str, Sequence[T]],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    tick_character: str = ...,
+    tick_style: str = ...,
+    cursor_style: str = ...,
+    ticked_indices: Optional[Sequence[SectionedPosition]] = ...,
+    cursor_index: SectionedPosition = ...,
+    minimal_count: int = ...,
+    maximal_count: Optional[int] = ...,
+    return_indices: Literal[False] = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> List[T]: ...
+
+
+@overload
+def select_multiple(
+    options: Mapping[str, Sequence[T]],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    tick_character: str = ...,
+    tick_style: str = ...,
+    cursor_style: str = ...,
+    ticked_indices: Optional[Sequence[SectionedPosition]] = ...,
+    cursor_index: SectionedPosition = ...,
+    minimal_count: int = ...,
+    maximal_count: Optional[int] = ...,
+    return_indices: Literal[True],
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> List[SectionedPosition]: ...
+
+
+@overload
+def select_multiple(
+    options: Sequence[T],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    tick_character: str = ...,
+    tick_style: str = ...,
+    cursor_style: str = ...,
+    ticked_indices: Optional[Sequence[int]] = ...,
+    cursor_index: int = ...,
+    minimal_count: int = ...,
+    maximal_count: Optional[int] = ...,
+    return_indices: bool = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> List[Union[T, int]]: ...
+
+
+@overload
+def select_multiple(
+    options: Mapping[str, Sequence[T]],
+    *,
+    preprocessor: Callable[[T], str] = ...,
+    tick_character: str = ...,
+    tick_style: str = ...,
+    cursor_style: str = ...,
+    ticked_indices: Optional[Sequence[SectionedPosition]] = ...,
+    cursor_index: SectionedPosition = ...,
+    minimal_count: int = ...,
+    maximal_count: Optional[int] = ...,
+    return_indices: bool = ...,
+    strict: bool = ...,
+    page_size: Optional[int] = ...,
+    title: str = ...,
+    instructions: Optional[str] = ...,
+    filterable: bool = ...,
+    config: Optional[Config] = ...,
+) -> List[Union[T, SectionedPosition]]: ...
 
 
 def select_multiple(
-    options: List[Union[str, T]],
+    options: Options,
+    *,
     preprocessor: Callable[[T], str] = lambda val: str(val),
     tick_character: str = '✓',
     tick_style: str = 'pink1',
     cursor_style: str = 'pink1',
-    ticked_indices: Optional[List[int]] = None,
-    cursor_index: int = 0,
+    ticked_indices: Optional[Sequence[Index]] = None,
+    cursor_index: Optional[Index] = None,
     minimal_count: int = 0,
     maximal_count: Optional[int] = None,
     return_indices: bool = False,
-    strict: bool = False,
-    pagination: bool = False,
+    strict: bool = True,
     page_size: Optional[int] = None,
-) -> List[Union[int, Any]]:
+    title: str = '',
+    instructions: Optional[str] = _SELECT_MULTIPLE_INSTRUCTIONS,
+    filterable: bool = False,
+    config: Optional[Config] = None,
+) -> List[Any]:
     """A prompt that allows selecting multiple options from a list of options
 
     Args:
-        options (List[Union[str, T]]): A list of options to select from. If `preprocessor` is left as default (not passed),
-                                       it needs to be a list of strings or objects with a `__str__` method. Otherwise,
-                                       you can pass a `preprocessor` to create a string representation of arbitrary data-structures.
+        options (Union[Sequence[T], Mapping[str, Sequence[T]]]): A sequence of options to select from. If `preprocessor` is
+                                       left as default (not passed), it needs to be a list of strings or objects with a `__str__` method.
+                                       Otherwise, you can pass a `preprocessor` to create a string representation of arbitrary
+                                       data-structures. Pass a dict of `{section_name: options}` to show options in sections.
         preprocessor (Callable[[T], str]): A callable that can be used to preprocess the list of options prior to printing.
                                            For example, if you passed a `Person` object with `name` attribute, preprocessor
                                            could be `lambda person: person.name` to just show the content of `name` attribute
@@ -372,77 +760,96 @@ def select_multiple(
         tick_character (str, optional): Character that will be used as a tick in a checkbox. Defaults to 'x'.
         tick_style (str, optional): Rich friendly style for the tick character. Defaults to 'pink1'.
         cursor_style (str, optional): Rich friendly style for the option when the cursor is currently on it. Defaults to 'pink1'.
-        ticked_indices (Optional[List[int]], optional): Indices of options that are pre-ticked when the prompt appears. Defaults to None.
-        cursor_index (int, optional): Index of the option cursor starts at. Defaults to 0.
+        ticked_indices (Optional[List[Union[int, Tuple[str, int]]]], optional): Indices of options that are pre-ticked when the prompt
+                                                                                appears. For sectioned options, they must be
+                                                                                `(section_name, index_in_section)`. Defaults to None.
+        cursor_index (Union[int, Tuple[str, int]], optional): Index of the option cursor starts at.
+                                                              For sectioned options, it must be `(section_name, index_in_section)`.
+                                                              Defaults to the first option.
         minimal_count (int, optional): Minimal count of options that need to be selected. Defaults to 0.
         maximal_count (Optional[int], optional): Maximal count of options that need to be selected. Defaults to None.
-        return_indices (bool, optional): If `True`, `select_multiple` will return the indices
-                                         of ticked elements in options. Defaults to `False`.
-        strict (bool, optional): If empty `options` is provided and strict is `False`, None will be returned,
-                                 if it's `True`, `ValueError` will be thrown. Defaults to False.
-        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
-        page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
-                                             If `None`, the page size is derived automatically from the terminal height.
-                                             Pagination is also enabled automatically when options exceed the terminal height.
-                                             Defaults to None.
+        return_indices (bool, optional): If `True`, `select_multiple` will return the indices of ticked elements in options.
+                                         For sectioned options, they are `(section_name, index_in_section)`. Defaults to `False`.
+        strict (bool, optional): If `True` and `options` is empty, `ValueError` is raised; if `False`, an empty list is
+                                 returned instead. Defaults to True.
+        page_size (Optional[int], optional): Number of options to show on a single page. If `None`, the page size is derived
+                                             from the terminal height, and pagination is only used when the options don't fit.
+                                             If set, options are always paginated with this many per page. Defaults to None.
+        title (str, optional): Rich friendly text shown above the options. Defaults to ''.
+        instructions (str, optional): Rich friendly text shown below the options. Pass `None` to hide it.
+        filterable (bool, optional): If `True`, typing filters the options (case-insensitive substring of the displayed text)
+                                     and backspace edits the filter. Keys bound in `config.keys` keep their action, so space still ticks.
+                                     Defaults to False.
+        config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:
-        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
+        ValueError: Thrown if no `options` are provided and strict is `True`, or if an option or section name is blank
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
-        Union[List[str], List[int]]: A list of selected values or indices of selected options
+        Union[List[str], List[int], List[Tuple[str, int]]]: A list of selected values or indices of selected options
     """
+    config = config or Config()
+    flat_options, sections, positions = _flatten_options(options)
 
-    if not options:
+    if not flat_options:
         if strict:
             raise ValueError('`options` cannot be empty')
         return []
     if cursor_style in ['', None]:
-        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+        warnings.warn('`cursor_style` should be a valid style, defaulting to `white`', stacklevel=2)
         cursor_style = 'white'
     if tick_style in ['', None]:
-        warnings.warn('`tick_style` should be a valid style, defaulting to `white`')
+        warnings.warn('`tick_style` should be a valid style, defaulting to `white`', stacklevel=2)
         tick_style = 'white'
-    if ticked_indices is None:
-        ticked_indices = []
 
-    effective_page_size = page_size if page_size is not None else max(1, console.size.height - 1)
-    effective_pagination = pagination or (page_size is None and len(options) > effective_page_size)
+    labels = _validate_no_blank_options(flat_options, positions, preprocessor)
+    effective_page_size = (
+        page_size
+        if page_size is not None
+        else _auto_page_size(
+            config.console, title, instructions, sections, filterable, error_line=minimal_count > 0 or maximal_count is not None
+        )
+    )
+    effective_pagination = page_size is not None or len(flat_options) > effective_page_size
 
-    renderer = partial(_render_select_multiple, preprocessor, tick_character, tick_style, cursor_style)
+    renderer = partial(
+        _render_select_multiple, preprocessor, tick_character, tick_style, cursor_style, title, instructions, sections, labels
+    )
 
     element = qselect.Select(
         qselect.SelectState(
-            options=options,
-            title='',
+            options=flat_options,
+            title=title,
             select_multiple=True,
-            index=cursor_index,
-            selected_indexes=ticked_indices,
+            index=_to_flat_index(positions, cursor_index),
+            selected_indexes=[_to_flat_index(positions, i) for i in ticked_indices or []],
             pagination=effective_pagination,
             page_size=effective_page_size,
         ),
         renderer=renderer,
-        transient=Config.transient,
-        console=console,
+        transient=config.transient,
+        console=config.console,
     )
 
     with element.displayed():
         while True:
-            keypress = get_key()
+            keypress = _read_key()
             new_state = element.state
             new_state.error = ''
 
-            new_state = _navigate_select_multiple(new_state, keypress, minimal_count, maximal_count)
+            new_state = _navigate_select_multiple(new_state, keypress, minimal_count, maximal_count, config, labels if filterable else None)
             if new_state.exit or new_state.abort:
                 break
             element.state = new_state
         if return_indices:
-            return new_state.selected_indexes  # type: ignore
-        return [options[i] for i in new_state.selected_indexes]
+            return [positions[i] for i in new_state.selected_indexes]
+        return [flat_options[i] for i in new_state.selected_indexes]
 
 
 def confirm(
     question: str,
+    *,
     yes_text: str = 'Yes',
     no_text: str = 'No',
     has_to_match_case: bool = False,
@@ -451,6 +858,8 @@ def confirm(
     cursor: str = '>',
     cursor_style: str = 'pink1',
     char_prompt: bool = True,
+    instructions: Optional[str] = _CONFIRM_INSTRUCTIONS,
+    config: Optional[Config] = None,
 ) -> Optional[bool]:
     """A prompt that asks a question and offers two responses
 
@@ -464,17 +873,25 @@ def confirm(
         cursor (str, optional): What character(s) to use as a cursor. Defaults to '> '.
         cursor_style (str, optional): Rich friendly style for the cursor. Defaults to 'pink1'.
         char_prompt (bool, optional): Print [Y/n] after the question. Defaults to True.
+        instructions (str, optional): Rich friendly text shown below the responses. Pass `None` to hide it.
+                                      Defaults to '([bold]enter[/bold] to confirm)'.
+        config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:
-        KeyboardInterrupt: Raised when keyboard interrupt is encountered and Config.raise_on_interrupt is True
+        ValueError: Thrown if `yes_text` or `no_text` is blank, or if `char_prompt` is on and they start with the same letter
+        KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
         Optional[bool]
     """
+    config = config or Config()
+    keys = config.keys
+    console = config.console
+    _validate_confirm_texts(yes_text, no_text, has_to_match_case, char_prompt)
     rendered = ''
-    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=Config.transient) as live:
+    with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=config.transient) as live:
         if cursor_style in ['', None]:
-            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`')
+            warnings.warn('`cursor_style` should be a valid style, defaulting to `white`', stacklevel=2)
             cursor_style = 'white'
         is_yes = default_is_yes
         is_selected = enter_empty_confirms
@@ -488,29 +905,29 @@ def confirm(
             question_line = f'{question}{yn_prompt}{current_message}'
             yes_prefix = selected_prefix if yes else deselected_prefix
             no_prefix = selected_prefix if no else deselected_prefix
-            rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}\n\n([bold]enter[/bold] to confirm)'
+            rendered = f'{question_line}\n{yes_prefix}{yes_text}\n{no_prefix}{no_text}' + (f'\n\n{instructions}' if instructions else '')
             _update_rendered(live, rendered)
 
-            keypress = get_key()
-            if keypress in DefaultKeys.interrupt:
-                if Config.raise_on_interrupt:
+            keypress = _read_key()
+            if keypress in keys.interrupt:
+                if config.raise_on_interrupt:
                     raise KeyboardInterrupt()
                 return None
-            elif keypress in DefaultKeys.down or keypress in DefaultKeys.up:
+            elif keypress in keys.down or keypress in keys.up:
                 is_yes = not is_yes
                 is_selected = True
                 current_message = yes_text if is_yes else no_text
-            elif keypress in DefaultKeys.backspace:
+            elif keypress in keys.backspace:
                 if current_message:
                     current_message = current_message[:-1]
-            elif keypress in DefaultKeys.confirm:
+            elif keypress in keys.confirm:
                 if is_selected:
                     break
-            elif keypress in DefaultKeys.tab:
+            elif keypress in keys.tab:
                 if is_selected:
                     current_message = yes_text if is_yes else no_text
-            elif keypress in DefaultKeys.escape:
-                if Config.raise_on_escape:
+            elif keypress in keys.escape:
+                if config.raise_on_escape:
                     raise Abort(keypress)
                 return None
             else:
