@@ -423,3 +423,25 @@ def test_version_matches_the_installed_distribution():
     from importlib.metadata import version
 
     assert beaupy.__version__ == version("beaupy")
+
+
+def test_type_checker_types_prompt_by_target_type(tmp_path):
+    mypy_api = pytest.importorskip("mypy.api")
+    snippet = tmp_path / "snippet.py"
+    snippet.write_text(
+        """
+from beaupy import prompt
+
+reveal_type(prompt("a"))
+reveal_type(prompt("a", target_type=int))
+prompt("a", target_type=int, validator=lambda s: s.startswith("x"))
+"""
+    )
+    stdout, _, _ = mypy_api.run(["--no-incremental", "--no-error-summary", "--hide-error-context", str(snippet)])
+    lines = [line.split(": ", 1)[1] for line in stdout.splitlines()]
+
+    assert lines == [
+        'note: Revealed type is "str | None"',
+        'note: Revealed type is "int | None"',
+        'error: "int" has no attribute "startswith"  [attr-defined]',
+    ]

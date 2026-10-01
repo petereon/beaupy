@@ -23,7 +23,6 @@ from beaupy._internals import (
     Abort,
     ConversionError,
     SectionedPosition,
-    TargetType,
     ValidationError,
     _cursor_hidden,
     _flatten_options,
@@ -237,11 +236,45 @@ def _navigate_select_multiple(
     return state
 
 
+T = TypeVar('T')
+
+
+@overload
 def prompt(
     prompt: str,
     *,
-    target_type: Type[TargetType] = str,
-    validator: Callable[[TargetType], bool] = lambda input: True,
+    validator: Callable[[str], bool] = ...,
+    secure: bool = ...,
+    raise_validation_fail: bool = ...,
+    raise_type_conversion_fail: bool = ...,
+    initial_value: Optional[str] = ...,
+    completion: Optional[Callable[[str], List[str]]] = ...,
+    instructions: Optional[str] = ...,
+    config: Optional[Config] = ...,
+) -> Optional[str]: ...
+
+
+@overload
+def prompt(
+    prompt: str,
+    *,
+    target_type: Type[T],
+    validator: Callable[[T], bool] = ...,
+    secure: bool = ...,
+    raise_validation_fail: bool = ...,
+    raise_type_conversion_fail: bool = ...,
+    initial_value: Optional[str] = ...,
+    completion: Optional[Callable[[str], List[str]]] = ...,
+    instructions: Optional[str] = ...,
+    config: Optional[Config] = ...,
+) -> Optional[T]: ...
+
+
+def prompt(
+    prompt: str,
+    *,
+    target_type: Type[Any] = str,
+    validator: Callable[[Any], bool] = lambda input: True,
     secure: bool = False,
     raise_validation_fail: bool = True,
     raise_type_conversion_fail: bool = True,
@@ -249,7 +282,7 @@ def prompt(
     completion: Optional[Callable[[str], List[str]]] = None,
     instructions: Optional[str] = _CONFIRM_INSTRUCTIONS,
     config: Optional[Config] = None,
-) -> TargetType:
+) -> Any:
     """Function that prompts the user for written input
 
     Args:
@@ -273,7 +306,8 @@ def prompt(
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
-        Union[T, str]: Returns a value formatted as provided type or string if no type is provided
+        Optional[T]: The input converted to `target_type` (a string by default), or `None` if the prompt was aborted
+                     (Esc, or Ctrl+C when `config.raise_on_interrupt` is False)
     """
     config = config or Config()
 
@@ -324,8 +358,6 @@ def prompt(
                 return None
             element.state = new_state
 
-
-T = TypeVar('T')
 
 Options = Union[List[T], Dict[str, List[T]]]
 Index = Union[int, SectionedPosition]
