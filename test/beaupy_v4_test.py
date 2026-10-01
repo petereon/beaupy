@@ -409,3 +409,17 @@ def test_confirm_allows_shared_first_letter_without_hint_or_with_case_sensitivit
 
     assert confirm("q", yes_text="Yes", no_text="Yep", char_prompt=False, default_is_yes=True) is True
     assert confirm("q", yes_text="Yes", no_text="yep", has_to_match_case=True, default_is_yes=True) is True
+
+
+def test_public_api_is_exactly_what_all_declares():
+    assert all(hasattr(beaupy, name) for name in beaupy.__all__)
+    assert not hasattr(beaupy, "sys")
+    namespace = {}
+    exec("from beaupy import *", namespace)
+    assert sorted(n for n in namespace if n != "__builtins__") == sorted(beaupy.__all__)
+
+
+def test_version_matches_the_installed_distribution():
+    from importlib.metadata import version
+
+    assert beaupy.__version__ == version("beaupy")

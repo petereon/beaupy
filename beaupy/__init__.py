@@ -1,16 +1,29 @@
-import sys
+from importlib.metadata import PackageNotFoundError as _PackageNotFoundError
+from importlib.metadata import version as _version
+from sys import modules as _modules
 
-import beaupy.spinners as spinners  # noqa: F401
-from beaupy._beaupy import Config as Config
-from beaupy._beaupy import KeyBindings as KeyBindings
-from beaupy._beaupy import confirm as confirm
-from beaupy._beaupy import prompt as prompt
-from beaupy._beaupy import select as select
-from beaupy._beaupy import select_multiple as select_multiple
-from beaupy._internals import Abort as Abort
-from beaupy._internals import ConversionError as ConversionError
-from beaupy._internals import RemovedInV4Error as RemovedInV4Error
-from beaupy._internals import ValidationError as ValidationError
-from beaupy._internals import _RemovedGlobalsModule
+import beaupy.spinners as spinners
+from beaupy._beaupy import Config, KeyBindings, confirm, prompt, select, select_multiple
+from beaupy._internals import Abort, ConversionError, RemovedInV4Error, ValidationError, _RemovedGlobalsModule
 
-sys.modules[__name__].__class__ = _RemovedGlobalsModule
+try:
+    __version__ = _version('beaupy')
+except _PackageNotFoundError:  # running from a source tree that isn't installed
+    __version__ = '0+unknown'
+
+__all__ = [
+    'Abort',
+    'Config',
+    'ConversionError',
+    'KeyBindings',
+    'RemovedInV4Error',
+    'ValidationError',
+    '__version__',
+    'confirm',
+    'prompt',
+    'select',
+    'select_multiple',
+    'spinners',
+]
+
+_modules[__name__].__class__ = _RemovedGlobalsModule
