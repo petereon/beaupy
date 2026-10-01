@@ -1,6 +1,6 @@
 [project]
 name = 'beaupy'
-version = '4.0.0b1'
+version = '4.0.0b2'
 description = 'A library of elements for interactive TUIs in Python'
 authors = [{ name = 'Peter Vyboch', email = 'pvyboch1@gmail.com' }]
 license = 'MIT'
