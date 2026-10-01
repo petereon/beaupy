@@ -347,4 +347,6 @@ runners), they raise `RuntimeError('Interactive terminal required')`.
 | Ctrl+C returns `None`/`[]` (`raise_on_interrupt=False`) | Raises `KeyboardInterrupt`; pass `Config(raise_on_interrupt=False)` for the old behavior |
 | `strict` defaults to `False` (empty `options` returns `None`/`[]`) | Defaults to `True` (raises `ValueError`); pass `strict=False` for the old behavior |
 
+`ValidationError` and `ConversionError` (from `prompt`) are now `ValueError` subclasses, so `except ValueError` catches them too.
+
 `Keys` above comes from `yakh.key`. Using a removed global raises `RemovedInV4Error` (or `AttributeError` when assigning on `Config`/`KeyBindings`) with a message explaining the replacement.

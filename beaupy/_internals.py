@@ -19,11 +19,11 @@ from yakh.key import Key, Keys
 TargetType = Any
 
 
-class ValidationError(Exception):
+class ValidationError(ValueError):
     pass
 
 
-class ConversionError(Exception):
+class ConversionError(ValueError):
     pass
 
 
@@ -344,6 +344,7 @@ def _validate_prompt_value(
     secure: bool,
 ) -> TargetType:
     str_value = ''.join(value)
+    shown = '<secure_input>' if secure else f'`{str_value}`'
     try:
         if target_type is bool:
             result: bool = literal_eval(str_value)
@@ -351,14 +352,12 @@ def _validate_prompt_value(
                 raise ValueError('Bool conversion failed')
         else:
             result: target_type = target_type(str_value)  # type: ignore
-        if validator(result):
-            return result
-        else:
-            error = f'Input {"<secure_input>" if secure else "`" + str_value + "`"} is invalid'
-            raise ValidationError(error)
     except ValueError as e:
-        error = f'Input {"<secure_input>" if secure else "`" + str_value + "`"} cannot be converted to type `{target_type}`'
-        raise ConversionError(error) from e
+        raise ConversionError(f'Input {shown} cannot be converted to type `{target_type}`') from e
+    # Outside the `try` above: ValidationError is a ValueError too, so it must not be mistaken for a failed conversion
+    if not validator(result):
+        raise ValidationError(f'Input {shown} is invalid')
+    return result
 
 
 def _paginate_forward(page_num: int, total_pages: int) -> int:

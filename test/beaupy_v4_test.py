@@ -488,3 +488,36 @@ reveal_type(select_multiple(names, ticked_indices=(0,)))
 def test_a_bare_string_is_rejected_as_options(fn, options):
     with pytest.raises(TypeError, match="not a bare (str|bytes)"):
         fn(options)
+
+
+def test_validation_and_conversion_errors_are_value_errors():
+    assert issubclass(beaupy.ValidationError, ValueError)
+    assert issubclass(beaupy.ConversionError, ValueError)
+    assert not issubclass(beaupy.ValidationError, beaupy.ConversionError)
+    assert not issubclass(beaupy.ConversionError, beaupy.ValidationError)
+
+
+def _prompt_with(text, **kwargs):
+    steps = iter([*text, Keys.ENTER])
+    b.get_key = lambda: next(steps)
+    Live.update = mock.MagicMock()
+    return prompt("q", **kwargs)
+
+
+def test_a_failed_validator_is_a_validation_error_not_a_conversion_error():
+    with pytest.raises(beaupy.ValidationError, match="Input `1` is invalid"):
+        _prompt_with("1", target_type=int, validator=lambda n: n > 5)
+
+
+def test_an_unconvertible_input_is_a_conversion_error():
+    with pytest.raises(beaupy.ConversionError, match="cannot be converted to type"):
+        _prompt_with("x", target_type=int)
+
+
+def test_a_validator_that_itself_raises_value_error_is_not_swallowed_as_a_conversion_error():
+    def validator(value):
+        raise ValueError("my own complaint")
+
+    with pytest.raises(ValueError, match="my own complaint") as e:
+        _prompt_with("abc", validator=validator)
+    assert not isinstance(e.value, beaupy.ConversionError)

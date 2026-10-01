@@ -290,9 +290,9 @@ def prompt(
         target_type (Union[Type[T], Type[str]], optional): Type to convert the answer to. Defaults to str.
         validator (Callable[[Any], bool], optional): Optional function to validate the input. Defaults to lambda input: True.
         secure (bool, optional): If True, input will be hidden. Defaults to False.
-        raise_validation_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ValidationError`, else
+        raise_validation_fail (bool, optional): If True, invalid inputs will raise `ValidationError`, else
                                                 the error will be reported onto the console. Defaults to True.
-        raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `rich.internals.ConversionError`, else
+        raise_type_conversion_fail (bool, optional): If True, invalid inputs will raise `ConversionError`, else
                                                      the error will be reported onto the console. Defaults to True.
         initial_value (str, optional): If present, the value is placed in the prompt as the default value.
         completion (Callable[[str], List[str]], optional): Returns completion options for the current input.
