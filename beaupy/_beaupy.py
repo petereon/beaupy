@@ -363,10 +363,18 @@ Options = Union[Sequence[T], Mapping[str, Sequence[T]]]
 Index = Union[int, SectionedPosition]
 
 
-def _auto_page_size(console: Console, reserved_lines: int, title: str, sections: List[Optional[str]], filterable: bool) -> int:
-    # ponytail: reserves a line for every section header, conservative when headers are spread over pages
-    reserved_lines += (title.count('\n') + 1 if title or filterable else 0) + len(set(sections) - {None})
-    return max(1, console.size.height - reserved_lines)
+def _auto_page_size(
+    console: Console, title: str, instructions: Optional[str], sections: List[Optional[str]], filterable: bool, error_line: bool
+) -> int:
+    """Largest page that still fits the terminal together with everything else the element renders around the options."""
+    chrome = title.count('\n') + 1 if title or filterable else 0  # title, or the filter query line
+    chrome += 2  # blank line and "Page x/y"
+    chrome += 2 + instructions.count('\n') if instructions else 0  # blank line and the instructions
+    chrome += 1 if error_line else 0
+    available = console.size.height - chrome
+    # A page holds at most `page_size` options and at most one section header per option (and per section)
+    section_count = len(set(sections) - {None})
+    return max(1, available - section_count, available // 2)
 
 
 @overload
@@ -542,7 +550,9 @@ def select(
         cursor_style = 'white'
 
     labels = _validate_no_blank_options(flat_options, positions, preprocessor)
-    effective_page_size = page_size if page_size is not None else _auto_page_size(config.console, 6, title, sections, filterable)
+    effective_page_size = (
+        page_size if page_size is not None else _auto_page_size(config.console, title, instructions, sections, filterable, error_line=False)
+    )
     effective_pagination = page_size is not None or len(flat_options) > effective_page_size
 
     renderer = partial(_render_select, preprocessor, cursor_style, cursor, title, instructions, sections, labels)
@@ -794,7 +804,13 @@ def select_multiple(
         tick_style = 'white'
 
     labels = _validate_no_blank_options(flat_options, positions, preprocessor)
-    effective_page_size = page_size if page_size is not None else _auto_page_size(config.console, 1, title, sections, filterable)
+    effective_page_size = (
+        page_size
+        if page_size is not None
+        else _auto_page_size(
+            config.console, title, instructions, sections, filterable, error_line=minimal_count > 0 or maximal_count is not None
+        )
+    )
     effective_pagination = page_size is not None or len(flat_options) > effective_page_size
 
     renderer = partial(

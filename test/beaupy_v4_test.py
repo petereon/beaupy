@@ -66,9 +66,13 @@ def test_only_first_argument_is_positional(call):
 def test_select_uses_console_from_config():
     b.get_key = lambda: Keys.ENTER
     Live.update = mock.MagicMock()
-    select(options=["a", "b", "c", "d"], config=Config(console=Console(height=8)))
+    select(options=["a", "b", "c", "d", "e"], config=Config(console=Console(height=8)))
 
-    assert Live.update.call_args.kwargs["renderable"] == "[pink1]>[/pink1] a\n  b[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
+    # 8 rows: 2 for the page indicator, 2 for the instructions, leaving 4 options per page
+    assert (
+        Live.update.call_args.kwargs["renderable"]
+        == "[pink1]>[/pink1] a\n  b\n  c\n  d[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"
+    )
 
 
 def test_select_uses_keys_from_config():
@@ -582,3 +586,39 @@ def test_unticked_boxes_are_as_wide_as_ticked_ones(tick, width):
     unticked, ticked = Live.update.call_args.kwargs["renderable"].splitlines()[:2]
     assert unticked.startswith("\\[" + " " * width + "]")
     assert ticked.startswith(f"\\[[pink1]{tick}[/pink1]]")
+
+
+def _sectioned(count, sections):
+    options = [f"opt{i}" for i in range(count)]
+    if not sections:
+        return options
+    return {f"section{s}": options[s::sections] for s in range(sections)}
+
+
+@pytest.mark.parametrize("fn", [select, select_multiple])
+@pytest.mark.parametrize("height", [12, 20, 30])
+@pytest.mark.parametrize("count, sections", [(3, 0), (50, 0), (50, 1), (50, 7), (50, 40), (9, 9)])
+@pytest.mark.parametrize("title", ["", "Pick one\nor more"])
+@pytest.mark.parametrize("filterable", [False, True])
+def test_auto_page_size_never_renders_taller_than_the_terminal(fn, height, count, sections, title, filterable):
+    keys = ([Keys.ENTER] if fn is select_multiple else []) + typed("o" if filterable else "") + [Keys.RIGHT_ARROW] * 2
+    steps = iter([*keys, Keys.END, Keys.ESC])
+    b.get_key = lambda: next(steps)
+    renders = []
+    Live.update = mock.MagicMock(side_effect=lambda renderable: renders.append(renderable))
+    extra = {"minimal_count": 1} if fn is select_multiple else {}
+
+    fn(_sectioned(count, sections), title=title, filterable=filterable, config=Config(console=Console(height=height)), **extra)
+
+    tallest = max(len(r.splitlines()) for r in renders)
+    assert tallest <= height, f"{tallest} lines rendered in a {height}-row terminal"
+
+
+@pytest.mark.parametrize("fn", [select, select_multiple])
+def test_auto_page_size_is_the_same_for_select_and_select_multiple(fn):
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+    # Both render the same chrome (page indicator + instructions), so both leave the same room for options
+    fn([f"opt{i}" for i in range(50)], instructions="(done)", config=Config(console=Console(height=20)))
+
+    assert Live.update.call_args.kwargs["renderable"].count("opt") == 20 - 4
