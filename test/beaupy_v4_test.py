@@ -390,3 +390,22 @@ def test_key_reading_errors_with_a_terminal_are_not_masked(monkeypatch):
 
     with pytest.raises(OSError):
         select(["a"])
+
+
+@pytest.mark.parametrize("kwargs", [{"yes_text": ""}, {"no_text": "   "}, {"yes_text": "[red][/red]"}])
+def test_confirm_raises_on_blank_labels(kwargs):
+    with pytest.raises(ValueError, match="is blank"):
+        confirm("q", **kwargs)
+
+
+def test_confirm_raises_when_labels_share_a_first_letter_and_hint_is_shown():
+    with pytest.raises(ValueError, match=r"both start with 'Y'.*\(Y/y\)"):
+        confirm("q", yes_text="Yes", no_text="yep")
+
+
+def test_confirm_allows_shared_first_letter_without_hint_or_with_case_sensitivity():
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    assert confirm("q", yes_text="Yes", no_text="Yep", char_prompt=False, default_is_yes=True) is True
+    assert confirm("q", yes_text="Yes", no_text="yep", has_to_match_case=True, default_is_yes=True) is True

@@ -37,6 +37,7 @@ from beaupy._internals import (
     _render_select_multiple,
     _to_flat_index,
     _update_rendered,
+    _validate_confirm_texts,
     _validate_no_blank_options,
     _validate_prompt_value,
     _visible_indexes,
@@ -847,6 +848,7 @@ def confirm(
         config (Config, optional): Configuration to use. Defaults to `Config()`.
 
     Raises:
+        ValueError: Thrown if `yes_text` or `no_text` is blank, or if `char_prompt` is on and they start with the same letter
         KeyboardInterrupt: Raised when keyboard interrupt is encountered and `config.raise_on_interrupt` is True
 
     Returns:
@@ -855,6 +857,7 @@ def confirm(
     config = config or Config()
     keys = config.keys
     console = config.console
+    _validate_confirm_texts(yes_text, no_text, has_to_match_case, char_prompt)
     rendered = ''
     with _cursor_hidden(console), Live(rendered, console=console, auto_refresh=False, transient=config.transient) as live:
         if cursor_style in ['', None]:

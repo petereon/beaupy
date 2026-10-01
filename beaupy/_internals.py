@@ -110,6 +110,24 @@ def _option_labels(options: List[Any], preprocessor: Callable[[Any], str]) -> Li
     return [Text.from_markup(preprocessor(option)).plain.lower() for option in options]
 
 
+def _is_blank(text: str) -> bool:
+    """Whether `text` displays as nothing: empty, whitespace only, or markup that strips to that."""
+    return not Text.from_markup(text).plain.strip()
+
+
+def _validate_confirm_texts(yes_text: str, no_text: str, has_to_match_case: bool, char_prompt: bool) -> None:
+    """Raises if `confirm`'s labels display as blank, or if the `(Y/N)` hint they produce would be ambiguous."""
+    for name, text in (('yes_text', yes_text), ('no_text', no_text)):
+        if _is_blank(text):
+            raise ValueError(f'`{name}` is blank')
+    yes_letter, no_letter = (yes_text[0], no_text[0]) if has_to_match_case else (yes_text[0].upper(), no_text[0].upper())
+    if char_prompt and yes_letter == no_letter:
+        raise ValueError(
+            f'`yes_text` and `no_text` both start with {yes_letter!r}, which makes the ({yes_text[0]}/{no_text[0]}) hint ambiguous; '
+            'use different labels or pass `char_prompt=False`'
+        )
+
+
 def _validate_no_blank_options(options: List[Any], positions: List[Any], preprocessor: Callable[[Any], str]) -> List[str]:
     """Raises if any option's displayed text (preprocessed, markup stripped) is blank. Returns the labels for reuse."""
     labels = _option_labels(options, preprocessor)

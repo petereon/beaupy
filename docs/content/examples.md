@@ -307,6 +307,9 @@ select(options=[], strict=False)   # returns None
 A blank option (after preprocessing and stripping markup, e.g. `''`, `'   '`, or `'[red][/red]'`) or a blank section name
 always raises `ValueError`, regardless of `strict` — there's no legitimate reason to want a menu row with nothing in it.
 
+`confirm` applies the same rule to `yes_text`/`no_text`, and also raises if both labels start with the same letter while the
+`(Y/N)` hint is shown (pass `char_prompt=False` or use different labels).
+
 All elements read keypresses from the terminal, so they need an interactive one. When stdin isn't a TTY (piped input, most CI
 runners), they raise `RuntimeError('Interactive terminal required')`.
 
