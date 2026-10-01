@@ -96,6 +96,11 @@ def _flatten_options(options: Union[Sequence[Any], Mapping[str, Sequence[Any]]])
 
     For a list, position is the list index. For a dict, it's `(section_name, index_within_section)`.
     """
+    if isinstance(options, (str, bytes)):
+        raise TypeError(
+            f'`options` must be a sequence of options or a dict of sections, not a bare {type(options).__name__}; '
+            'wrap it in a list to offer it as a single option'
+        )
     if isinstance(options, Mapping):
         for section in options:
             if not section.strip():

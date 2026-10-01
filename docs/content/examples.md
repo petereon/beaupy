@@ -320,6 +320,9 @@ select(options=[])                 # raises ValueError
 select(options=[], strict=False)   # returns None
 ```
 
+`options` itself must be a sequence (or a dict of sections), never a bare string: `select('abc')` raises `TypeError` instead of
+silently offering the letters.
+
 A blank option (after preprocessing and stripping markup, e.g. `''`, `'   '`, or `'[red][/red]'`) or a blank section name
 always raises `ValueError`, regardless of `strict` — there's no legitimate reason to want a menu row with nothing in it.
 

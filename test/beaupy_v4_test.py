@@ -481,3 +481,10 @@ reveal_type(select_multiple(names, ticked_indices=(0,)))
         'note: Revealed type is "tuple[str, int] | None"',
         'note: Revealed type is "list[str]"',
     ]
+
+
+@pytest.mark.parametrize("fn", [select, select_multiple])
+@pytest.mark.parametrize("options", ["abc", "", b"abc"])
+def test_a_bare_string_is_rejected_as_options(fn, options):
+    with pytest.raises(TypeError, match="not a bare (str|bytes)"):
+        fn(options)
