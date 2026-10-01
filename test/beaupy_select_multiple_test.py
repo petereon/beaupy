@@ -461,7 +461,6 @@ def test_select_multiple_shows_only_5_options_if_pagination_is_enabled():
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=5,
     )
 
@@ -495,7 +494,6 @@ def test_select_multiple_shows_only_3_options_if_pagination_is_enabled_and_page_
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -526,7 +524,6 @@ def test_select_multiple_paginates_forwards_if_last_option_is_selected_and_down_
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=3,
         cursor_index=2,
     )
@@ -555,7 +552,6 @@ def test_select_multiple_paginates_backwards_if_first_option_is_selected_on_seco
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=3,
         cursor_index=3,
     )
@@ -584,7 +580,6 @@ def test_select_multiple_paginates_backwards_if_on_second_page_and_left_arrow_is
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=3,
         cursor_index=3,
     )
@@ -613,7 +608,6 @@ def test_select_multiple_paginates_forwards_if_on_first_page_and_right_arrow_is_
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -641,7 +635,6 @@ def test_select_multiple_paginates_to_last_page_if_on_first_page_and_left_arrow_
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -669,7 +662,6 @@ def test_select_multiple_paginates_to_first_page_if_on_last_page_and_right_arrow
     res = select_multiple(
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor_style="green",
-        pagination=True,
         page_size=3,
         cursor_index=6,
     )

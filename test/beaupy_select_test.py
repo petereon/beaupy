@@ -336,7 +336,6 @@ def test_select_shows_only_first_5_options_and_number_of_pages_if_pagination_is_
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=5,
     )
 
@@ -368,7 +367,6 @@ def test_select_shows_only_first_3_options_and_number_of_pages_if_pagination_is_
         options=["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8"],
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -392,7 +390,6 @@ def test_select_paginates_forward_when_cursor_is_on_last_option_and_down_arrow_i
         cursor_index=2,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -415,7 +412,6 @@ def test_select_paginates_backward_when_cursor_is_on_first_option_and_second_pag
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -433,7 +429,7 @@ def test_select_paginates_forward_when_right_arrow_is_pressed():
 
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
+    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", page_size=3)
 
     assert Live.update.call_args_list == [
         mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
@@ -454,7 +450,6 @@ def test_select_paginates_backward_when_on_second_page_and_left_arrow_is_pressed
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -476,7 +471,6 @@ def test_select_paginates_to_first_page_when_on_last_page_and_right_arrow_is_pre
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -493,7 +487,7 @@ def test_select_paginates_to_last_page_when_on_first_page_and_left_arrow_is_pres
 
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", pagination=True, page_size=3)
+    res = select(options=["test1", "test2", "test3", "test4", "test5"], cursor="x", cursor_style="green", page_size=3)
 
     assert Live.update.call_args_list == [
         mock.call(renderable="[green]x[/green] test1\n  test2\n  test3[grey58]\n\nPage 1/2[/grey58]\n\n([bold]enter[/bold] to confirm)"),
@@ -513,7 +507,6 @@ def test_select_paginates_to_first_page_when_on_last_page_and_home_is_pressed():
         cursor_index=3,
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 
@@ -534,7 +527,6 @@ def test_select_paginates_to_last_page_when_on_first_page_and_end_is_pressed():
         options=["test1", "test2", "test3", "test4", "test5"],
         cursor="x",
         cursor_style="green",
-        pagination=True,
         page_size=3,
     )
 

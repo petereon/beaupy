@@ -123,7 +123,7 @@ def test_select_repeats_section_header_at_top_of_page():
     steps = iter([Keys.RIGHT_ARROW, Keys.ENTER])
     b.get_key = lambda: next(steps)
     Live.update = mock.MagicMock()
-    result = select(options={"Veg": ["leek", "kale", "okra"]}, pagination=True, page_size=2)
+    result = select(options={"Veg": ["leek", "kale", "okra"]}, page_size=2)
 
     assert result == "okra"
     assert Live.update.call_args.kwargs["renderable"] == (
@@ -521,3 +521,41 @@ def test_a_validator_that_itself_raises_value_error_is_not_swallowed_as_a_conver
     with pytest.raises(ValueError, match="my own complaint") as e:
         _prompt_with("abc", validator=validator)
     assert not isinstance(e.value, beaupy.ConversionError)
+
+
+@pytest.mark.parametrize("fn", [select, select_multiple])
+def test_page_size_alone_paginates(fn):
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    fn(options=[f"opt{i}" for i in range(8)], page_size=3)
+
+    rendered = Live.update.call_args.kwargs["renderable"]
+    assert "Page 1/3" in rendered
+    assert "opt2" in rendered and "opt3" not in rendered
+
+
+@pytest.mark.parametrize("fn", [select, select_multiple])
+def test_options_fitting_the_terminal_are_not_paginated_by_default(fn):
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    fn(options=["a", "b", "c"])
+
+    assert "Page" not in Live.update.call_args.kwargs["renderable"]
+
+
+@pytest.mark.parametrize("fn", [select, select_multiple])
+def test_options_exceeding_the_terminal_are_paginated_by_default(fn):
+    b.get_key = lambda: Keys.ENTER
+    Live.update = mock.MagicMock()
+
+    fn(options=[str(i) for i in range(50)], config=Config(console=Console(height=20)))
+
+    assert "Page 1/" in Live.update.call_args.kwargs["renderable"]
+
+
+@pytest.mark.parametrize("fn", [select, select_multiple])
+def test_the_pagination_flag_is_gone(fn):
+    with pytest.raises(TypeError, match="pagination"):
+        fn(options=["a"], pagination=True)

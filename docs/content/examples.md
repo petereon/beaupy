@@ -310,6 +310,15 @@ Keys bound in `KeyBindings` keep their action, so in `select_multiple` space sti
 
 Ticked options stay ticked while hidden by the filter.
 
+## Pagination
+
+Options that don't fit in the terminal are paginated automatically, so there is nothing to turn on. To choose the page size
+yourself, pass `page_size` — options are then always paginated with that many per page:
+
+```python
+select(many_options, page_size=10)
+```
+
 ## Input validation
 
 Empty `options` raises `ValueError` by default; pass `strict=False` to get `None` (`select`) or `[]` (`select_multiple`)
@@ -344,6 +353,7 @@ runners), they raise `RuntimeError('Interactive terminal required')`.
 | `select(options, my_preprocessor)` | `select(options, preprocessor=my_preprocessor)` |
 | `a` ticks/unticks all in `select_multiple` | `ctrl+a`; restore with `KeyBindings(select_all=['a'])` |
 | `Spinner(DOTS, "text")` | `Spinner(DOTS, text="text")` (options are keyword-only); also usable as `with Spinner(...):` |
+| `select(options, pagination=True, page_size=5)` | `select(options, page_size=5)` — `pagination` is gone; `page_size` alone paginates, and with neither set options are paginated only when they don't fit the terminal |
 | Ctrl+C returns `None`/`[]` (`raise_on_interrupt=False`) | Raises `KeyboardInterrupt`; pass `Config(raise_on_interrupt=False)` for the old behavior |
 | `strict` defaults to `False` (empty `options` returns `None`/`[]`) | Defaults to `True` (raises `ValueError`); pass `strict=False` for the old behavior |
 

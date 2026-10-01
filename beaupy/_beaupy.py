@@ -379,7 +379,6 @@ def select(
     cursor_index: int = ...,
     return_index: Literal[False] = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -398,7 +397,6 @@ def select(
     cursor_index: int = ...,
     return_index: Literal[True],
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -417,7 +415,6 @@ def select(
     cursor_index: SectionedPosition = ...,
     return_index: Literal[False] = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -436,7 +433,6 @@ def select(
     cursor_index: SectionedPosition = ...,
     return_index: Literal[True],
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -455,7 +451,6 @@ def select(
     cursor_index: int = ...,
     return_index: bool = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -474,7 +469,6 @@ def select(
     cursor_index: SectionedPosition = ...,
     return_index: bool = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -492,7 +486,6 @@ def select(
     cursor_index: Optional[Index] = None,
     return_index: bool = False,
     strict: bool = True,
-    pagination: bool = False,
     page_size: Optional[int] = None,
     title: str = '',
     instructions: Optional[str] = _CONFIRM_INSTRUCTIONS,
@@ -519,11 +512,9 @@ def select(
                                        For sectioned options, it's `(section_name, index_in_section)`. Defaults to `False`.
         strict (bool, optional): If `True` and `options` is empty, `ValueError` is raised; if `False`, `None` is
         returned instead. Defaults to True.
-        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
-        page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
-                                             If `None`, the page size is derived automatically from the terminal height.
-                                             Pagination is also enabled automatically when options exceed the terminal height.
-                                             Defaults to None.
+        page_size (Optional[int], optional): Number of options to show on a single page. If `None`, the page size is derived
+                                             from the terminal height, and pagination is only used when the options don't fit.
+                                             If set, options are always paginated with this many per page. Defaults to None.
         title (str, optional): Rich friendly text shown above the options. Defaults to ''.
         instructions (str, optional): Rich friendly text shown below the options. Pass `None` to hide it.
                                       Defaults to '([bold]enter[/bold] to confirm)'.
@@ -552,7 +543,7 @@ def select(
 
     labels = _validate_no_blank_options(flat_options, positions, preprocessor)
     effective_page_size = page_size if page_size is not None else _auto_page_size(config.console, 6, title, sections, filterable)
-    effective_pagination = pagination or (page_size is None and len(flat_options) > effective_page_size)
+    effective_pagination = page_size is not None or len(flat_options) > effective_page_size
 
     renderer = partial(_render_select, preprocessor, cursor_style, cursor, title, instructions, sections, labels)
 
@@ -608,7 +599,6 @@ def select_multiple(
     maximal_count: Optional[int] = ...,
     return_indices: Literal[False] = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -631,7 +621,6 @@ def select_multiple(
     maximal_count: Optional[int] = ...,
     return_indices: Literal[True],
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -654,7 +643,6 @@ def select_multiple(
     maximal_count: Optional[int] = ...,
     return_indices: Literal[False] = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -677,7 +665,6 @@ def select_multiple(
     maximal_count: Optional[int] = ...,
     return_indices: Literal[True],
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -700,7 +687,6 @@ def select_multiple(
     maximal_count: Optional[int] = ...,
     return_indices: bool = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -723,7 +709,6 @@ def select_multiple(
     maximal_count: Optional[int] = ...,
     return_indices: bool = ...,
     strict: bool = ...,
-    pagination: bool = ...,
     page_size: Optional[int] = ...,
     title: str = ...,
     instructions: Optional[str] = ...,
@@ -745,7 +730,6 @@ def select_multiple(
     maximal_count: Optional[int] = None,
     return_indices: bool = False,
     strict: bool = True,
-    pagination: bool = False,
     page_size: Optional[int] = None,
     title: str = '',
     instructions: Optional[str] = _SELECT_MULTIPLE_INSTRUCTIONS,
@@ -778,11 +762,9 @@ def select_multiple(
                                          For sectioned options, they are `(section_name, index_in_section)`. Defaults to `False`.
         strict (bool, optional): If `True` and `options` is empty, `ValueError` is raised; if `False`, an empty list is
                                  returned instead. Defaults to True.
-        pagination (bool, optional): If `True`, pagination will be used. Defaults to False.
-        page_size (Optional[int], optional): Number of options to show on a single page if pagination is enabled.
-                                             If `None`, the page size is derived automatically from the terminal height.
-                                             Pagination is also enabled automatically when options exceed the terminal height.
-                                             Defaults to None.
+        page_size (Optional[int], optional): Number of options to show on a single page. If `None`, the page size is derived
+                                             from the terminal height, and pagination is only used when the options don't fit.
+                                             If set, options are always paginated with this many per page. Defaults to None.
         title (str, optional): Rich friendly text shown above the options. Defaults to ''.
         instructions (str, optional): Rich friendly text shown below the options. Pass `None` to hide it.
         filterable (bool, optional): If `True`, typing filters the options (case-insensitive substring of the displayed text)
@@ -813,7 +795,7 @@ def select_multiple(
 
     labels = _validate_no_blank_options(flat_options, positions, preprocessor)
     effective_page_size = page_size if page_size is not None else _auto_page_size(config.console, 1, title, sections, filterable)
-    effective_pagination = pagination or (page_size is None and len(flat_options) > effective_page_size)
+    effective_pagination = page_size is not None or len(flat_options) > effective_page_size
 
     renderer = partial(
         _render_select_multiple, preprocessor, tick_character, tick_style, cursor_style, title, instructions, sections, labels
