@@ -673,7 +673,7 @@
 <div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">KeyBindings</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_InstanceOnly</span><span class="p">)</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L55">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/_beaupy.py#L55">[view_source]</a></p>
 <p>Keybindings used by the elements. Pass an instance via <code>Config(keys=KeyBindings(...))</code>.</p>
 <p><strong>Attributes</strong>:</p>
 <p>escape(List[Union[Tuple[int, ...], str]]): Keys that escape the current context.
@@ -696,7 +696,7 @@
 <div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_InstanceOnly</span><span class="p">)</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L95">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/_beaupy.py#L95">[view_source]</a></p>
 <p>Configuration of the elements. Create an instance and pass it via the <code>config=</code> argument.</p>
 <p><strong>Attributes</strong>:</p>
 <ul>
@@ -726,7 +726,7 @@
            <span class="n">instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_CONFIRM_INSTRUCTIONS</span><span class="p">,</span>
            <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L273">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/_beaupy.py#L273">[view_source]</a></p>
 <p>Function that prompts the user for written input</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -772,7 +772,7 @@
            <span class="n">filterable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
            <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L488">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/_beaupy.py#L488">[view_source]</a></p>
 <p>A prompt that allows selecting one option from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -832,7 +832,7 @@
         <span class="n">filterable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L730">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/_beaupy.py#L730">[view_source]</a></p>
 <p>A prompt that allows selecting multiple options from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -892,7 +892,7 @@
             <span class="n">instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_CONFIRM_INSTRUCTIONS</span><span class="p">,</span>
             <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L850">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/_beaupy.py#L850">[view_source]</a></p>
 <p>A prompt that asks a question and offers two responses</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -921,7 +921,7 @@
 <h2 id="class-spinner">Class Spinner</h2>
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Spinner</span><span class="p">()</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L19">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/spinners/_spinners.py#L19">[view_source]</a></p>
 <p><a id="beaupy.spinners._spinners.Spinner.__init__"></a></p>
 <p><a id="pydoc:beaupy.spinners._spinners.Spinner.__init__"></a></p>
 <h4 id="__init__">__init__</h4>
@@ -932,7 +932,7 @@
              <span class="n">transient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
              <span class="n">console</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Console</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L23">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/spinners/_spinners.py#L23">[view_source]</a></p>
 <p>Creates a spinner which can be used to provide some user feedback during long processing</p>
 <p>Can be used as a context manager, which also stops the spinner if the body raises:
 <code>with Spinner(DOTS, text='Working...'): do_work()</code></p>
@@ -955,14 +955,14 @@
 <h4 id="start">start</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L60">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/spinners/_spinners.py#L60">[view_source]</a></p>
 <p>Starts the spinner</p>
 <p><a id="beaupy.spinners._spinners.Spinner.stop"></a></p>
 <p><a id="pydoc:beaupy.spinners._spinners.Spinner.stop"></a></p>
 <h4 id="stop">stop</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L64">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/7c332d4a982ef9826f05b203a824d5c2ecf55fc2/docs/../beaupy/spinners/_spinners.py#L64">[view_source]</a></p>
 <p>Stops the spinner</p>
 
 
