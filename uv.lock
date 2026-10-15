@@ -2,16 +2,16 @@ version = 1
 revision = 3
 requires-python = ">=3.8, <4.0.0"
 resolution-markers = [
+    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.11' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
     "python_full_version == '3.10.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version < '3.9' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and python_full_version < '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
-    "python_full_version < '3.9' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
+    "python_full_version < '3.9' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
+    "python_full_version < '3.9' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version < '3.9' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
 ]
 conflicts = [[
@@ -201,7 +201,7 @@ dev = [
 ]
 docs = [
     { name = "mkdocs", specifier = "==1.6.1" },
-    { name = "mkdocs-material", specifier = "==9.7.6" },
+    { name = "mkdocs-material", specifier = "==9.7.7" },
     { name = "novella", specifier = "==0.2.6" },
     { name = "pydoc-markdown", specifier = "==4.8.2" },
     { name = "setuptools", marker = "python_full_version < '3.9'", specifier = "<81" },
@@ -1034,9 +1034,9 @@ name = "markdown-it-py"
 version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.11' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
     "python_full_version == '3.10.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and python_full_version < '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
 ]
@@ -1304,7 +1304,7 @@ wheels = [
 
 [[package]]
 name = "mkdocs-material"
-version = "9.7.6"
+version = "9.7.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "babel" },
@@ -1329,9 +1329,9 @@ dependencies = [
     { name = "requests", version = "2.32.5", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version == '3.9.*' and extra == 'group-6-beaupy-docs') or (extra == 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs')" },
     { name = "requests", version = "2.34.2", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.10' and extra == 'group-6-beaupy-docs') or (extra == 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs')" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/45/29/6d2bcf41ae40802c4beda2432396fff97b8456fb496371d1bc7aad6512ec/mkdocs_material-9.7.6.tar.gz", hash = "sha256:00bdde50574f776d328b1862fe65daeaf581ec309bd150f7bff345a098c64a69", size = 4097959, upload-time = "2026-03-19T15:41:58.161Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/cd/c05d3a530ba7934f144fb45f7203cd236adc25c7bdcc34673d202f4b0278/mkdocs_material-9.7.7.tar.gz", hash = "sha256:c0649c065b1b0512d60aad8c10f947f8e455284475239b364b610f2deb4d0855", size = 4097923, upload-time = "2026-07-17T16:21:33.156Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2c/01/bc663630c510822c95c47a66af9fa7a443c295b47d5f041e5e6ae62ef659/mkdocs_material-9.7.6-py3-none-any.whl", hash = "sha256:71b84353921b8ea1ba84fe11c50912cc512da8fe0881038fcc9a0761c0e635ba", size = 9305470, upload-time = "2026-03-19T15:41:55.217Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/21/17c1bc9e6f47c972ad66fb2ac2568f99f90f1207eeb6fc3b34d094dba7b5/mkdocs_material-9.7.7-py3-none-any.whl", hash = "sha256:8ea9bb1737a5b524a5f9dcf2e1b4ebda8274ae3008aa7845720a97083bef708f", size = 9305438, upload-time = "2026-07-17T16:21:30.017Z" },
 ]
 
 [[package]]
@@ -1483,11 +1483,11 @@ name = "packaging"
 version = "26.3"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.11' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
     "python_full_version == '3.10.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and python_full_version < '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-26.3.tar.gz", hash = "sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79", size = 313412, upload-time = "2026-08-04T18:15:28.737Z" }
 wheels = [
@@ -1529,11 +1529,11 @@ name = "pathspec"
 version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.11' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
     "python_full_version == '3.10.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and python_full_version < '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/5a/82/42f767fc1c1143d6fd36efb827202a2d997a375e160a71eb2888a925aac1/pathspec-1.1.1.tar.gz", hash = "sha256:17db5ecd524104a120e173814c90367a96a98d07c45b2e10c2f3919fff91bf5a", size = 135180, upload-time = "2026-04-27T01:46:08.907Z" }
 wheels = [
@@ -1646,13 +1646,13 @@ name = "pygments"
 version = "2.21.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.11' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
     "python_full_version == '3.10.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and python_full_version < '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/49/2e/ced460408999b33da6b31b0021b0f37d329e202d4169aeb164493778f25b/pygments-2.21.0.tar.gz", hash = "sha256:610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c", size = 5005329, upload-time = "2026-08-17T08:02:48.824Z" }
@@ -1974,13 +1974,13 @@ name = "rich"
 version = "15.0.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.11' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
     "python_full_version == '3.10.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and python_full_version < '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
 ]
 dependencies = [
@@ -2170,11 +2170,11 @@ name = "typing-extensions"
 version = "4.16.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.11' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
     "python_full_version == '3.10.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
-    "python_full_version >= '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
     "python_full_version >= '3.10' and python_full_version < '3.15' and extra == 'group-6-beaupy-dev' and extra != 'group-6-beaupy-docs'",
+    "python_full_version == '3.9.*' and extra != 'group-6-beaupy-dev' and extra == 'group-6-beaupy-docs'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5", size = 113555, upload-time = "2026-07-02T08:40:05.92Z" }
 wheels = [
