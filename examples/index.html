@@ -739,6 +739,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pagination
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#input-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input validation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#migrating-from-3x" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1157,6 +1179,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pagination
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#input-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input validation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#migrating-from-3x" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1304,37 +1348,47 @@
 <span class="n">prompt</span><span class="p">(</span><span class="s2">"&gt;"</span><span class="p">,</span> <span class="n">completion</span><span class="o">=</span><span class="n">path_completion</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="spinners">Spinners</h2>
+<p>Everything after the first argument (the animation) is keyword-only. A spinner can be driven by hand with <code>start()</code>/<code>stop()</code>,
+or used as a context manager, which also stops it if the body raises:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">DOTS</span>
+
+<span class="k">with</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">DOTS</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Packing things..."</span><span class="p">):</span>
+    <span class="n">do_some_work</span><span class="p">()</span>
+</code></pre></div>
+<p>To render on the same console as the other elements (e.g. a console you pass through <code>Config</code>), pass <code>console=</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Spinner</span><span class="p">(</span><span class="n">DOTS</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Packing things..."</span><span class="p">,</span> <span class="n">console</span><span class="o">=</span><span class="n">my_console</span><span class="p">)</span>
+</code></pre></div>
 <h3 id="styling_1">Styling</h3>
 <h4 id="spinner-animation">Spinner Animation</h4>
 <p>There are few built in spinner animations, namely: ARC, ARROWS, BARS, CLOCK, DIAMOND, DOT, DOTS, LINE, LOADING and MOON</p>
 <p>Each of these can be used in a spinner:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">ARC</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">ARC</span><span class="p">,</span> <span class="s2">"Doing some heavy work"</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">ARC</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Doing some heavy work"</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <p>All that "animations" are, is but a list of string, so making your own is as trivial as this:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">'whee'</span><span class="p">,</span> <span class="s1">'whe '</span><span class="p">,</span> <span class="s1">'wh  '</span><span class="p">,</span> <span class="s1">'w   '</span><span class="p">,</span> <span class="s1">'wh  '</span><span class="p">,</span> <span class="s1">'whe '</span><span class="p">,</span> <span class="s1">'whee'</span><span class="p">],</span> <span class="s2">"Whee!"</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">'whee'</span><span class="p">,</span> <span class="s1">'whe '</span><span class="p">,</span> <span class="s1">'wh  '</span><span class="p">,</span> <span class="s1">'w   '</span><span class="p">,</span> <span class="s1">'wh  '</span><span class="p">,</span> <span class="s1">'whe '</span><span class="p">,</span> <span class="s1">'whee'</span><span class="p">],</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Whee!"</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <h4 id="rich-styling">Rich styling</h4>
 <p>Every text in spinner does accept and respect rich styles, so the following works:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">'[red]⬤[/red] '</span><span class="p">,</span> <span class="s1">'[green]⬤[/green] '</span><span class="p">,</span> <span class="s1">'[blue]⬤[/blue] '</span><span class="p">],</span> <span class="s1">'[pink1]Setting[/pink1] colors!'</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">([</span><span class="s1">'[red]⬤[/red] '</span><span class="p">,</span> <span class="s1">'[green]⬤[/green] '</span><span class="p">,</span> <span class="s1">'[blue]⬤[/blue] '</span><span class="p">],</span> <span class="n">text</span><span class="o">=</span><span class="s1">'[pink1]Setting[/pink1] colors!'</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <h4 id="animation-speed">Animation speed</h4>
 <p>Animation speed can be set using <code>refresh_per_second</code> parameter:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy.spinners</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spinner</span><span class="p">,</span> <span class="n">LOADING</span>
-<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">LOADING</span><span class="p">,</span> <span class="s2">"something"</span><span class="p">,</span> <span class="n">refresh_per_second</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">LOADING</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"something"</span><span class="p">,</span> <span class="n">refresh_per_second</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="configuration">Configuration</h2>
 <p>Each element accepts a <code>config</code> argument taking a <code>Config</code> instance. Options:</p>
 <ul>
-<li><code>raise_on_interrupt</code>: If <code>True</code>, functions will raise <code>KeyboardInterrupt</code> whenever one is encountered when waiting for input,
+<li><code>raise_on_interrupt</code>: If <code>True</code>, functions will raise <code>KeyboardInterrupt</code> whenever Ctrl+C is pressed when waiting for input,
         otherwise, they will return some sane alternative to their usual return. For <code>select</code>, <code>prompt</code> and <code>confirm</code> this means <code>None</code>,
-        while for <code>select_multiple</code> it means an empty list - <code>[]</code>. Defaults to <code>False</code>.</li>
+        while for <code>select_multiple</code> it means an empty list - <code>[]</code>. Defaults to <code>True</code>.</li>
 <li><code>raise_on_escape</code>: If <code>True</code>, functions will raise <code>Abort</code> whenever the escape key is encountered when waiting for input, otherwise,
         they will return some sane alternative to their usual return. For <code>select</code>, <code>prompt</code> and <code>confirm</code> this means <code>None</code>, while for
         <code>select_multiple</code> it means an empty list - <code>[]</code>.  Defaults to <code>False</code>.</li>
@@ -1344,11 +1398,9 @@
 </ul>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">beaupy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span><span class="p">,</span> <span class="n">select</span>
 
-<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">raise_on_interrupt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="s1">'Option 1'</span><span class="p">,</span> <span class="s1">'Option 2'</span><span class="p">],</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+<span class="c1"># Ctrl+C raises KeyboardInterrupt by default; opt out to get `None` back instead</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">select</span><span class="p">([</span><span class="s1">'Option 1'</span><span class="p">,</span> <span class="s1">'Option 2'</span><span class="p">],</span> <span class="n">config</span><span class="o">=</span><span class="n">Config</span><span class="p">(</span><span class="n">raise_on_interrupt</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"User pressed Ctrl+C"</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="using-your-own-console">Using your own console</h3>
@@ -1380,11 +1432,31 @@ are then always <code>(section_name, index_within_section)</code> tuples; a plai
 </code></pre></div>
 <h2 id="filtering">Filtering</h2>
 <p>With <code>filterable=True</code>, typing narrows the options to those whose displayed text contains what was typed (case-insensitive,
-markup ignored). Backspace removes the last typed character; the query is shown next to the title.</p>
+markup ignored). Backspace removes the last typed character; the query is shown next to the title, along with a
+<code>(matches/total)</code> count.</p>
 <div class="highlight"><pre><span></span><code><span class="n">select</span><span class="p">([</span><span class="s1">'apple'</span><span class="p">,</span> <span class="s1">'banana'</span><span class="p">,</span> <span class="s1">'cherry'</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Fruit'</span><span class="p">,</span> <span class="n">filterable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <p>Keys bound in <code>KeyBindings</code> keep their action, so in <code>select_multiple</code> space still ticks and <code>ctrl+a</code> ticks/unticks all visible options.</p>
 <p>Ticked options stay ticked while hidden by the filter.</p>
+<h2 id="pagination">Pagination</h2>
+<p>Options that don't fit in the terminal are paginated automatically, so there is nothing to turn on. To choose the page size
+yourself, pass <code>page_size</code> — options are then always paginated with that many per page:</p>
+<div class="highlight"><pre><span></span><code><span class="n">select</span><span class="p">(</span><span class="n">many_options</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="input-validation">Input validation</h2>
+<p>Empty <code>options</code> raises <code>ValueError</code> by default; pass <code>strict=False</code> to get <code>None</code> (<code>select</code>) or <code>[]</code> (<code>select_multiple</code>)
+back instead:</p>
+<div class="highlight"><pre><span></span><code><span class="n">select</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[])</span>                 <span class="c1"># raises ValueError</span>
+<span class="n">select</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">[],</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># returns None</span>
+</code></pre></div>
+<p><code>options</code> itself must be a sequence (or a dict of sections), never a bare string: <code>select('abc')</code> raises <code>TypeError</code> instead of
+silently offering the letters.</p>
+<p>A blank option (after preprocessing and stripping markup, e.g. <code>''</code>, <code>'   '</code>, or <code>'[red][/red]'</code>) or a blank section name
+always raises <code>ValueError</code>, regardless of <code>strict</code> — there's no legitimate reason to want a menu row with nothing in it.</p>
+<p><code>confirm</code> applies the same rule to <code>yes_text</code>/<code>no_text</code>, and also raises if both labels start with the same letter while the
+<code>(Y/N)</code> hint is shown (pass <code>char_prompt=False</code> or use different labels).</p>
+<p>All elements read keypresses from the terminal, so they need an interactive one. When stdin isn't a TTY (piped input, most CI
+runners), they raise <code>RuntimeError('Interactive terminal required')</code>.</p>
 <h2 id="migrating-from-3x">Migrating from 3.x</h2>
 <p>4.0.0 removes process-wide state and makes every argument after the first keyword-only.</p>
 <table>
@@ -1415,8 +1487,26 @@ markup ignored). Backspace removes the last typed character; the query is shown 
 <td><code>a</code> ticks/unticks all in <code>select_multiple</code></td>
 <td><code>ctrl+a</code>; restore with <code>KeyBindings(select_all=['a'])</code></td>
 </tr>
+<tr>
+<td><code>Spinner(DOTS, "text")</code></td>
+<td><code>Spinner(DOTS, text="text")</code> (options are keyword-only); also usable as <code>with Spinner(...):</code></td>
+</tr>
+<tr>
+<td><code>select(options, pagination=True, page_size=5)</code></td>
+<td><code>select(options, page_size=5)</code> — <code>pagination</code> is gone; <code>page_size</code> alone paginates, and with neither set options are paginated only when they don't fit the terminal</td>
+</tr>
+<tr>
+<td>Ctrl+C returns <code>None</code>/<code>[]</code> (<code>raise_on_interrupt=False</code>)</td>
+<td>Raises <code>KeyboardInterrupt</code>; pass <code>Config(raise_on_interrupt=False)</code> for the old behavior</td>
+</tr>
+<tr>
+<td><code>strict</code> defaults to <code>False</code> (empty <code>options</code> returns <code>None</code>/<code>[]</code>)</td>
+<td>Defaults to <code>True</code> (raises <code>ValueError</code>); pass <code>strict=False</code> for the old behavior</td>
+</tr>
 </tbody>
 </table>
+<p><code>beaupy</code> now needs Rich 14.3 or newer (to measure emoji cursors and ticks correctly) and no longer depends on <code>emoji</code>.</p>
+<p><code>ValidationError</code> and <code>ConversionError</code> (from <code>prompt</code>) are now <code>ValueError</code> subclasses, so <code>except ValueError</code> catches them too.</p>
 <p><code>Keys</code> above comes from <code>yakh.key</code>. Using a removed global raises <code>RemovedInV4Error</code> (or <code>AttributeError</code> when assigning on <code>Config</code>/<code>KeyBindings</code>) with a message explaining the replacement.</p>
 
 

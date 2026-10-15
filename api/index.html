@@ -673,7 +673,7 @@
 <div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">KeyBindings</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_InstanceOnly</span><span class="p">)</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/_beaupy.py#L55">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L55">[view_source]</a></p>
 <p>Keybindings used by the elements. Pass an instance via <code>Config(keys=KeyBindings(...))</code>.</p>
 <p><strong>Attributes</strong>:</p>
 <p>escape(List[Union[Tuple[int, ...], str]]): Keys that escape the current context.
@@ -696,13 +696,13 @@
 <div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_InstanceOnly</span><span class="p">)</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/_beaupy.py#L95">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L95">[view_source]</a></p>
 <p>Configuration of the elements. Create an instance and pass it via the <code>config=</code> argument.</p>
 <p><strong>Attributes</strong>:</p>
 <ul>
-<li><code>raise_on_interrupt(bool)</code> - If True, functions will raise KeyboardInterrupt whenever one is encountered when waiting for input,
+<li><code>raise_on_interrupt(bool)</code> - If True, functions will raise KeyboardInterrupt whenever Ctrl+C is pressed when waiting for input,
   otherwise, they will return some sane alternative to their usual return. For <code>select</code>, <code>prompt</code> and <code>confirm</code> this means <code>None</code>,
-  while for <code>select_multiple</code> it means an empty list - <code>[]</code>. Defaults to False.</li>
+  while for <code>select_multiple</code> it means an empty list - <code>[]</code>. Defaults to True.</li>
 <li><code>raise_on_escape(bool)</code> - If True, functions will raise Abort whenever the escape key is encountered when waiting for input, otherwise,
   they will return some sane alternative to their usual return. For <code>select</code>, <code>prompt</code> and <code>confirm</code> this means <code>None</code>, while for
   <code>select_multiple</code> it means an empty list - <code>[]</code>.  Defaults to False.</li>
@@ -716,17 +716,17 @@
 <h4 id="prompt">prompt</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
            <span class="o">*</span><span class="p">,</span>
-           <span class="n">target_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">TargetType</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
-           <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">TargetType</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+           <span class="n">target_type</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">,</span>
+           <span class="n">validator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
            <span class="n">secure</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
            <span class="n">raise_validation_fail</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
            <span class="n">raise_type_conversion_fail</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
            <span class="n">initial_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
            <span class="n">completion</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
            <span class="n">instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_CONFIRM_INSTRUCTIONS</span><span class="p">,</span>
-           <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TargetType</span>
+           <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/_beaupy.py#L227">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L273">[view_source]</a></p>
 <p>Function that prompts the user for written input</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -734,9 +734,9 @@
 <li><code>target_type</code> <em>Union[Type[T], Type[str]], optional</em> - Type to convert the answer to. Defaults to str.</li>
 <li><code>validator</code> <em>Callable[[Any], bool], optional</em> - Optional function to validate the input. Defaults to lambda input: True.</li>
 <li><code>secure</code> <em>bool, optional</em> - If True, input will be hidden. Defaults to False.</li>
-<li><code>raise_validation_fail</code> <em>bool, optional</em> - If True, invalid inputs will raise <code>rich.internals.ValidationError</code>, else
+<li><code>raise_validation_fail</code> <em>bool, optional</em> - If True, invalid inputs will raise <code>ValidationError</code>, else
   the error will be reported onto the console. Defaults to True.</li>
-<li><code>raise_type_conversion_fail</code> <em>bool, optional</em> - If True, invalid inputs will raise <code>rich.internals.ConversionError</code>, else
+<li><code>raise_type_conversion_fail</code> <em>bool, optional</em> - If True, invalid inputs will raise <code>ConversionError</code>, else
   the error will be reported onto the console. Defaults to True.</li>
 <li><code>initial_value</code> <em>str, optional</em> - If present, the value is placed in the prompt as the default value.</li>
 <li><code>completion</code> <em>Callable[[str], List[str]], optional</em> - Returns completion options for the current input.</li>
@@ -751,7 +751,10 @@
 <li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and <code>config.raise_on_interrupt</code> is True</li>
 </ul>
 <p><strong>Returns</strong>:</p>
-<p>Union[T, str]: Returns a value formatted as provided type or string if no type is provided</p>
+<ul>
+<li><code>Optional[T]</code> - The input converted to <code>target_type</code> (a string by default), or <code>None</code> if the prompt was aborted
+  (Esc, or Ctrl+C when <code>config.raise_on_interrupt</code> is False)</li>
+</ul>
 <p><a id="beaupy._beaupy.select"></a></p>
 <p><a id="pydoc:beaupy._beaupy.select"></a></p>
 <h4 id="select">select</h4>
@@ -762,19 +765,18 @@
            <span class="n">cursor_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'pink1'</span><span class="p">,</span>
            <span class="n">cursor_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
            <span class="n">return_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-           <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-           <span class="n">pagination</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+           <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
            <span class="n">page_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
            <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
            <span class="n">instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_CONFIRM_INSTRUCTIONS</span><span class="p">,</span>
            <span class="n">filterable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
            <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/_beaupy.py#L441">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L488">[view_source]</a></p>
 <p>A prompt that allows selecting one option from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>options</code> <em>Union[List[Union[str, T]], Dict[str, List[Union[str, T]]]]</em> - A list of options to select from. If <code>preprocessor</code> is
+<li><code>options</code> <em>Union[Sequence[T], Mapping[str, Sequence[T]]]</em> - A sequence of options to select from. If <code>preprocessor</code> is
   left as default (not passed), it needs to be a list of strings or objects with a <code>__str__</code> method.
   Otherwise, you can pass a <code>preprocessor</code> to create a string representation of arbitrary
   data-structures. Pass a dict of <code>{section_name: options}</code> to show options in sections.</li>
@@ -789,13 +791,11 @@
   Defaults to the first option.</li>
 <li><code>return_index</code> <em>bool, optional</em> - If <code>True</code>, <code>select</code> will return the index of selected element in options.
   For sectioned options, it's <code>(section_name, index_in_section)</code>. Defaults to <code>False</code>.</li>
-<li><code>strict</code> <em>bool, optional</em> - If empty <code>options</code> is provided and strict is <code>False</code>, None will be returned,
-  if it's <code>True</code>, <code>ValueError</code> will be thrown. Defaults to False.</li>
-<li><code>pagination</code> <em>bool, optional</em> - If <code>True</code>, pagination will be used. Defaults to False.</li>
-<li><code>page_size</code> <em>Optional[int], optional</em> - Number of options to show on a single page if pagination is enabled.
-  If <code>None</code>, the page size is derived automatically from the terminal height.
-  Pagination is also enabled automatically when options exceed the terminal height.
-  Defaults to None.</li>
+<li><code>strict</code> <em>bool, optional</em> - If <code>True</code> and <code>options</code> is empty, <code>ValueError</code> is raised; if <code>False</code>, <code>None</code> is
+  returned instead. Defaults to True.</li>
+<li><code>page_size</code> <em>Optional[int], optional</em> - Number of options to show on a single page. If <code>None</code>, the page size is derived
+  from the terminal height, and pagination is only used when the options don't fit.
+  If set, options are always paginated with this many per page. Defaults to None.</li>
 <li><code>title</code> <em>str, optional</em> - Rich friendly text shown above the options. Defaults to ''.</li>
 <li><code>instructions</code> <em>str, optional</em> - Rich friendly text shown below the options. Pass <code>None</code> to hide it.
   Defaults to '([bold]enter[/bold] to confirm)'.</li>
@@ -805,7 +805,7 @@
 </ul>
 <p><strong>Raises</strong>:</p>
 <ul>
-<li><code>ValueError</code> - Thrown if no <code>options</code> are provided and strict is <code>True</code></li>
+<li><code>ValueError</code> - Thrown if no <code>options</code> are provided and strict is <code>True</code>, or if an option or section name is blank</li>
 <li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and <code>config.raise_on_interrupt</code> is True</li>
 </ul>
 <p><strong>Returns</strong>:</p>
@@ -825,19 +825,18 @@
         <span class="n">minimal_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">maximal_count</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">return_indices</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">pagination</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">page_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">''</span><span class="p">,</span>
         <span class="n">instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_SELECT_MULTIPLE_INSTRUCTIONS</span><span class="p">,</span>
         <span class="n">filterable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/_beaupy.py#L690">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L730">[view_source]</a></p>
 <p>A prompt that allows selecting multiple options from a list of options</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>options</code> <em>Union[List[Union[str, T]], Dict[str, List[Union[str, T]]]]</em> - A list of options to select from. If <code>preprocessor</code> is
+<li><code>options</code> <em>Union[Sequence[T], Mapping[str, Sequence[T]]]</em> - A sequence of options to select from. If <code>preprocessor</code> is
   left as default (not passed), it needs to be a list of strings or objects with a <code>__str__</code> method.
   Otherwise, you can pass a <code>preprocessor</code> to create a string representation of arbitrary
   data-structures. Pass a dict of <code>{section_name: options}</code> to show options in sections.</li>
@@ -858,13 +857,11 @@
 <li><code>maximal_count</code> <em>Optional[int], optional</em> - Maximal count of options that need to be selected. Defaults to None.</li>
 <li><code>return_indices</code> <em>bool, optional</em> - If <code>True</code>, <code>select_multiple</code> will return the indices of ticked elements in options.
   For sectioned options, they are <code>(section_name, index_in_section)</code>. Defaults to <code>False</code>.</li>
-<li><code>strict</code> <em>bool, optional</em> - If empty <code>options</code> is provided and strict is <code>False</code>, None will be returned,
-  if it's <code>True</code>, <code>ValueError</code> will be thrown. Defaults to False.</li>
-<li><code>pagination</code> <em>bool, optional</em> - If <code>True</code>, pagination will be used. Defaults to False.</li>
-<li><code>page_size</code> <em>Optional[int], optional</em> - Number of options to show on a single page if pagination is enabled.
-  If <code>None</code>, the page size is derived automatically from the terminal height.
-  Pagination is also enabled automatically when options exceed the terminal height.
-  Defaults to None.</li>
+<li><code>strict</code> <em>bool, optional</em> - If <code>True</code> and <code>options</code> is empty, <code>ValueError</code> is raised; if <code>False</code>, an empty list is
+  returned instead. Defaults to True.</li>
+<li><code>page_size</code> <em>Optional[int], optional</em> - Number of options to show on a single page. If <code>None</code>, the page size is derived
+  from the terminal height, and pagination is only used when the options don't fit.
+  If set, options are always paginated with this many per page. Defaults to None.</li>
 <li><code>title</code> <em>str, optional</em> - Rich friendly text shown above the options. Defaults to ''.</li>
 <li><code>instructions</code> <em>str, optional</em> - Rich friendly text shown below the options. Pass <code>None</code> to hide it.</li>
 <li><code>filterable</code> <em>bool, optional</em> - If <code>True</code>, typing filters the options (case-insensitive substring of the displayed text)
@@ -874,6 +871,7 @@
 </ul>
 <p><strong>Raises</strong>:</p>
 <ul>
+<li><code>ValueError</code> - Thrown if no <code>options</code> are provided and strict is <code>True</code>, or if an option or section name is blank</li>
 <li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and <code>config.raise_on_interrupt</code> is True</li>
 </ul>
 <p><strong>Returns</strong>:</p>
@@ -894,7 +892,7 @@
             <span class="n">instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">_CONFIRM_INSTRUCTIONS</span><span class="p">,</span>
             <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Config</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/_beaupy.py#L806">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/_beaupy.py#L850">[view_source]</a></p>
 <p>A prompt that asks a question and offers two responses</p>
 <p><strong>Arguments</strong>:</p>
 <ul>
@@ -913,6 +911,7 @@
 </ul>
 <p><strong>Raises</strong>:</p>
 <ul>
+<li><code>ValueError</code> - Thrown if <code>yes_text</code> or <code>no_text</code> is blank, or if <code>char_prompt</code> is on and they start with the same letter</li>
 <li><code>KeyboardInterrupt</code> - Raised when keyboard interrupt is encountered and <code>config.raise_on_interrupt</code> is True</li>
 </ul>
 <p><strong>Returns</strong>:</p>
@@ -922,24 +921,30 @@
 <h2 id="class-spinner">Class Spinner</h2>
 <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Spinner</span><span class="p">()</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/spinners/_spinners.py#L18">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L19">[view_source]</a></p>
 <p><a id="beaupy.spinners._spinners.Spinner.__init__"></a></p>
 <p><a id="pydoc:beaupy.spinners._spinners.Spinner.__init__"></a></p>
 <h4 id="__init__">__init__</h4>
-<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="n">spinner_characters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOTS</span><span class="p">,</span>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="n">spinner_characters</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">DOTS</span><span class="p">,</span>
+             <span class="o">*</span><span class="p">,</span>
              <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'Loading...'</span><span class="p">,</span>
              <span class="n">refresh_per_second</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-             <span class="n">transient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+             <span class="n">transient</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+             <span class="n">console</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Console</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/spinners/_spinners.py#L22">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L23">[view_source]</a></p>
 <p>Creates a spinner which can be used to provide some user feedback during long processing</p>
+<p>Can be used as a context manager, which also stops the spinner if the body raises:
+<code>with Spinner(DOTS, text='Working...'): do_work()</code></p>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>spinner_characters</code> <em>List[str]</em> - List of strings that will be displayed in sequence by a spinner</li>
+<li><code>spinner_characters</code> <em>Sequence[str]</em> - Strings that will be displayed in sequence by a spinner. Defaults to <code>DOTS</code>.</li>
 <li><code>text</code> <em>str</em> - Static text that will be shown after the spinner. Defaults to <code>Loading...</code></li>
 <li><code>refresh_per_second</code> <em>float, optional</em> - Number of refreshes the spinner will do a second, this will affect
   the fluidity of the "animation". Defaults to 10.</li>
 <li><code>transient</code> <em>bool, optional</em> - If the spinner will disappear after it's done, otherwise not. Defaults to True.</li>
+<li><code>console</code> <em>rich.console.Console, optional</em> - Console to render to, e.g. the one passed to elements via <code>Config</code>.
+  Defaults to Rich's global console.</li>
 </ul>
 <p><strong>Raises</strong>:</p>
 <ul>
@@ -950,14 +955,14 @@
 <h4 id="start">start</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/spinners/_spinners.py#L47">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L60">[view_source]</a></p>
 <p>Starts the spinner</p>
 <p><a id="beaupy.spinners._spinners.Spinner.stop"></a></p>
 <p><a id="pydoc:beaupy.spinners._spinners.Spinner.stop"></a></p>
 <h4 id="stop">stop</h4>
 <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
-<p><a href="https://github.com/petereon/beaupy/blob/864d716c69ac12d55c5cf99707bc42c7c5b0e205/docs/../beaupy/spinners/_spinners.py#L51">[view_source]</a></p>
+<p><a href="https://github.com/petereon/beaupy/blob/a884685069f1ed967f2d1841c49d7ba15ac36a0e/docs/../beaupy/spinners/_spinners.py#L64">[view_source]</a></p>
 <p>Stops the spinner</p>
 
 

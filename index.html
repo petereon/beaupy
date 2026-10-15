@@ -733,31 +733,20 @@
         <span class="n">potato_count</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s1">'How many potatoes?'</span><span class="p">,</span> <span class="n">target_type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="k">lambda</span> <span class="n">count</span><span class="p">:</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Spinner to show while doing some work</span>
-    <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">DOTS</span><span class="p">,</span> <span class="s2">"Packing things..."</span><span class="p">)</span>
-    <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">DOTS</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Packing things..."</span><span class="p">):</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
     <span class="c1"># Get input without showing it being typed</span>
     <span class="k">if</span> <span class="s2">"friend"</span> <span class="o">==</span> <span class="n">prompt</span><span class="p">(</span><span class="s2">"Speak, [blue bold underline]friend[/blue bold underline], and enter"</span><span class="p">,</span> <span class="n">secure</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
 
         <span class="c1"># Custom spinner animation</span>
         <span class="n">spinner_animation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'▉▉'</span><span class="p">,</span> <span class="s1">'▌▐'</span><span class="p">,</span> <span class="s1">'  '</span><span class="p">,</span> <span class="s1">'▌▐'</span><span class="p">,</span> <span class="s1">'▉▉'</span><span class="p">]</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="s2">"Opening the Door of Durin..."</span><span class="p">)</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Opening the Door of Durin..."</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">spinner_animation</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'🐙🌊    ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙 🌊   ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙  🌊  ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙   🌊 ⚔️ '</span><span class="p">,</span> <span class="s1">'🐙    🌊⚔️ '</span><span class="p">]</span>
-        <span class="n">spinner</span> <span class="o">=</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="s2">"Getting attacked by an octopus..."</span><span class="p">)</span>
-        <span class="n">spinner</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="n">spinner</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">Spinner</span><span class="p">(</span><span class="n">spinner_animation</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Getting attacked by an octopus..."</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="s1">'The One Ring'</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
         <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">"[green]You throw The One Ring to a lava from an eagle![/green]"</span><span class="p">)</span>
@@ -767,6 +756,8 @@
 </code></pre></div>
 <p>For more information refer to <a href="https://petereon.github.io/beaupy/examples/">more examples</a> or definitive, but much less exciting <a href="https://petereon.github.io/beaupy/api/">API documentation</a></p>
 <h2 id="installation">Installation</h2>
+<p><code>beaupy</code> declares support for Python 3.8 and newer, but only Python 3.10 and newer are tested in CI: support for earlier
+versions is no longer actively tested.</p>
 <p>From PyPI:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>beaupy
 </code></pre></div>
