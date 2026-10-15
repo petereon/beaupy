@@ -1,6 +1,6 @@
 
-# This workflow will upload a Python Package using Twine when a release is created
-# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+# This workflow will upload a Python Package using uv when a release is created
+# For more information see: https://docs.astral.sh/uv/guides/publish/
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -15,47 +15,45 @@ on:
 
 jobs:
   deploy:
-
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.10"]
-      fail-fast: false
-    
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v7
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
+    - name: Install uv
+      uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.10"
     - name: Install dependencies
-      run: |
-        python -m pip install poetry poethepoet
-        poetry install
-    - name: Build and install the library
-      run: |
-        poe build
+      # Third-party packages come from uv.lock and must be prebuilt wheels, so no setup scripts
+      # run. --no-build also rejects the project itself, hence --no-install-project: it is built
+      # and installed from its wheel below.
+      run: uv sync --locked --no-build --no-install-project --group dev
+    - name: Build the library
+      run: uv build
+    - name: Install the built library
+      run: uv pip install --no-deps --no-build dist/*.whl
     - name: Test with pytest
-      run: |
-        export PYTHONPATH=$(pwd)
-        poetry run pip install --only-binary :all: -r requirements-dev.txt
-        poe test
-    
+      run: uv run --locked --no-sync --no-build pytest
+
     - name: Install documentation dependencies
-      run: pip install --only-binary :all: -r docs/requirements.txt
+      # pydoc-markdown's legacy pkg_resources-based plugin loader can't see uv's dist-info
+      # metadata for dotted distribution names (e.g. databind.json), so use uv's pip-compatible
+      # installer here instead of `uv sync`, fed with the hash-pinned requirements from uv.lock.
+      # Builds can't be disabled: pydoc-markdown pins docstring-parser 0.11 and termcolor 1.1.0,
+      # which only ship sdists.
+      run: |
+        uv export --locked --only-group docs --no-emit-project --format requirements-txt -o docs-requirements.txt
+        uv pip install --require-hashes --no-deps -r docs-requirements.txt
     - name: Build documentation
-      run: cd docs && novella
+      run: cd docs && uv run --no-sync --no-build novella
     - name: Publish documentation
-      uses: JamesIves/github-pages-deploy-action@v4.8.0
+      uses: JamesIves/github-pages-deploy-action@d92aa235d04922e8f08b40ce78cc5442fcfbfa2f
       with:
         branch: gh-pages
         folder: docs/_site
         ssh-key: ${{ secrets.DEPLOY_KEY }}
 
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      run: uv publish
+      env:
+        UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}

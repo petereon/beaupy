@@ -174,6 +174,22 @@ prompt(">", completion=path_completion)
 
 ## Spinners
 
+Everything after the first argument (the animation) is keyword-only. A spinner can be driven by hand with `start()`/`stop()`,
+or used as a context manager, which also stops it if the body raises:
+
+```python
+from beaupy.spinners import Spinner, DOTS
+
+with Spinner(DOTS, text="Packing things..."):
+    do_some_work()
+```
+
+To render on the same console as the other elements (e.g. a console you pass through `Config`), pass `console=`:
+
+```python
+Spinner(DOTS, text="Packing things...", console=my_console)
+```
+
 ### Styling
 
 #### Spinner Animation
@@ -184,7 +200,7 @@ Each of these can be used in a spinner:
 
 ```python
 from beaupy.spinners import Spinner, ARC
-spinner = Spinner(ARC, "Doing some heavy work")
+spinner = Spinner(ARC, text="Doing some heavy work")
 spinner.start()
 ```
 
@@ -192,7 +208,7 @@ All that "animations" are, is but a list of string, so making your own is as tri
 
 ```python
 from beaupy.spinners import Spinner
-spinner = Spinner(['whee', 'whe ', 'wh  ', 'w   ', 'wh  ', 'whe ', 'whee'], "Whee!")
+spinner = Spinner(['whee', 'whe ', 'wh  ', 'w   ', 'wh  ', 'whe ', 'whee'], text="Whee!")
 spinner.start()
 ```
 
@@ -202,7 +218,7 @@ Every text in spinner does accept and respect rich styles, so the following work
 
 ```python
 from beaupy.spinners import Spinner
-spinner = Spinner(['[red]⬤[/red] ', '[green]⬤[/green] ', '[blue]⬤[/blue] '], '[pink1]Setting[/pink1] colors!')
+spinner = Spinner(['[red]⬤[/red] ', '[green]⬤[/green] ', '[blue]⬤[/blue] '], text='[pink1]Setting[/pink1] colors!')
 spinner.start()
 ```
 
@@ -212,45 +228,137 @@ Animation speed can be set using `refresh_per_second` parameter:
 
 ```python
 from beaupy.spinners import Spinner, LOADING
-spinner = Spinner(LOADING, "something", refresh_per_second=4)
+spinner = Spinner(LOADING, text="something", refresh_per_second=4)
 spinner.start()
 ```
 
-## Global Configuration
+## Configuration
 
-`beaupy` exposes global configuration to configure behaviour of the CLI elements globally. There are currently 3 options:
+Each element accepts a `config` argument taking a `Config` instance. Options:
 
-- `raise_on_interrupt`: If `True`, functions will raise `KeyboardInterrupt` whenever one is encountered when waiting for input,
+- `raise_on_interrupt`: If `True`, functions will raise `KeyboardInterrupt` whenever Ctrl+C is pressed when waiting for input,
         otherwise, they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`,
-        while for `select_multiple` it means an empty list - `[]`. Defaults to `False`.
+        while for `select_multiple` it means an empty list - `[]`. Defaults to `True`.
 - `raise_on_escape`: If `True`, functions will raise `Abort` whenever the escape key is encountered when waiting for input, otherwise,
         they will return some sane alternative to their usual return. For `select`, `prompt` and `confirm` this means `None`, while for
         `select_multiple` it means an empty list - `[]`.  Defaults to `False`.
 - `transient`: If `False`, elements will remain displayed after their context has ended. Defaults to `True`.
-
-You can set these options like follows:
-
-```python
-from beaupy import Config
-
-Config.raise_on_interrupt = True
-Config.raise_on_escape = True
-Config.transient = False
-```
-
-### Usage
-
-For example, if you want to raise an exception when user presses `Ctrl+C` or `Esc` key, you can set `raise_on_interrupt` and `raise_on_escape` to `True`:
+- `console`: `rich.console.Console` the elements render to. Defaults to `Console(stderr=True, highlight=False)`.
+- `keys`: `KeyBindings` used by the elements. Defaults to `KeyBindings()`.
 
 ```python
 from beaupy import Config, select
 
-Config.raise_on_interrupt = True
-
-try:
-    result = select(['Option 1', 'Option 2'])
-except KeyboardInterrupt:
+# Ctrl+C raises KeyboardInterrupt by default; opt out to get `None` back instead
+result = select(['Option 1', 'Option 2'], config=Config(raise_on_interrupt=False))
+if result is None:
     print("User pressed Ctrl+C")
-
-print("Result:", result)
 ```
+
+### Using your own console
+
+Pass the console you already use, e.g. the one of a running `rich.live.Live`, so the two don't fight over the terminal:
+
+```python
+from rich.console import Console
+from rich.live import Live
+from rich.panel import Panel
+from beaupy import Config, select_multiple
+
+console = Console()
+with Live(Panel("Foo"), console=console):
+    select_multiple(list(range(15)), config=Config(console=console))
+```
+
+### Keybindings
+
+```python
+from beaupy import Config, KeyBindings, select
+
+vim = Config(keys=KeyBindings(up=['k'], down=['j']))
+select(['one', 'two'], config=vim)
+```
+
+## Title, instructions and sections
+
+`select` and `select_multiple` take a `title` shown above the options. All elements take `instructions` shown below; pass `None` to hide it.
+
+```python
+select(['red', 'green'], title='Pick a color', instructions='([bold]enter[/bold] to pick)')
+```
+
+Pass a dict to show options in sections. Indices (`cursor_index`, `ticked_indices`, `return_index`, `return_indices`)
+are then always `(section_name, index_within_section)` tuples; a plain `int` raises `TypeError` (and is flagged by type checkers):
+
+```python
+select_multiple({'Fruit': ['apple', 'pear'], 'Veg': ['leek']},
+                ticked_indices=[('Veg', 0)],
+                return_indices=True)  # e.g. [('Veg', 0), ('Fruit', 1)]
+```
+
+## Filtering
+
+With `filterable=True`, typing narrows the options to those whose displayed text contains what was typed (case-insensitive,
+markup ignored). Backspace removes the last typed character; the query is shown next to the title, along with a
+`(matches/total)` count.
+
+```python
+select(['apple', 'banana', 'cherry'], title='Fruit', filterable=True)
+```
+
+Keys bound in `KeyBindings` keep their action, so in `select_multiple` space still ticks and `ctrl+a` ticks/unticks all visible options.
+
+Ticked options stay ticked while hidden by the filter.
+
+## Pagination
+
+Options that don't fit in the terminal are paginated automatically, so there is nothing to turn on. To choose the page size
+yourself, pass `page_size` — options are then always paginated with that many per page:
+
+```python
+select(many_options, page_size=10)
+```
+
+## Input validation
+
+Empty `options` raises `ValueError` by default; pass `strict=False` to get `None` (`select`) or `[]` (`select_multiple`)
+back instead:
+
+```python
+select(options=[])                 # raises ValueError
+select(options=[], strict=False)   # returns None
+```
+
+`options` itself must be a sequence (or a dict of sections), never a bare string: `select('abc')` raises `TypeError` instead of
+silently offering the letters.
+
+A blank option (after preprocessing and stripping markup, e.g. `''`, `'   '`, or `'[red][/red]'`) or a blank section name
+always raises `ValueError`, regardless of `strict` — there's no legitimate reason to want a menu row with nothing in it.
+
+`confirm` applies the same rule to `yes_text`/`no_text`, and also raises if both labels start with the same letter while the
+`(Y/N)` hint is shown (pass `char_prompt=False` or use different labels).
+
+All elements read keypresses from the terminal, so they need an interactive one. When stdin isn't a TTY (piped input, most CI
+runners), they raise `RuntimeError('Interactive terminal required')`.
+
+## Migrating from 3.x
+
+4.0.0 removes process-wide state and makes every argument after the first keyword-only.
+
+| 3.x | 4.x |
+|---|---|
+| `Config.raise_on_escape = True` | `select(..., config=Config(raise_on_escape=True))` |
+| `beaupy._beaupy.console = my_console` | `select(..., config=Config(console=my_console))` |
+| `DefaultKeys.up.append('k')` | `select(..., config=Config(keys=KeyBindings(up=[Keys.UP_ARROW, 'k'])))` |
+| `select(options, my_preprocessor)` | `select(options, preprocessor=my_preprocessor)` |
+| `a` ticks/unticks all in `select_multiple` | `ctrl+a`; restore with `KeyBindings(select_all=['a'])` |
+| `Spinner(DOTS, "text")` | `Spinner(DOTS, text="text")` (options are keyword-only); also usable as `with Spinner(...):` |
+| `select(options, pagination=True, page_size=5)` | `select(options, page_size=5)` — `pagination` is gone; `page_size` alone paginates, and with neither set options are paginated only when they don't fit the terminal |
+| Ctrl+C returns `None`/`[]` (`raise_on_interrupt=False`) | Raises `KeyboardInterrupt`; pass `Config(raise_on_interrupt=False)` for the old behavior |
+| `strict` defaults to `False` (empty `options` returns `None`/`[]`) | Defaults to `True` (raises `ValueError`); pass `strict=False` for the old behavior |
+
+`beaupy` now needs Rich 14.3 or newer (to measure emoji cursors and ticks correctly) and no longer depends on `emoji`.
+
+`ValidationError` and `ConversionError` (from `prompt`) are now `ValueError` subclasses, so `except ValueError` catches them too.
+
+`Keys` above comes from `yakh.key`. Using a removed global raises `RemovedInV4Error` (or `AttributeError` when assigning on `Config`/`KeyBindings`) with a message explaining the replacement.
