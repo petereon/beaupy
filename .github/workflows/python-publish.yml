@@ -24,19 +24,28 @@ jobs:
       with:
         python-version: "3.10"
     - name: Install dependencies
-      run: uv sync --group dev
+      # Third-party packages come from uv.lock and must be prebuilt wheels, so no setup scripts
+      # run. --no-build also rejects the project itself, hence --no-install-project: it is built
+      # and installed from its wheel below.
+      run: uv sync --locked --no-build --no-install-project --group dev
     - name: Build the library
       run: uv build
+    - name: Install the built library
+      run: uv pip install --no-deps --no-build dist/*.whl
     - name: Test with pytest
-      run: uv run poe test
+      run: uv run --locked --no-sync --no-build pytest
 
     - name: Install documentation dependencies
       # pydoc-markdown's legacy pkg_resources-based plugin loader can't see uv's dist-info
       # metadata for dotted distribution names (e.g. databind.json), so use uv's pip-compatible
-      # installer here instead of `uv sync`.
-      run: uv pip install --group docs .
+      # installer here instead of `uv sync`, fed with the hash-pinned requirements from uv.lock.
+      # Builds can't be disabled: pydoc-markdown pins docstring-parser 0.11 and termcolor 1.1.0,
+      # which only ship sdists.
+      run: |
+        uv export --locked --only-group docs --no-emit-project --format requirements-txt -o docs-requirements.txt
+        uv pip install --require-hashes --no-deps -r docs-requirements.txt
     - name: Build documentation
-      run: cd docs && uv run --no-sync novella
+      run: cd docs && uv run --no-sync --no-build novella
     - name: Publish documentation
       uses: JamesIves/github-pages-deploy-action@d92aa235d04922e8f08b40ce78cc5442fcfbfa2f
       with:
