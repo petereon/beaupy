@@ -54,8 +54,8 @@ docs = [
     # setuptools>=81 dropped pkg_resources entirely, so pin below that. The Python 3.8 ceiling
     # (75.3.4), which a single universal lock would otherwise settle on, can't resolve dotted
     # distribution names (e.g. databind.json) through pkg_resources, so floor it above that.
-    "setuptools>=75.8,<81; python_version >= '3.9'",
-    "setuptools<81; python_version < '3.9'",
+    "setuptools>=83,<84; python_version >= '3.9'",
+    "setuptools<84; python_version < '3.9'",
 ]
 
 [tool.poe]
