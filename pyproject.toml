@@ -46,7 +46,7 @@ dev = [
 ]
 docs = [
     "mkdocs==1.6.1",
-    "mkdocs-material==9.7.7",
+    "mkdocs-material==9.8.0",
     "novella==0.2.6",
     "pydoc-markdown==4.8.2",
     # novella's nr.util.plugins uses the deprecated pkg_resources API without declaring
