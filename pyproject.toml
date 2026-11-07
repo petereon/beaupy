@@ -38,7 +38,7 @@ module-root = ""
 # tooling is only ever installed/run on the Python versions CI actually lints and tests with).
 dev = [
     "poethepoet==0.31.1; python_version >= '3.10'",
-    "pytest==9.1.1; python_version >= '3.10'",
+    "pytest==9.2.0; python_version >= '3.10'",
     "pytest-cov==7.1.0; python_version >= '3.10'",
     "mypy==2.2.0; python_version >= '3.10'",
     "ruff==0.17.1; python_version >= '3.10'",
