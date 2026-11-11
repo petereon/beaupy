@@ -541,6 +541,9 @@ def select(
     keys = config.keys
     flat_options, sections, positions = _flatten_options(options)
 
+    if page_size is not None and (isinstance(page_size, bool) or not isinstance(page_size, int) or page_size < 1):
+        raise ValueError('`page_size` must be a positive integer')
+
     if not flat_options:
         if strict:
             raise ValueError('`options` cannot be empty')
@@ -791,6 +794,9 @@ def select_multiple(
     """
     config = config or Config()
     flat_options, sections, positions = _flatten_options(options)
+
+    if page_size is not None and (isinstance(page_size, bool) or not isinstance(page_size, int) or page_size < 1):
+        raise ValueError('`page_size` must be a positive integer')
 
     if not flat_options:
         if strict:
