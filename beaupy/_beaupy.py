@@ -378,7 +378,7 @@ def _auto_page_size(
     return max(1, available - section_count, available // 2)
 
 
-def _validate_page_size(page_size: Optional[int]) -> None:
+def _validate_page_size(page_size: object) -> None:
     # numbers.Integral accepts int-likes such as numpy integers; bool is an Integral subclass but not a valid size
     if page_size is not None and (isinstance(page_size, bool) or not isinstance(page_size, numbers.Integral) or page_size < 1):
         raise ValueError('`page_size` must be a positive integer')
