@@ -1,3 +1,4 @@
+import numbers
 import pytest
 from yakh.key import Keys
 
@@ -29,3 +30,26 @@ def test_select_with_non_integer_page_size_raises_value_error():
     with pytest.raises(ValueError) as e:
         select(options=["a", "b"], page_size="3")
     assert "`page_size` must be a positive integer" in str(e.value)
+
+
+def test_integral_page_size_is_accepted():
+    class IntLike(numbers.Integral):  # stands in for numpy integers
+        def __init__(self, v):
+            self.v = v
+
+        def __int__(self):
+            return self.v
+
+        def __lt__(self, other):
+            return self.v < other
+
+        def __getattr__(self, name):  # remaining abstract methods are never used here
+            raise NotImplementedError(name)
+
+    IntLike.__abstractmethods__ = frozenset()
+    b._validate_page_size(IntLike(3))
+
+
+def test_bool_page_size_raises_value_error():
+    with pytest.raises(ValueError):
+        b._validate_page_size(True)
