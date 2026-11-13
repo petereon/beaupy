@@ -77,11 +77,15 @@ def test_real_terminal_end_to_end():
         seen, deadline = b'', time.time() + seconds
         while (not until or until not in seen) and time.time() < deadline:
             if select.select([fd], [], [], 0.1)[0]:
-                seen += os.read(fd, 4096)
+                try:
+                    seen += os.read(fd, 4096)
+                except OSError:  # Linux: EIO once the child closed the terminal
+                    break
         return seen
 
     try:
-        assert b'confirm' in drain(10, until=b'confirm')  # footer drawn => raw mode imminent; yakh drops keys typed before it
+        shown = drain(10, until=b'confirm')
+        assert b'confirm' in shown, shown  # footer drawn => raw mode imminent; yakh drops keys typed before it
         drain(0.3)
         os.write(fd, b'\x1b[B')
         drain(0.3)
