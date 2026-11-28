@@ -21,6 +21,9 @@ dependencies = [
     "questo>=0.4.1,<0.5.0",
 ]
 
+[project.scripts]
+beaupy = 'beaupy.__main__:main'
+
 [project.urls]
 Repository = 'https://github.com/petereon/beaupy'
 
